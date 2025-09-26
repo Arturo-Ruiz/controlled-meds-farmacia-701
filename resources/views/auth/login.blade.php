@@ -144,7 +144,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-clinic-medical text-white text-2xl"></i>
+                    <i class="fa-solid fa-capsules text-white text-2xl"></i>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800">Iniciar Sesión</h1>
                 <p class="text-gray-600">Sistema de administración de medicamentos controlados.</p>
@@ -248,7 +248,7 @@
             <!-- Footer -->
             <div class="mt-8 text-center">
                 <p class="text-xs text-gray-500">
-                    © 2024 Farmacia 701. Sistema seguro de administración.
+                    © 2025 Farmacia 701.
                 </p>
             </div>
         </div>

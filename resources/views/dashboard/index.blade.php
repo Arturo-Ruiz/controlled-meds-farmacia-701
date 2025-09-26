@@ -4,33 +4,6 @@
 
 @section('content')
 <div class="space-y-8 animate-fadeInUp">
-    <!-- Header del Dashboard con Gradiente Mejorado -->
-    <div class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden">
-        <!-- Elementos decorativos de fondo -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-        </div>
-
-        <div class="relative z-10 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-2">¡Bienvenido al Dashboard!</h1>
-                <p class="text-blue-100 text-lg">Sistema de Control - Farmacia 701</p>
-                <div class="flex items-center mt-3 text-blue-200">
-                    <i class="fas fa-user-md mr-2"></i>
-                    <span>{{ Auth::user()->name ?? 'Administrador' }}</span>
-                </div>
-            </div>
-            <div class="text-right">
-                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <p class="text-blue-100 text-sm">Fecha Actual</p>
-                    <p class="text-2xl font-bold">{{ now()->format('d/m/Y') }}</p>
-                    <p class="text-blue-200 text-sm">{{ now()->format('H:i') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Cards de Estadísticas Mejoradas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Medicamentos -->
