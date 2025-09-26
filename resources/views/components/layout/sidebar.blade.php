@@ -12,25 +12,37 @@
         <!-- Logo Section -->
         <div class="relative z-10 p-6 border-b border-gray-200/50">
             <div class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300 group-hover:scale-105">
-                    <i class="fas fa-clinic-medical text-white text-xl"></i>
+                <div class="w-16 h-16 flex items-center justify-center transition-all duration-300">
+                    <img src="{{ asset('img/logo.png') }}" alt="Farmacia 701" class="w-12 h-12 object-contain">
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Farmacia 701</h1>
-                    <p class="text-gray-500 text-sm">Sistema de Control</p>
+                    <h1 class="text-xl font-bold text-gray-800 transition-colors duration-300">Farmacia 701</h1>
                 </div>
+
+                <button id="sidebarClose" class="lg:hidden absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
         </div>
 
         <!-- Navigation Menu -->
         <nav class="relative z-10 p-4 space-y-2">
+
             <!-- Dashboard -->
-            <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-blue-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-tachometer-alt text-lg text-gray-600 group-hover:text-blue-600"></i>
+            <a href="{{ route('dashboard') }}"
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1    
+   {{ request()->routeIs('dashboard') ? 'bg-blue-100 text-blue-700 border-r-4 border-blue-500' : 'text-gray-600 hover:text-gray-800 hover:bg-blue-50' }}">
+
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300  
+         {{ request()->routeIs('dashboard') ? 'bg-blue-200' : 'bg-gray-100 group-hover:bg-blue-100' }}">
+                    <i class="fas fa-tachometer-alt text-lg transition-all duration-300  
+           {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-gray-600 group-hover:text-blue-600' }}"></i>
                 </div>
-                <span class="font-medium">Dashboard</span>
-                <div class="ml-auto w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                <span class="font-medium">Panel de control</span>
+
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300  
+         {{ request()->routeIs('dashboard') ? 'bg-blue-500 opacity-100' : 'bg-blue-400 opacity-0 group-hover:opacity-100' }}"></div>
             </a>
 
             <!-- Medicamentos -->

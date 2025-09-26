@@ -59,4 +59,10 @@ $(document).ready(function () {
             $(this).find("i").addClass("text-blue-400");
         }
     });
+
+    $("#sidebarClose").click(function () {
+        $("#sidebar").addClass("-translate-x-full");
+        $("#sidebarOverlay").addClass("hidden");
+        $("body").removeClass("overflow-hidden");
+    });
 });
