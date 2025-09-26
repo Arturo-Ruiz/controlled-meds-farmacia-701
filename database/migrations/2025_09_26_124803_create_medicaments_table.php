@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('medicaments', function (Blueprint $table) {
             $table->id();
+
+            $table->string('name');
+            $table->string('presentation');
+            $table->integer('posological_units');
+            $table->integer('stock')->default(0);
+            $table->integer('min_stock')->default(0);
+            $table->decimal('price', 10, 2);
+            $table->date('expiration_date');
+
             $table->timestamps();
+
+            $table->index(['name', 'presentation']);
+            $table->index('expiration_date');
+            $table->index('stock');
         });
     }
 

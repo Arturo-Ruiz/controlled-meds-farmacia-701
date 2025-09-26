@@ -46,12 +46,17 @@
             </a>
 
             <!-- Medicamentos -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-green-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-green-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-pills text-lg text-gray-600 group-hover:text-green-600"></i>
+            <a href="{{ route('medicaments.index') }}"
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1  
+   {{ request()->routeIs('medicaments.*') ? 'bg-green-100 text-green-700 border-r-4 border-green-500' : 'text-gray-600 hover:text-gray-800 hover:bg-green-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300  
+         {{ request()->routeIs('medicaments.*') ? 'bg-green-200' : 'bg-gray-100 group-hover:bg-green-100' }}">
+                    <i class="fas fa-pills text-lg transition-all duration-300  
+           {{ request()->routeIs('medicaments.*') ? 'text-green-700' : 'text-gray-600 group-hover:text-green-600' }}"></i>
                 </div>
                 <span class="font-medium">Medicamentos</span>
-                <div class="ml-auto w-2 h-2 bg-green-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300  
+         {{ request()->routeIs('medicaments.*') ? 'bg-green-500 opacity-100' : 'bg-green-400 opacity-0 group-hover:opacity-100' }}"></div>
             </a>
 
             <!-- Inventario -->
