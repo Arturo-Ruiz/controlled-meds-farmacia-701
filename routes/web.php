@@ -4,10 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 
-
-
-
-
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
 

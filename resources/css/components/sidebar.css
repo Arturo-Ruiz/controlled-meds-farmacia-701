@@ -1,0 +1,58 @@
+/* SIDEBAR RESPONSIVE - CORREGIDO */
+@media (max-width: 1023px) {
+
+    /* Asegurar que el sidebar mantenga su ancho completo en móvil */
+    #sidebar {
+        width: 18rem;
+        /* 288px - mantener ancho completo */
+    }
+
+    /* Cuando está oculto, moverlo completamente fuera de pantalla */
+    #sidebar.-translate-x-full {
+        transform: translateX(-100%);
+    }
+
+    /* Cuando está visible, mostrarlo completamente */
+    #sidebar:not(.-translate-x-full) {
+        transform: translateX(0);
+    }
+
+    /* Prevenir scroll del body cuando sidebar está abierto */
+    body.overflow-hidden {
+        overflow: hidden;
+    }
+}
+
+/* En desktop, asegurar que esté siempre visible */
+@media (min-width: 1024px) {
+    #sidebar {
+        transform: translateX(0) !important;
+    }
+}
+
+/* OVERLAY */
+#sidebarOverlay {
+    display: none !important;
+}
+
+#sidebarOverlay:not(.hidden) {
+    display: block !important;
+}
+
+/* En desktop, el overlay NUNCA debe ser visible */
+@media (min-width: 1024px) {
+    #sidebarOverlay {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+}
+
+/* En móvil, solo visible cuando no tiene clase hidden */
+@media (max-width: 1023px) {
+    #sidebarOverlay.hidden {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+}

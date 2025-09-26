@@ -247,9 +247,14 @@
 
             <!-- Footer -->
             <div class="mt-8 text-center">
-                <p class="text-xs text-gray-500">
-                    © 2025 Farmacia 701.
-                </p>
+                <div class="copyright">
+                    © <script>
+                        document.write(new Date().getFullYear())
+                    </script>
+                    made with <i class="fa fa-heart"></i> by
+                    <a href="https://github.com/Arturo-Ruiz" class="font-weight-bold" target="_blank">Arturo Ruiz</a>
+                    for Farmacia 701.
+                </div>
             </div>
         </div>
     </div>
