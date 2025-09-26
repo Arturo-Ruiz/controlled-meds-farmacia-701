@@ -4,176 +4,458 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login - {{ config('app.name') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Login - Farmacia 701</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-100 via-blue-50 to-gray-100 flex items-center justify-center p-4 relative overflow-hidden" style="font-family: 'Inter', sans-serif;">
-    <!-- Animated Background Elements -->
+<body class="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center p-4 relative overflow-hidden" style="font-family: 'Inter', sans-serif;">
+
+    <!-- Enhanced Animated Background -->
     <div class="absolute inset-0 overflow-hidden">
-        <!-- Large geometric shapes -->
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-[#0077cc]/10 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-[#0077cc]/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/4 w-32 h-32 bg-[#0077cc]/8 rounded-full blur-2xl animate-bounce" style="animation-duration: 6s;"></div>
+        <!-- Gradiente base mejorado -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100"></div>
 
-        <!-- Grid pattern overlay -->
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=" 40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" %3E%3Cg fill="%230077cc" fill-opacity="0.03" %3E%3Cpath d="M0 0h40v40H0z" /%3E%3Cpath d="M0 20h40M20 0v40" stroke="%230077cc" stroke-opacity="0.05" stroke-width="1" /%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+        <!-- Capas de gradientes animados -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-cyan-200/30 via-blue-300/20 to-indigo-400/30 animate-pulse" style="animation-duration: 8s;"></div>
+        <div class="absolute inset-0 bg-gradient-to-bl from-purple-200/20 via-pink-200/10 to-blue-300/25 animate-pulse" style="animation-duration: 12s; animation-delay: 2s;"></div>
 
-        <!-- Floating particles -->
-        <div class="absolute top-1/4 right-1/3 w-2 h-2 bg-[#0077cc]/20 rounded-full animate-ping" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-1/3 left-1/5 w-3 h-3 bg-[#0077cc]/15 rounded-full animate-ping" style="animation-delay: 3s;"></div>
-        <div class="absolute top-2/3 right-1/4 w-1 h-1 bg-[#0077cc]/25 rounded-full animate-ping" style="animation-delay: 5s;"></div>
-    </div>
+        <!-- Formas geométricas grandes mejoradas -->
+        <div class="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-duration: 6s;"></div>
+        <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-gradient-to-tr from-indigo-400/15 to-purple-500/20 rounded-full blur-3xl animate-pulse" style="animation-duration: 8s; animation-delay: 3s;"></div>
+        <div class="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-cyan-300/25 to-blue-400/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 10s;"></div>
 
-    <!-- Login Container -->
-    <div class="relative w-full max-w-md z-10">
-        <!-- Main Card with enhanced backdrop -->
-        <div class="bg-white/95 backdrop-blur-sm border border-white/50 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
-            <!-- Subtle gradient overlay -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0077cc]/5 via-transparent to-blue-50/30 rounded-2xl"></div>
+        <!-- Formas medianas flotantes -->
+        <div class="absolute top-20 left-1/4 w-40 h-40 bg-gradient-to-br from-pink-300/20 to-purple-400/15 rounded-full blur-xl animate-pulse" style="animation-duration: 7s; animation-delay: 1s;"></div>
+        <div class="absolute bottom-1/4 right-1/3 w-48 h-48 bg-gradient-to-br from-emerald-300/15 to-teal-400/20 rounded-full blur-xl animate-pulse" style="animation-duration: 9s; animation-delay: 4s;"></div>
 
-            <!-- Content -->
-            <div class="relative z-10">
-                <!-- Logo/Icon -->
-                <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#0077cc] to-blue-600 rounded-xl mb-4 shadow-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <h1 class="text-2xl font-bold text-gray-800 mb-2">Panel Administrativo</h1>
-                    <p class="text-gray-600 text-sm">Farmacia 701 - Sistema de Control</p>
-                </div>
+        <!-- CÍRCULOS PEQUEÑOS ADICIONALES -->
+        <div class="absolute top-1/5 right-2/5 w-20 h-20 bg-gradient-to-br from-emerald-300/15 to-green-400/20 rounded-full blur-lg animate-pulse" style="animation-duration: 11s; animation-delay: 6s;"></div>
+        <div class="absolute bottom-1/5 left-2/5 w-24 h-24 bg-gradient-to-br from-orange-300/10 to-yellow-400/15 rounded-full blur-lg animate-pulse" style="animation-duration: 13s; animation-delay: 8s;"></div>
 
-                <!-- Login Form -->
-                <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                    @csrf
+        <!-- FORMAS HEXAGONALES -->
+        <div class="absolute top-2/5 right-1/5 w-16 h-16 bg-gradient-to-br from-violet-300/20 to-purple-400/15 transform rotate-45 blur-md animate-pulse" style="animation-duration: 9s; animation-delay: 10s;"></div>
 
-                    <!-- Email Field -->
-                    <div class="space-y-2">
-                        <label for="email" class="block text-sm font-medium text-gray-700">
-                            Correo Electrónico
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                                </svg>
-                            </div>
-                            <input type="email" name="email" id="email" required
-                                class="block w-full pl-10 pr-3 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0077cc] focus:border-transparent focus:bg-white transition duration-200"
-                                placeholder="admin@farmacia701.com"
-                                value="{{ old('email') }}">
-                        </div>
-                        @error('email')
-                        <p class="text-red-500 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    <!-- Password Field -->
-                    <div class="space-y-2">
-                        <label for="password" class="block text-sm font-medium text-gray-700">
-                            Contraseña
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <input type="password" name="password" id="password" required
-                                class="block w-full pl-10 pr-3 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0077cc] focus:border-transparent focus:bg-white transition duration-200"
-                                placeholder="••••••••••••">
-                        </div>
-                        @error('password')
-                        <p class="text-red-500 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="remember"
-                                class="w-4 h-4 text-[#0077cc] bg-white border-gray-300 rounded focus:ring-[#0077cc] focus:ring-2">
-                            <span class="ml-2 text-sm text-gray-600">Recordarme</span>
-                        </label>
-                        <a href="#" class="text-sm text-[#0077cc] hover:text-blue-800 transition duration-200">
-                            ¿Olvidaste tu contraseña?
-                        </a>
-                    </div>
-
-                    <!-- Login Button -->
-                    <button type="submit"
-                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-gradient-to-r from-[#0077cc] to-blue-600 hover:from-blue-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0077cc] transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                            <svg class="h-5 w-5 text-blue-200 group-hover:text-blue-100 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                        </span>
-                        Iniciar Sesión
-                    </button>
-                </form>
-
-                <!-- Footer -->
-                <div class="mt-8 text-center">
-                    <p class="text-xs text-gray-500">
-                        © 2024 Farmacia 701. Sistema seguro de administración.
-                    </p>
-                </div>
-            </div>
+        <!-- ICONOS MÉDICOS FLOTANTES ORIGINALES -->
+        <!-- Medicamentos/Píldoras -->
+        <div class="absolute top-1/4 left-1/6 text-blue-300/30 animate-medical-float" style="animation-delay: 1s;">
+            <i class="fas fa-pills text-4xl"></i>
+        </div>
+        <div class="absolute bottom-1/3 right-1/5 text-indigo-300/25 animate-medical-drift" style="animation-delay: 3s;">
+            <i class="fas fa-capsules text-3xl"></i>
+        </div>
+        <div class="absolute top-2/3 left-1/3 text-purple-300/20 animate-medical-float" style="animation-delay: 5s;">
+            <i class="fas fa-tablets text-2xl"></i>
         </div>
 
-        <!-- Enhanced decorative elements -->
-        <div class="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[#0077cc]/20 to-blue-400/10 rounded-full blur-2xl animate-pulse"></div>
-        <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-gradient-to-br from-[#0077cc]/10 to-blue-300/5 rounded-full blur-2xl animate-pulse" style="animation-delay: 1.5s;"></div>
+        <!-- Recetas y documentos médicos -->
+        <div class="absolute top-1/6 right-1/3 text-cyan-300/25 animate-medical-drift" style="animation-delay: 2s;">
+            <i class="fas fa-prescription text-3xl"></i>
+        </div>
+        <div class="absolute bottom-1/4 left-1/4 text-blue-300/30 animate-medical-float" style="animation-delay: 4s;">
+            <i class="fas fa-file-medical text-2xl"></i>
+        </div>
+        <div class="absolute top-1/2 right-1/6 text-indigo-300/20 animate-medical-drift" style="animation-delay: 6s;">
+            <i class="fas fa-prescription-bottle text-3xl"></i>
+        </div>
+
+        <!-- Equipos médicos -->
+        <div class="absolute bottom-1/6 right-1/4 text-purple-300/25 animate-medical-float" style="animation-delay: 7s;">
+            <i class="fas fa-stethoscope text-2xl"></i>
+        </div>
+        <div class="absolute top-1/3 left-1/5 text-cyan-300/20 animate-medical-drift" style="animation-delay: 8s;">
+            <i class="fas fa-syringe text-2xl"></i>
+        </div>
+        <div class="absolute bottom-2/3 right-1/2 text-blue-300/25 animate-medical-float" style="animation-delay: 9s;">
+            <i class="fas fa-thermometer text-2xl"></i>
+        </div>
+
+        <!-- Símbolos médicos adicionales -->
+        <div class="absolute top-1/5 left-1/2 text-indigo-300/30 animate-medical-drift" style="animation-delay: 10s;">
+            <i class="fas fa-heartbeat text-3xl"></i>
+        </div>
+        <div class="absolute bottom-1/5 left-1/6 text-purple-300/20 animate-medical-float" style="animation-delay: 11s;">
+            <i class="fas fa-user-md text-2xl"></i>
+        </div>
+        <div class="absolute top-3/4 right-1/3 text-cyan-300/25 animate-medical-drift" style="animation-delay: 12s;">
+            <i class="fas fa-hospital text-2xl"></i>
+        </div>
+
+        <!-- MÁS ICONOS MÉDICOS ADICIONALES -->
+        <!-- Más medicamentos -->
+        <div class="absolute top-1/8 right-1/8 text-emerald-300/25 animate-medical-float" style="animation-delay: 13s;">
+            <i class="fas fa-mortar-pestle text-3xl"></i>
+        </div>
+        <div class="absolute bottom-1/8 left-1/8 text-teal-300/20 animate-medical-drift" style="animation-delay: 14s;">
+            <i class="fas fa-prescription-bottle-medical text-2xl"></i>
+        </div>
+
+        <!-- Equipos adicionales -->
+        <div class="absolute top-3/5 left-1/8 text-blue-300/30 animate-medical-float" style="animation-delay: 15s;">
+            <i class="fas fa-microscope text-2xl"></i>
+        </div>
+        <div class="absolute bottom-2/5 right-1/8 text-purple-300/25 animate-medical-drift" style="animation-delay: 16s;">
+            <i class="fas fa-dna text-3xl"></i>
+        </div>
+
+        <!-- Símbolos de salud -->
+        <div class="absolute top-1/7 left-2/5 text-cyan-300/20 animate-medical-float" style="animation-delay: 17s;">
+            <i class="fas fa-plus-circle text-2xl"></i>
+        </div>
+        <div class="absolute bottom-1/7 right-2/5 text-indigo-300/25 animate-medical-drift" style="animation-delay: 18s;">
+            <i class="fas fa-shield-virus text-2xl"></i>
+        </div>
+
+        <!-- PARTÍCULAS ADICIONALES -->
+        <div class="absolute top-1/8 left-3/5 w-2 h-2 bg-emerald-400/50 rounded-full animate-ping" style="animation-delay: 6s; animation-duration: 4s;"></div>
+        <div class="absolute bottom-1/8 right-3/5 w-3 h-3  bg-violet-400/60 rounded-full animate-ping" style="animation-delay: 7s; animation-duration: 3s;"></div>
+        <div class="absolute top-3/8 left-4/5 w-1 h-1 bg-violet-400/60 rounded-full animate-ping" style="animation-delay: 8s; animation-duration: 2.5s;"></div>
+        <div class="absolute bottom-3/8 right-4/5 w-2 h-2 bg-teal-400/45 rounded-full animate-ping" style="animation-delay: 9s; animation-duration: 3.5s;"></div>
+
+        <!-- Partículas flotantes originales -->
+        <div class="absolute top-1/4 right-1/3 w-4 h-4 bg-blue-400/40 rounded-full animate-ping" style="animation-delay: 1s; animation-duration: 3s;"></div>
+        <div class="absolute bottom-1/3 left-1/5 w-3 h-3 bg-purple-400/50 rounded-full animate-ping" style="animation-delay: 2s; animation-duration: 4s;"></div>
+        <div class="absolute top-2/3 right-1/4 w-2 h-2 bg-cyan-400/60 rounded-full animate-ping" style="animation-delay: 3s; animation-duration: 2s;"></div>
+        <div class="absolute top-1/2 left-1/3 w-3 h-3 bg-indigo-400/45 rounded-full animate-ping" style="animation-delay: 4s; animation-duration: 3.5s;"></div>
+        <div class="absolute bottom-1/4 right-1/2 w-2 h-2 bg-pink-400/55 rounded-full animate-ping" style="animation-delay: 5s; animation-duration: 2.5s;"></div>
+
+        <!-- EFECTOS DE LUZ ADICIONALES -->
+        <!-- Rayos de luz suaves -->
+        <div class="absolute top-0 left-1/3 w-1 h-full bg-gradient-to-b from-transparent via-blue-200/10 to-transparent transform -skew-x-12 animate-pulse" style="animation-duration: 15s;"></div>
+        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-transparent via-purple-200/8 to-transparent transform skew-x-12 animate-pulse" style="animation-duration: 18s; animation-delay: 5s;"></div>
+
+        <!-- Patrón de grid sutil -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\\" 60\\" height=\\"60\\" viewBox=\\"0 0 60 60\\" xmlns=\\"http://www.w3.org/2000/svg\\"%3E%3Cg fill=\\"none\\" fill-rule=\\"evenodd\\"%3E%3Cg fill=\\"%233b82f6\\" fill-opacity=\\"0.03\\"%3E%3Ccircle cx=\\"30\\" cy=\\"30\\" r=\\"1.5\\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+
+        <!-- PATRÓN DE CRUCES MÉDICAS -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\\" 80\\" height=\\"80\\" viewBox=\\"0 0 80 80\\" xmlns=\\"http://www.w3.org/2000/svg\\"%3E%3Cg fill=\\"%233b82f6\\" fill-opacity=\\"0.02\\"%3E%3Cpath d=\\"M35 35h10v10h-10z\\"/%3E%3Cpath d=\\"M30 40h20v5h-20z\\"/%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+
+        <!-- Ondas sutiles -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-200/30 to-transparent"></div>
+        <div class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-indigo-200/20 to-transparent"></div>
     </div>
 
+    <!-- Container principal -->
+    <div class="relative w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-clinic-medical text-white text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">Iniciar Sesión</h1>
+                <p class="text-gray-600">Sistema de administración de medicamentos controlados.</p>
+            </div>
+
+            <!-- Mensajes de error/éxito -->
+            @if (session('status'))
+            <div class="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    <span class="text-green-700">{{ session('status') }}</span>
+                </div>
+            </div>
+            @endif
+            <form method="POST" action="{{ route('login') }}" id="loginForm">
+                @csrf
+
+                <!-- Campo Email -->
+                <div class="mb-6">
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Correo Electrónico
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email"
+                            name="email"
+                            id="email"
+                            required
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('email') border-red-500 @enderror"
+                            placeholder="admin@farmacia701.com"
+                            value="{{ old('email') }}">
+                    </div>
+                    @error('email')
+                    <p class="mt-1 text-sm text-red-600">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        {{ $message }}
+                    </p>
+                    @enderror
+                </div>
+
+                <!-- Campo Contraseña -->
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Contraseña
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password"
+                            name="password"
+                            id="password"
+                            required
+                            class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('password') border-red-500 @enderror"
+                            placeholder="••••••••">
+                        <button type="button"
+                            id="togglePassword"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                            aria-label="Mostrar contraseña">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    @error('password')
+                    <p class="mt-1 text-sm text-red-600">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        {{ $message }}
+                    </p>
+                    @enderror
+                </div>
+
+                <!-- Recordarme y Olvidé contraseña -->
+                <div class="flex items-center justify-between mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-600">Recordarme</span>
+                    </label>
+                    @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-800">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                    @endif
+                </div>
+
+                <!-- Botón Login -->
+                <button type="submit"
+                    id="loginBtn"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium">
+                    <span id="btnText">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Iniciar Sesión
+                    </span>
+                    <span id="btnLoading" class="hidden">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>
+                        Iniciando sesión...
+                    </span>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <p class="text-xs text-gray-500">
+                    © 2024 Farmacia 701. Sistema seguro de administración.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Auto-focus en email  
+            $('#email').focus();
+
+            // Toggle mostrar/ocultar contraseña - SOLUCIÓN MEJORADA  
+            $('#togglePassword').on('click', function(e) {
+                e.preventDefault();
+
+                const passwordField = $('#password');
+                const currentType = passwordField.attr('type');
+
+                if (currentType === 'password') {
+                    // Mostrar contraseña  
+                    passwordField.attr('type', 'text');
+                    $(this).html('<i class="fas fa-eye-slash"></i>');
+                    $(this).attr('aria-label', 'Ocultar contraseña');
+                } else {
+                    // Ocultar contraseña  
+                    passwordField.attr('type', 'password');
+                    $(this).html('<i class="fas fa-eye"></i>');
+                    $(this).attr('aria-label', 'Mostrar contraseña');
+                }
+            });
+
+            // Navegación con Enter  
+            $('#email').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#password').focus();
+                }
+            });
+
+            $('#password').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#loginForm').submit();
+                }
+            });
+
+            // Estado de carga del formulario  
+            $('#loginForm').on('submit', function() {
+                const btn = $('#loginBtn');
+                const btnText = $('#btnText');
+                const btnLoading = $('#btnLoading');
+
+                btn.prop('disabled', true);
+                btnText.addClass('hidden');
+                btnLoading.removeClass('hidden');
+
+                // Timeout de seguridad para re-habilitar  
+                setTimeout(function() {
+                    btn.prop('disabled', false);
+                    btnText.removeClass('hidden');
+                    btnLoading.addClass('hidden');
+                }, 10000);
+            });
+        });
+    </script>
+
     <style>
-        @keyframes float {
+        /* Animaciones mejoradas para el background */
+        @keyframes float-slow {
 
             0%,
             100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-15px) translateX(10px) rotate(2deg);
+            }
+
+            66% {
+                transform: translateY(10px) translateX(-5px) rotate(-1deg);
+            }
+        }
+
+        @keyframes drift {
+
+            0%,
+            100% {
+                transform: translateX(0px) translateY(0px);
+            }
+
+            25% {
+                transform: translateX(20px) translateY(-10px);
             }
 
             50% {
-                transform: translateY(-12px) rotate(6deg);
+                transform: translateX(-15px) translateY(15px);
+            }
+
+            75% {
+                transform: translateX(10px) translateY(-20px);
             }
         }
 
-        /* Enhanced scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Animaciones específicas para iconos médicos */
+        @keyframes medical-float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg) scale(1);
+                opacity: 0.3;
+            }
+
+            25% {
+                transform: translateY(-15px) rotate(5deg) scale(1.1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(-3deg) scale(1.05);
+                opacity: 0.35;
+            }
+
+            75% {
+                transform: translateY(-20px) rotate(2deg) scale(1.08);
+                opacity: 0.25;
+            }
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(119, 169, 255, 0.1);
-            border-radius: 4px;
+        @keyframes medical-drift {
+
+            0%,
+            100% {
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                opacity: 0.25;
+            }
+
+            20% {
+                transform: translateX(15px) translateY(-8px) rotate(10deg);
+                opacity: 0.35;
+            }
+
+            40% {
+                transform: translateX(-10px) translateY(12px) rotate(-5deg);
+                opacity: 0.3;
+            }
+
+            60% {
+                transform: translateX(20px) translateY(-15px) rotate(8deg);
+                opacity: 0.4;
+            }
+
+            80% {
+                transform: translateX(-5px) translateY(10px) rotate(-3deg);
+                opacity: 0.28;
+            }
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #0077cc, #005fa3);
-            border-radius: 4px;
+        /* Aplicar animaciones a elementos específicos */
+        .animate-float-slow {
+            animation: float-slow 15s ease-in-out infinite;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #005fa3, #004080);
+        .animate-drift {
+            animation: drift 20s ease-in-out infinite;
         }
 
-        /* Custom animations */
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
+        /* Aplicar animaciones médicas */
+        .animate-medical-float {
+            animation: medical-float 18s ease-in-out infinite;
+        }
+
+        .animate-medical-drift {
+            animation: medical-drift 22s ease-in-out infinite;
+        }
+
+        /* Efecto de respiración para las formas */
+        @keyframes breathe {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .animate-breathe {
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        /* Estilos adicionales */
+        .transition-colors {
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
         }
     </style>
 </body>
