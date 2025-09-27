@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.index');
     })->name('dashboard');
 
-    Route::resource('medicaments', MedicamentController::class);
+    Route::resource('medicaments', MedicamentController::class);  
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

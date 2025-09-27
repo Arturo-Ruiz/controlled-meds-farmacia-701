@@ -12,9 +12,7 @@ class MedicamentController extends Controller
 {
     public function index()
     {
-        $medicaments = Medicament::with(['lowStock', 'expiringSoon'])
-            ->orderBy('name')
-            ->paginate(15);
+        $medicaments = Medicament::latest()->paginate(9);
 
         return view('medicaments.index', compact('medicaments'));
     }
