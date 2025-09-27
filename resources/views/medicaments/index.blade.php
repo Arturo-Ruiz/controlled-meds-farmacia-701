@@ -226,9 +226,9 @@
 
 
 <!-- Modal de Medicamentos - Versión Sin Overlay -->
-<div id="medicamentModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <!-- Contenido del Modal -->
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border-2 border-gray-200">
+<div id="medicamentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center transition-opacity duration-300 opacity-0">
+    <!-- Modal Content -->
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto animate-fadeInUp">
         <!-- Header del Modal -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
             <h3 id="medicamentModalTitle" class="text-xl font-semibold text-gray-900">Crear Medicamento</h3>
@@ -238,62 +238,103 @@
         </div>
 
         <!-- Resto del contenido del modal igual que antes -->
-        <form id="medicamentForm" class="px-6 py-4" data-action="create">
+        <form id="medicamentForm" class="px-6 py-4">
             @csrf
-            @csrf
+            <input type="hidden" id="medicamentId" name="id">
+
+            <!-- Primera fila: Nombre y Presentación -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre del medicamento</label>
-                    <input type="text" id="name" name="name" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="nameError"></span>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-pills text-gray-400"></i>
+                        </div>
+                        <input type="text" id="name" name="name" required
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="nameError"></span>
+                    </div>
                 </div>
 
                 <div>
                     <label for="presentation" class="block text-sm font-medium text-gray-700 mb-1">Presentación</label>
-                    <input type="text" id="presentation" name="presentation" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="presentationError"></span>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-capsules text-gray-400"></i>
+                        </div>
+                        <input type="text" id="presentation" name="presentation" required
+                            placeholder="Ej: Tabletas, Jarabe, Cápsulas"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="presentationError"></span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Segunda fila: Unidades posológicas y Precio -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="posological_units" class="block text-sm font-medium text-gray-700 mb-1">Unidades posológicas</label>
-                    <input type="number" id="posological_units" name="posological_units" required min="1"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="posological_unitsError"></span>
-                </div>
-
-                <div>
-                    <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock actual</label>
-                    <input type="number" id="stock" name="stock" required min="0"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="stockError"></span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="min_stock" class="block text-sm font-medium text-gray-700 mb-1">Stock mínimo</label>
-                    <input type="number" id="min_stock" name="min_stock" required min="0"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="min_stockError"></span>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-hashtag text-gray-400"></i>
+                        </div>
+                        <input type="number" id="posological_units" name="posological_units" required min="1"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="posological_unitsError"></span>
+                    </div>
                 </div>
 
                 <div>
                     <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Precio</label>
-                    <input type="number" id="price" name="price" required min="0" step="0.01"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <span class="text-red-500 text-xs hidden" id="priceError"></span>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-dollar-sign text-gray-400"></i>
+                        </div>
+                        <input type="number" id="price" name="price" required min="0" step="0.01"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="priceError"></span>
+                    </div>
                 </div>
             </div>
 
-            <div>
+            <!-- Tercera fila: Stock actual y Stock mínimo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock actual</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-boxes text-gray-400"></i>
+                        </div>
+                        <input type="number" id="stock" name="stock" required min="0"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="stockError"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="min_stock" class="block text-sm font-medium text-gray-700 mb-1">Stock mínimo</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-exclamation-triangle text-gray-400"></i>
+                        </div>
+                        <input type="number" id="min_stock" name="min_stock" required min="0"
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="text-red-500 text-xs hidden" id="min_stockError"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cuarta fila: Fecha de vencimiento (ancho completo) -->
+            <div class="mb-4">
                 <label for="expiration_date" class="block text-sm font-medium text-gray-700 mb-1">Fecha de vencimiento</label>
-                <input type="date" id="expiration_date" name="expiration_date" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <span class="text-red-500 text-xs hidden" id="expiration_dateError"></span>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <i class="fas fa-calendar-alt text-gray-400"></i>
+                    </div>
+                    <input type="date" id="expiration_date" name="expiration_date" required
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <span class="text-red-500 text-xs hidden" id="expiration_dateError"></span>
+                </div>
             </div>
         </form>
 
@@ -301,7 +342,7 @@
             <button id="cancelBtn" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                 Cancelar
             </button>
-            <button id="saveBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200">
+            <button id="saveBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
                 Guardar
             </button>
         </div>
@@ -363,12 +404,17 @@
     #medicamentModal .bg-white {
         transform: scale(0.95);
         opacity: 0;
-        transition: all 0.3s ease-out;
+        transition: opacity 0.3s ease-in-out;
     }
 
     #medicamentModal:not(.hidden) .bg-white {
         transform: scale(1);
         opacity: 1;
+    }
+
+    #medicamentModal .bg-white {
+        animation-duration: 0.4s;
+        animation-timing-function: ease-out;
     }
 </style>
 @endsection
@@ -538,11 +584,13 @@
             });
         }
 
+        //Clear errors
         function clearErrors() {
             $('.text-red-500').addClass('hidden');
             $('input').removeClass('border-red-500');
         }
 
+        //Show alert
         function showAlert(type, message) {
             const alertClass = type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
             const alert = `  
@@ -557,6 +605,38 @@
                 $('.fixed.top-4.right-4').fadeOut();
             }, 3000);
         }
+
+        $('#createMedicamentBtn').click(function() {
+            const modal = $('#medicamentModal');
+
+            // Mostrar modal  
+            modal.removeClass('hidden').addClass('flex');
+
+            // Trigger fade in  
+            setTimeout(() => {
+                modal.removeClass('opacity-0').addClass('opacity-100');
+            }, 10);
+
+            // Reset form  
+            $('#medicamentForm')[0].reset();
+            $('#medicamentForm').attr('data-action', 'create');
+        });
+
+        // Cerrar modal con fade out  
+        $('#cancelBtn, .modal-close').click(function() {
+            const modal = $('#medicamentModal');
+
+            // Fade out  
+            modal.removeClass('opacity-100').addClass('opacity-0');
+
+            // Hide after animation  
+            setTimeout(() => {
+                modal.addClass('hidden').removeClass('flex');
+            }, 300);
+
+            clearErrors();
+        });
+
     });
 </script>
 @endpush
