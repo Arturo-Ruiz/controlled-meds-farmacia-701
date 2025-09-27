@@ -13,10 +13,10 @@
         <div class="relative z-10 p-6 border-b border-gray-200/50">
             <div class="flex items-center space-x-3 group">
                 <div class="w-16 h-16 flex items-center justify-center transition-all duration-300">
-                    <img src="{{ asset('img/logo.png') }}" alt="Farmacia 701" class="w-12 h-12 object-contain">
+                    <img src="{{ asset('img/logo.png') }}" alt="Farmacia 701" class="w-13 h-13 object-contain">
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-gray-800 transition-colors duration-300">Farmacia 701</h1>
+                    <h1 class="text-lg font-bold text-gray-800 transition-colors duration-300">Farmacia 701</h1>
                 </div>
 
                 <button id="sidebarClose" class="lg:hidden absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200">

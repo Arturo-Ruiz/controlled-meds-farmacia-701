@@ -418,19 +418,17 @@
     }
 </style>
 @endsection
-
 @push('scripts')
 <script>
     $(document).ready(function() {
         // Abrir modal para crear  
-        $('#createMedicamentBtn').click(function() {
-            $('#modalTitle').text('Nuevo Medicamento');
+        $(document).on('click', '#createMedicamentBtn', function() {
+            $('#medicamentModalTitle').text('Nuevo Medicamento');
             $('#medicamentForm')[0].reset();
             $('#medicamentForm').attr('data-action', 'create');
             $('#medicamentId').val('');
             clearErrors();
 
-            // Mostrar modal con fade in  
             $('#medicamentModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
             setTimeout(() => {
                 $('#medicamentModal .bg-white').removeClass('scale-95').addClass('scale-100');
@@ -442,7 +440,6 @@
             closeModal();
         });
 
-        // Función para cerrar modal  
         function closeModal() {
             $('#medicamentModal .bg-white').removeClass('scale-100').addClass('scale-95');
             setTimeout(() => {
@@ -451,7 +448,7 @@
             clearErrors();
         }
 
-        // Guardar medicamento  
+        // Guardar medicamento - VERSIÓN SIMPLIFICADA CON RECARGA  
         $('#saveBtn').click(function() {
             const form = $('#medicamentForm');
             const action = form.attr('data-action');
@@ -459,7 +456,6 @@
 
             let url = action === 'create' ? '{{ route("medicaments.store") }}' :
                 '{{ route("medicaments.update", ":id") }}'.replace(':id', medicamentId);
-
             let method = action === 'create' ? 'POST' : 'PUT';
 
             $.ajax({
@@ -473,11 +469,8 @@
                     if (response.success) {
                         closeModal();
 
+                        // Mostrar notificación y recargar  
                         if (action === 'create') {
-                            // Agregar nueva tarjeta al grid  
-                            addMedicamentToGrid(response.medicament);
-
-                            // Toast de éxito  
                             Swal.fire({
                                 toast: true,
                                 position: 'top-end',
@@ -485,14 +478,12 @@
                                 title: '¡Medicamento creado!',
                                 text: `${response.medicament.name} ha sido registrado exitosamente`,
                                 showConfirmButton: false,
-                                timer: 3000,
+                                timer: 2000,
                                 timerProgressBar: true
+                            }).then(() => {
+                                window.location.reload();
                             });
                         } else {
-                            // Actualizar tarjeta existente  
-                            updateMedicamentCard(response.medicament);
-
-                            // Toast de éxito para edición  
                             Swal.fire({
                                 toast: true,
                                 position: 'top-end',
@@ -500,16 +491,17 @@
                                 title: '¡Medicamento actualizado!',
                                 text: `${response.medicament.name} ha sido actualizado exitosamente`,
                                 showConfirmButton: false,
-                                timer: 3000,
+                                timer: 2000,
                                 timerProgressBar: true
+                            }).then(() => {
+                                window.location.reload();
                             });
                         }
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
-                        const errors = xhr.responseJSON.errors;
-                        showValidationErrors(errors);
+                        showValidationErrors(xhr.responseJSON.errors);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -522,6 +514,7 @@
         });
 
         // Editar medicamento  
+        // Editar medicamento  
         $(document).on('click', '.edit-medicament', function() {
             const medicamentId = $(this).data('id');
 
@@ -532,19 +525,22 @@
                     if (response.success) {
                         const medicament = response.medicament;
 
-                        $('#modalTitle').text('Editar Medicamento');
+                        $('#medicamentModalTitle').text('Editar Medicamento');
                         $('#name').val(medicament.name);
                         $('#presentation').val(medicament.presentation);
                         $('#posological_units').val(medicament.posological_units);
                         $('#stock').val(medicament.stock);
                         $('#min_stock').val(medicament.min_stock);
                         $('#price').val(medicament.price);
-                        $('#expiration_date').val(medicament.expiration_date);
-                        $('#medicamentId').val(medicament.id);
 
+                        // CORRECCIÓN: Formatear la fecha correctamente  
+                        const expirationDate = new Date(medicament.expiration_date);
+                        const formattedDate = expirationDate.toISOString().split('T')[0];
+                        $('#expiration_date').val(formattedDate);
+
+                        $('#medicamentId').val(medicament.id);
                         $('#medicamentForm').attr('data-action', 'edit');
 
-                        // Mostrar modal  
                         $('#medicamentModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
                         setTimeout(() => {
                             $('#medicamentModal .bg-white').removeClass('scale-95').addClass('scale-100');
@@ -554,7 +550,7 @@
             });
         });
 
-        // Eliminar medicamento  
+        // Eliminar medicamento - VERSIÓN SIMPLIFICADA CON RECARGA  
         $(document).on('click', '.delete-medicament', function() {
             const medicamentId = $(this).data('id');
             const medicamentName = $(this).closest('.bg-white').find('h3').text();
@@ -578,14 +574,7 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                // Remover tarjeta del DOM con animación  
-                                const card = $(`.delete-medicament[data-id="${medicamentId}"]`).closest('.bg-white');
-
-                                // Asegúrate de que el resto del bloque de eliminación quede así:
-                                card.fadeOut(300, function() {
-                                    $(this).remove();
-                                });
-
+                                // Mostrar notificación y recargar  
                                 Swal.fire({
                                     toast: true,
                                     position: 'top-end',
@@ -593,8 +582,10 @@
                                     title: '¡Eliminado!',
                                     text: 'El medicamento ha sido eliminado exitosamente',
                                     showConfirmButton: false,
-                                    timer: 3000,
+                                    timer: 2000,
                                     timerProgressBar: true
+                                }).then(() => {
+                                    window.location.reload();
                                 });
                             }
                         },
@@ -609,154 +600,6 @@
                 }
             });
         });
-
-        // Función para agregar medicamento al grid  
-        function addMedicamentToGrid(medicament) {
-            // Busca y elimina el mensaje de "grid vacío" si existe
-            const emptyState = $('#medicamentsGrid').find('.col-span-full');
-            if (emptyState.length) {
-                emptyState.remove();
-            }
-
-            const newCard = createMedicamentCard(medicament);
-            $('#medicamentsGrid').prepend(newCard);
-
-            // Animación de entrada
-            setTimeout(() => {
-                newCard.removeClass('opacity-0 scale-95').addClass('opacity-100 scale-100');
-            }, 100);
-        }
-
-        // Función para actualizar tarjeta existente  
-        function updateMedicamentCard(medicament) {
-            const existingCard = $(`.edit-medicament[data-id="${medicament.id}"]`).closest('.bg-white').parent();
-            const newCard = createMedicamentCard(medicament);
-
-            existingCard.fadeOut(200, function() {
-                existingCard.replaceWith(newCard);
-                newCard.hide().fadeIn(200);
-            });
-        }
-
-        // Reemplaza la función completa con esta versión corregida.
-        function createMedicamentCard(medicament) {
-            // 1. Lógica para el badge de estado del stock
-            let stockBadge = '';
-            if (medicament.stock <= medicament.min_stock) {
-                stockBadge = `
-            <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full border border-red-200">
-                <i class="fas fa-exclamation-triangle mr-1"></i>
-                Stock Crítico
-            </span>`;
-            } else if (medicament.stock <= (medicament.min_stock * 1.5)) {
-                stockBadge = `
-            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
-                <i class="fas fa-exclamation-circle mr-1"></i>
-                Stock Bajo
-            </span>`;
-            } else {
-                stockBadge = `
-            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
-                <i class="fas fa-check-circle mr-1"></i>
-                Stock Normal
-            </span>`;
-            }
-
-            // 2. Lógica para los días de vencimiento
-            const expirationDate = new Date(medicament.expiration_date);
-            const today = new Date();
-            expirationDate.setHours(0, 0, 0, 0);
-            today.setHours(0, 0, 0, 0);
-
-            const diffTime = expirationDate - today;
-            const daysToExpire = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            let expirationWarning = '';
-            if (daysToExpire < 30) {
-                expirationWarning = `<span class="text-xs text-red-600 font-medium"><i class="fas fa-clock mr-1"></i> Vence en ${daysToExpire} días</span>`;
-            } else if (daysToExpire < 90) {
-                expirationWarning = `<span class="text-xs text-yellow-600 font-medium"><i class="fas fa-clock mr-1"></i> Vence en ${daysToExpire} días</span>`;
-            } else {
-                expirationWarning = `<span class="text-xs text-gray-500"><i class="fas fa-clock mr-1"></i> ${daysToExpire} días restantes</span>`;
-            }
-
-            const formattedExpirationDate = expirationDate.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-
-            // 3. Crear el HTML
-            const cardWrapper = document.createElement('div');
-            cardWrapper.innerHTML = `
-        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group">
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="fas fa-pills text-white text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-lg group-hover:text-blue-700 transition-colors duration-200">${medicament.name}</h3>
-                            <p class="text-sm text-gray-600">${medicament.presentation}</p>
-                        </div>
-                    </div>
-                    ${stockBadge}
-                </div>
-            </div>
-
-            <div class="p-6 space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-xl p-3 text-center">
-                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Stock Actual</p>
-                        <p class="text-2xl font-bold text-gray-900">${new Intl.NumberFormat('es-ES').format(medicament.stock)}</p>
-                        <p class="text-xs text-gray-600">unidades</p>
-                    </div>
-                    <div class="bg-gray-50 rounded-xl p-3 text-center">
-                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Stock Mínimo</p>
-                        <p class="text-2xl font-bold text-gray-900">${new Intl.NumberFormat('es-ES').format(medicament.min_stock)}</p>
-                        <p class="text-xs text-gray-600">unidades</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between py-2 border-b border-gray-100">
-                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-dollar-sign text-green-500 mr-2"></i> Precio</span>
-                        <span class="font-semibold text-green-600">$${new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(medicament.price)}</span>
-                    </div>
-                    <div class="flex items-center justify-between py-2 border-b border-gray-100">
-                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Vencimiento</span>
-                        <span class="font-medium text-gray-900">${formattedExpirationDate}</span>
-                    </div>
-                    <div class="flex items-center justify-between py-2">
-                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-capsules text-purple-500 mr-2"></i> Unidades Posológicas</span>
-                        <span class="font-medium text-gray-900">${medicament.posological_units}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div class="flex space-x-2">
-                        <button class="edit-medicament p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200" data-id="${medicament.id}" title="Editar medicamento">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-medicament p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200" data-id="${medicament.id}" title="Eliminar medicamento">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    ${expirationWarning}
-                </div>
-            </div>
-        </div>
-    `;
-
-            cardWrapper.className = 'opacity-0 scale-95 transition-all duration-300';
-
-            // La única línea que cambió es esta:
-            return $(cardWrapper);
-        }
-
 
         // Funciones auxiliares  
         function showValidationErrors(errors) {
