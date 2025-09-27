@@ -422,36 +422,40 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Mostrar modal  
+        // Abrir modal para crear  
         $('#createMedicamentBtn').click(function() {
-            $('#medicamentModalTitle').text('Crear Medicamento');
+            $('#modalTitle').text('Nuevo Medicamento');
             $('#medicamentForm')[0].reset();
             $('#medicamentForm').attr('data-action', 'create');
-            $('#medicamentModal').removeClass('hidden').addClass('flex');
-            $('body').addClass('overflow-hidden'); // Prevenir scroll del body  
+            $('#medicamentId').val('');
+            clearErrors();
+
+            // Mostrar modal con fade in  
+            $('#medicamentModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
+            setTimeout(() => {
+                $('#medicamentModal .bg-white').removeClass('scale-95').addClass('scale-100');
+            }, 10);
         });
 
         // Cerrar modal  
         $('#cancelBtn, .modal-close').click(function() {
-            $('#medicamentModal').addClass('hidden').removeClass('flex');
-            $('body').removeClass('overflow-hidden');
-            clearErrors();
+            closeModal();
         });
 
-        // Cerrar modal al hacer clic fuera del contenido  
-        $('#medicamentModal').click(function(e) {
-            if (e.target === this) {
-                $(this).addClass('hidden').removeClass('flex');
-                $('body').removeClass('overflow-hidden');
-                clearErrors();
-            }
-        });
+        // Función para cerrar modal  
+        function closeModal() {
+            $('#medicamentModal .bg-white').removeClass('scale-100').addClass('scale-95');
+            setTimeout(() => {
+                $('#medicamentModal').removeClass('flex opacity-100').addClass('hidden opacity-0');
+            }, 200);
+            clearErrors();
+        }
 
         // Guardar medicamento  
         $('#saveBtn').click(function() {
             const form = $('#medicamentForm');
             const action = form.attr('data-action');
-            const medicamentId = form.attr('data-id');
+            const medicamentId = $('#medicamentId').val();
 
             let url = action === 'create' ? '{{ route("medicaments.store") }}' :
                 '{{ route("medicaments.update", ":id") }}'.replace(':id', medicamentId);
@@ -467,9 +471,39 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#medicamentModal').addClass('hidden').removeClass('flex');
-                        location.reload();
-                        showAlert('success', response.message);
+                        closeModal();
+
+                        if (action === 'create') {
+                            // Agregar nueva tarjeta al grid  
+                            addMedicamentToGrid(response.medicament);
+
+                            // Toast de éxito  
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: '¡Medicamento creado!',
+                                text: `${response.medicament.name} ha sido registrado exitosamente`,
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        } else {
+                            // Actualizar tarjeta existente  
+                            updateMedicamentCard(response.medicament);
+
+                            // Toast de éxito para edición  
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: '¡Medicamento actualizado!',
+                                text: `${response.medicament.name} ha sido actualizado exitosamente`,
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        }
                     }
                 },
                 error: function(xhr) {
@@ -477,14 +511,18 @@
                         const errors = xhr.responseJSON.errors;
                         showValidationErrors(errors);
                     } else {
-                        showAlert('error', 'Error al procesar la solicitud');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al procesar la solicitud'
+                        });
                     }
                 }
             });
         });
 
         // Editar medicamento  
-        $('.edit-btn').click(function() {
+        $(document).on('click', '.edit-btn', function() {
             const medicamentId = $(this).data('id');
 
             $.ajax({
@@ -494,10 +532,7 @@
                     if (response.success) {
                         const medicament = response.medicament;
 
-                        $('#medicamentModalTitle').text('Editar Medicamento');
-                        $('#medicamentForm').attr('data-action', 'edit').attr('data-id', medicamentId);
-
-                        // Llenar el formulario  
+                        $('#modalTitle').text('Editar Medicamento');
                         $('#name').val(medicament.name);
                         $('#presentation').val(medicament.presentation);
                         $('#posological_units').val(medicament.posological_units);
@@ -505,73 +540,191 @@
                         $('#min_stock').val(medicament.min_stock);
                         $('#price').val(medicament.price);
                         $('#expiration_date').val(medicament.expiration_date);
+                        $('#medicamentId').val(medicament.id);
 
-                        $('#medicamentModal').removeClass('hidden').addClass('flex');
-                        clearErrors();
+                        $('#medicamentForm').attr('data-action', 'edit');
+
+                        // Mostrar modal  
+                        $('#medicamentModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
+                        setTimeout(() => {
+                            $('#medicamentModal .bg-white').removeClass('scale-95').addClass('scale-100');
+                        }, 10);
                     }
-                },
-                error: function() {
-                    showAlert('error', 'Error al cargar los datos del medicamento');
                 }
             });
         });
 
         // Eliminar medicamento  
-        $('.delete-btn').click(function() {
+        $(document).on('click', '.delete-btn', function() {
             const medicamentId = $(this).data('id');
-            const medicamentName = $(this).data('name');
+            const medicamentName = $(this).closest('.bg-white').find('h3').text();
 
-            if (confirm(`¿Estás seguro de que deseas eliminar el medicamento "${medicamentName}"?`)) {
-                $.ajax({
-                    url: '{{ route("medicaments.destroy", ":id") }}'.replace(':id', medicamentId),
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            location.reload();
-                            showAlert('success', response.message);
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `¿Quieres eliminar el medicamento "${medicamentName}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route("medicaments.destroy", ":id") }}'.replace(':id', medicamentId),
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Remover tarjeta del DOM con animación  
+                                const card = $(`.delete-btn[data-id="${medicamentId}"]`).closest('.bg-white').parent();
+                                card.fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: '¡Eliminado!',
+                                    text: 'El medicamento ha sido eliminado exitosamente',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al eliminar el medicamento'
+                            });
                         }
-                    },
-                    error: function() {
-                        showAlert('error', 'Error al eliminar el medicamento');
-                    }
-                });
+                    });
+                }
+            });
+        });
+
+        // Función para agregar medicamento al grid  
+        function addMedicamentToGrid(medicament) {
+            const newCard = createMedicamentCard(medicament);
+            $('#medicamentsGrid').prepend(newCard);
+
+            // Animación de entrada  
+            setTimeout(() => {
+                newCard.removeClass('opacity-0 scale-95').addClass('opacity-100 scale-100');
+            }, 100);
+        }
+
+        // Función para actualizar tarjeta existente  
+        function updateMedicamentCard(medicament) {
+            const existingCard = $(`.edit-btn[data-id="${medicament.id}"]`).closest('.bg-white').parent();
+            const newCard = createMedicamentCard(medicament);
+
+            existingCard.fadeOut(200, function() {
+                existingCard.replaceWith(newCard);
+                newCard.hide().fadeIn(200);
+            });
+        }
+
+        // Función para crear tarjeta de medicamento  
+        function createMedicamentCard(medicament) {
+            // Calcular estado del medicamento  
+            const isLowStock = medicament.stock <= medicament.min_stock;
+            const expirationDate = new Date(medicament.expiration_date);
+            const today = new Date();
+            const diffTime = expirationDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let statusBadge = '';
+            let statusColor = '';
+
+            if (isLowStock) {
+                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Stock bajo</span>';
+                statusColor = 'from-red-500 to-red-600';
+            } else if (diffDays <= 30) {
+                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Próximo a vencer</span>';
+                statusColor = 'from-yellow-500 to-yellow-600';
+            } else {
+                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Normal</span>';
+                statusColor = 'from-blue-500 to-blue-600';
             }
-        });
 
-        // Búsqueda en tiempo real  
-        $('#searchInput').on('input', function() {
-            const searchTerm = $(this).val().toLowerCase();
-            $('.medicament-card').each(function() {
-                const medicamentName = $(this).find('.medicament-name').text().toLowerCase();
-                const medicamentPresentation = $(this).find('.medicament-presentation').text().toLowerCase();
+            // Formatear fecha  
+            const formattedDate = new Date(medicament.expiration_date).toLocaleDateString('es-ES');
 
-                if (medicamentName.includes(searchTerm) || medicamentPresentation.includes(searchTerm)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
+            // Formatear precio  
+            const formattedPrice = new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(medicament.price);
 
-        // Filtro por estado  
-        $('#statusFilter').change(function() {
-            const selectedStatus = $(this).val();
-            $('.medicament-card').each(function() {
-                if (selectedStatus === 'all') {
-                    $(this).show();
-                } else {
-                    const hasStatus = $(this).find('.status-badge').hasClass('bg-' + selectedStatus + '-100');
-                    if (hasStatus) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                }
-            });
-        });
+            return $(`  
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group opacity-0 scale-95 transform">  
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">  
+                    <div class="flex items-center justify-between">  
+                        <div class="flex items-center space-x-3">  
+                            <div class="w-12 h-12 bg-gradient-to-br ${statusColor} rounded-xl flex items-center justify-center shadow-lg">  
+                                <i class="fas fa-pills text-white text-lg"></i>  
+                            </div>  
+                            <div>  
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">${medicament.name}</h3>  
+                                <p class="text-sm text-gray-600">${medicament.presentation}</p>  
+                            </div>  
+                        </div>  
+                        ${statusBadge}  
+                    </div>  
+                </div>  
+  
+                <div class="p-6 space-y-4">  
+                    <div class="grid grid-cols-2 gap-4">  
+                        <div class="bg-gray-50 rounded-lg p-3">  
+                            <div class="flex items-center space-x-2 mb-1">  
+                                <i class="fas fa-boxes text-blue-500 text-sm"></i>  
+                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</span>  
+                            </div>  
+                            <p class="text-lg font-bold text-gray-900">${medicament.stock}</p>  
+                            <p class="text-xs text-gray-500">Mín: ${medicament.min_stock}</p>  
+                        </div>  
+  
+                        <div class="bg-gray-50 rounded-lg p-3">  
+                            <div class="flex items-center space-x-2 mb-1">  
+                                <i class="fas fa-tag text-green-500 text-sm"></i>  
+                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</span>  
+                            </div>  
+                            <p class="text-lg font-bold text-gray-900">${formattedPrice}</p>  
+                        </div>  
+                    </div>  
+  
+                    <div class="bg-gray-50 rounded-lg p-3">  
+                        <div class="flex items-center space-x-2 mb-1">  
+                            <i class="fas fa-calendar-alt text-purple-500 text-sm"></i>  
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimiento</span>  
+                        </div>  
+                        <p class="text-sm font-semibold text-gray-900">${formattedDate}</p>  
+                        <p class="text-xs text-gray-500">${medicament.posological_units} unidades posológicas</p>  
+                    </div>  
+                </div>  
+  
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">  
+                    <div class="flex space-x-2">  
+                        <button class="edit-btn bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
+                            <i class="fas fa-edit text-sm"></i>  
+                        </button>  
+                        <button class="delete-btn bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
+                            <i class="fas fa-trash text-sm"></i>  
+                        </button>  
+                    </div>  
+                    <div class="text-xs text-gray-500">  
+                        ID: ${medicament.id}  
+                    </div>  
+                </div>  
+            </div>  
+        `);
+        }
 
         // Funciones auxiliares  
         function showValidationErrors(errors) {
@@ -584,59 +737,10 @@
             });
         }
 
-        //Clear errors
         function clearErrors() {
             $('.text-red-500').addClass('hidden');
             $('input').removeClass('border-red-500');
         }
-
-        //Show alert
-        function showAlert(type, message) {
-            const alertClass = type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-            const alert = `  
-            <div class="fixed top-4 right-4 z-50 p-4 rounded-lg ${alertClass} shadow-lg">  
-                ${message}  
-            </div>  
-        `;
-
-            $('body').append(alert);
-
-            setTimeout(function() {
-                $('.fixed.top-4.right-4').fadeOut();
-            }, 3000);
-        }
-
-        $('#createMedicamentBtn').click(function() {
-            const modal = $('#medicamentModal');
-
-            // Mostrar modal  
-            modal.removeClass('hidden').addClass('flex');
-
-            // Trigger fade in  
-            setTimeout(() => {
-                modal.removeClass('opacity-0').addClass('opacity-100');
-            }, 10);
-
-            // Reset form  
-            $('#medicamentForm')[0].reset();
-            $('#medicamentForm').attr('data-action', 'create');
-        });
-
-        // Cerrar modal con fade out  
-        $('#cancelBtn, .modal-close').click(function() {
-            const modal = $('#medicamentModal');
-
-            // Fade out  
-            modal.removeClass('opacity-100').addClass('opacity-0');
-
-            // Hide after animation  
-            setTimeout(() => {
-                modal.addClass('hidden').removeClass('flex');
-            }, 300);
-
-            clearErrors();
-        });
-
     });
 </script>
 @endpush

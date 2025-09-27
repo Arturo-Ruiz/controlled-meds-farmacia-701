@@ -25,12 +25,22 @@ class MedicamentController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Medicamento creado exitosamente',
-                'medicament' => $medicament
+                'medicament' => $medicament,
+                'toast' => [
+                    'title' => '¡Éxito!',
+                    'text' => "El medicamento '{$medicament->name}' ha sido registrado correctamente",
+                    'icon' => 'success'
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al crear el medicamento: ' . $e->getMessage()
+                'message' => 'Error al crear el medicamento: ' . $e->getMessage(),
+                'toast' => [
+                    'title' => 'Error',
+                    'text' => 'No se pudo crear el medicamento',
+                    'icon' => 'error'
+                ]
             ], 500);
         }
     }
