@@ -266,7 +266,7 @@
                     <label for="presentation" class="block text-sm font-medium text-gray-700 mb-1">Presentación</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-capsules text-gray-400"></i>
+                            <i class="fa-solid fa-file-prescription text-gray-400"></i>
                         </div>
                         <input type="text" id="presentation" name="presentation" required
                             placeholder="Ej: Tabletas, Jarabe, Cápsulas"
