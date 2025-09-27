@@ -176,7 +176,9 @@
 
                         <!-- Indicador de días hasta vencimiento -->
                         @php
-                        $daysToExpire = now()->diffInDays($medicament->expiration_date, false);
+                        $today = now()->startOfDay();
+                        $expirationDate = $medicament->expiration_date->startOfDay();
+                        $daysToExpire = $today->diffInDays($expirationDate, false);
                         @endphp
 
                         @if($daysToExpire < 30)
@@ -416,6 +418,23 @@
         animation-duration: 0.4s;
         animation-timing-function: ease-out;
     }
+
+    #medicamentModal {
+        transition: opacity 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out;
+    }
+
+    #medicamentModal .bg-white {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+    }
+
+    /* Animación de salida más suave */
+    #medicamentModal.opacity-0 {
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #medicamentModal .bg-white.scale-95 {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 </style>
 @endsection
 @push('scripts')
@@ -441,12 +460,47 @@
         });
 
         function closeModal() {
-            $('#medicamentModal .bg-white').removeClass('scale-100').addClass('scale-95');
+            // Animar el contenido del modal más rápido  
+            $('#medicamentModal .bg-white').css({
+                'transform': 'scale(0.95)',
+                'opacity': '0.8'
+            });
+
+            // Desvanecer el backdrop rápidamente  
+            setTimeout(() => {
+                $('#medicamentModal').css('opacity', '0');
+                $('#medicamentModal .bg-white').css({
+                    'transform': 'scale(0.9)',
+                    'opacity': '0'
+                });
+            }, 100);
+
+            // Ocultar completamente y resetear  
             setTimeout(() => {
                 $('#medicamentModal').removeClass('flex opacity-100').addClass('hidden opacity-0');
+                // Resetear estilos para la próxima apertura  
+                $('#medicamentModal .bg-white').css({
+                    'transform': '',
+                    'opacity': ''
+                }).removeClass('scale-95').addClass('scale-100');
+                $('#medicamentModal').css('opacity', '');
             }, 200);
+
             clearErrors();
         }
+        $('#medicamentForm').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#saveBtn').click();
+            }
+        });
+
+        $('#medicamentModal').on('click', function(e) {
+            // Solo cerrar si el clic fue en el backdrop (no en el contenido del modal)  
+            if (e.target === this) {
+                closeModal();
+            }
+        });
 
         // Guardar medicamento - VERSIÓN SIMPLIFICADA CON RECARGA  
         $('#saveBtn').click(function() {
@@ -478,7 +532,7 @@
                                 title: '¡Medicamento creado!',
                                 text: `${response.medicament.name} ha sido registrado exitosamente`,
                                 showConfirmButton: false,
-                                timer: 2000,
+                                timer: 1000,
                                 timerProgressBar: true
                             }).then(() => {
                                 window.location.reload();
@@ -491,7 +545,7 @@
                                 title: '¡Medicamento actualizado!',
                                 text: `${response.medicament.name} ha sido actualizado exitosamente`,
                                 showConfirmButton: false,
-                                timer: 2000,
+                                timer: 1000,
                                 timerProgressBar: true
                             }).then(() => {
                                 window.location.reload();
@@ -582,7 +636,7 @@
                                     title: '¡Eliminado!',
                                     text: 'El medicamento ha sido eliminado exitosamente',
                                     showConfirmButton: false,
-                                    timer: 2000,
+                                    timer: 1000,
                                     timerProgressBar: true
                                 }).then(() => {
                                     window.location.reload();
