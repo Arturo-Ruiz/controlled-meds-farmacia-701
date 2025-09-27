@@ -579,7 +579,9 @@
                         success: function(response) {
                             if (response.success) {
                                 // Remover tarjeta del DOM con animación  
-                                const card = $(`.delete-medicament[data-id="${medicamentId}"]`).closest('.bg-white').parent();
+                                const card = $(`.delete-medicament[data-id="${medicamentId}"]`).closest('.bg-white');
+
+                                // Asegúrate de que el resto del bloque de eliminación quede así:
                                 card.fadeOut(300, function() {
                                     $(this).remove();
                                 });
@@ -636,101 +638,125 @@
             });
         }
 
-        // Función para crear tarjeta de medicamento  
+        // Reemplaza la función completa con esta versión corregida.
         function createMedicamentCard(medicament) {
-            // Calcular estado del medicamento  
-            const isLowStock = medicament.stock <= medicament.min_stock;
-            const expirationDate = new Date(medicament.expiration_date);
-            const today = new Date();
-            const diffTime = expirationDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            let statusBadge = '';
-            let statusColor = '';
-
-            if (isLowStock) {
-                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Stock bajo</span>';
-                statusColor = 'from-red-500 to-red-600';
-            } else if (diffDays <= 30) {
-                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Próximo a vencer</span>';
-                statusColor = 'from-yellow-500 to-yellow-600';
+            // 1. Lógica para el badge de estado del stock
+            let stockBadge = '';
+            if (medicament.stock <= medicament.min_stock) {
+                stockBadge = `
+            <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full border border-red-200">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                Stock Crítico
+            </span>`;
+            } else if (medicament.stock <= (medicament.min_stock * 1.5)) {
+                stockBadge = `
+            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                Stock Bajo
+            </span>`;
             } else {
-                statusBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Normal</span>';
-                statusColor = 'from-blue-500 to-blue-600';
+                stockBadge = `
+            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
+                <i class="fas fa-check-circle mr-1"></i>
+                Stock Normal
+            </span>`;
             }
 
-            // Formatear fecha  
-            const formattedDate = new Date(medicament.expiration_date).toLocaleDateString('es-ES');
+            // 2. Lógica para los días de vencimiento
+            const expirationDate = new Date(medicament.expiration_date);
+            const today = new Date();
+            expirationDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
 
-            // Formatear precio  
-            const formattedPrice = new Intl.NumberFormat('es-ES', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(medicament.price);
+            const diffTime = expirationDate - today;
+            const daysToExpire = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            return $(`  
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group opacity-0 scale-95 transform">  
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">  
-                    <div class="flex items-center justify-between">  
-                        <div class="flex items-center space-x-3">  
-                            <div class="w-12 h-12 bg-gradient-to-br ${statusColor} rounded-xl flex items-center justify-center shadow-lg">  
-                                <i class="fas fa-pills text-white text-lg"></i>  
-                            </div>  
-                            <div>  
-                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">${medicament.name}</h3>  
-                                <p class="text-sm text-gray-600">${medicament.presentation}</p>  
-                            </div>  
-                        </div>  
-                        ${statusBadge}  
-                    </div>  
-                </div>  
-  
-                <div class="p-6 space-y-4">  
-                    <div class="grid grid-cols-2 gap-4">  
-                        <div class="bg-gray-50 rounded-lg p-3">  
-                            <div class="flex items-center space-x-2 mb-1">  
-                                <i class="fas fa-boxes text-blue-500 text-sm"></i>  
-                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</span>  
-                            </div>  
-                            <p class="text-lg font-bold text-gray-900">${medicament.stock}</p>  
-                            <p class="text-xs text-gray-500">Mín: ${medicament.min_stock}</p>  
-                        </div>  
-  
-                        <div class="bg-gray-50 rounded-lg p-3">  
-                            <div class="flex items-center space-x-2 mb-1">  
-                                <i class="fas fa-tag text-green-500 text-sm"></i>  
-                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</span>  
-                            </div>  
-                            <p class="text-lg font-bold text-gray-900">${formattedPrice}</p>  
-                        </div>  
-                    </div>  
-  
-                    <div class="bg-gray-50 rounded-lg p-3">  
-                        <div class="flex items-center space-x-2 mb-1">  
-                            <i class="fas fa-calendar-alt text-purple-500 text-sm"></i>  
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimiento</span>  
-                        </div>  
-                        <p class="text-sm font-semibold text-gray-900">${formattedDate}</p>  
-                        <p class="text-xs text-gray-500">${medicament.posological_units} unidades posológicas</p>  
-                    </div>  
-                </div>  
-  
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">  
-                    <div class="flex space-x-2">  
-                        <button class="edit-medicament bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
-                            <i class="fas fa-edit text-sm"></i>  
-                        </button>  
-                        <button class="delete-medicament bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
-                            <i class="fas fa-trash text-sm"></i>  
-                        </button>  
-                    </div>  
-                    <div class="text-xs text-gray-500">  
-                        ID: ${medicament.id}  
-                    </div>  
-                </div>  
-            </div>  
-        `);
+            let expirationWarning = '';
+            if (daysToExpire < 30) {
+                expirationWarning = `<span class="text-xs text-red-600 font-medium"><i class="fas fa-clock mr-1"></i> Vence en ${daysToExpire} días</span>`;
+            } else if (daysToExpire < 90) {
+                expirationWarning = `<span class="text-xs text-yellow-600 font-medium"><i class="fas fa-clock mr-1"></i> Vence en ${daysToExpire} días</span>`;
+            } else {
+                expirationWarning = `<span class="text-xs text-gray-500"><i class="fas fa-clock mr-1"></i> ${daysToExpire} días restantes</span>`;
+            }
+
+            const formattedExpirationDate = expirationDate.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // 3. Crear el HTML
+            const cardWrapper = document.createElement('div');
+            cardWrapper.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-pills text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg group-hover:text-blue-700 transition-colors duration-200">${medicament.name}</h3>
+                            <p class="text-sm text-gray-600">${medicament.presentation}</p>
+                        </div>
+                    </div>
+                    ${stockBadge}
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-50 rounded-xl p-3 text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Stock Actual</p>
+                        <p class="text-2xl font-bold text-gray-900">${new Intl.NumberFormat('es-ES').format(medicament.stock)}</p>
+                        <p class="text-xs text-gray-600">unidades</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3 text-center">
+                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Stock Mínimo</p>
+                        <p class="text-2xl font-bold text-gray-900">${new Intl.NumberFormat('es-ES').format(medicament.min_stock)}</p>
+                        <p class="text-xs text-gray-600">unidades</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-dollar-sign text-green-500 mr-2"></i> Precio</span>
+                        <span class="font-semibold text-green-600">$${new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(medicament.price)}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Vencimiento</span>
+                        <span class="font-medium text-gray-900">${formattedExpirationDate}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-gray-600 flex items-center"><i class="fas fa-capsules text-purple-500 mr-2"></i> Unidades Posológicas</span>
+                        <span class="font-medium text-gray-900">${medicament.posological_units}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div class="flex space-x-2">
+                        <button class="edit-medicament p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200" data-id="${medicament.id}" title="Editar medicamento">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-medicament p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200" data-id="${medicament.id}" title="Eliminar medicamento">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    ${expirationWarning}
+                </div>
+            </div>
+        </div>
+    `;
+
+            cardWrapper.className = 'opacity-0 scale-95 transition-all duration-300';
+
+            // La única línea que cambió es esta:
+            return $(cardWrapper);
         }
+
 
         // Funciones auxiliares  
         function showValidationErrors(errors) {
