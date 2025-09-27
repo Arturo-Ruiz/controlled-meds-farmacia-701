@@ -10,9 +10,58 @@ use App\Models\Medicament;
 
 class MedicamentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $medicaments = Medicament::latest()->paginate(9);
+        $query = Medicament::query();
+
+        // Filtro por nombre  
+        if ($request->filled('search')) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // Filtro por estado de stock (usando tu nueva lógica)  
+        if ($request->filled('status') && $request->status !== 'all') {
+            switch ($request->status) {
+                case 'critical':
+                    $query->whereRaw('stock < min_stock');
+                    break;
+                case 'low':
+                    $query->whereRaw('stock >= min_stock AND stock <= (min_stock + 5)');
+                    break;
+                case 'normal':
+                    $query->whereRaw('stock > (min_stock + 5)');
+                    break;
+            }
+        }
+
+        // Filtro por fecha de vencimiento  
+        if ($request->filled('expiration') && $request->expiration !== 'all') {
+            $now = now();
+
+            switch ($request->expiration) {
+                case 'this_month':
+                    $query->whereMonth('expiration_date', $now->month)
+                        ->whereYear('expiration_date', $now->year);
+                    break;
+                case 'next_3_months':
+                    $query->whereBetween('expiration_date', [
+                        $now->startOfDay(),
+                        $now->copy()->addMonths(3)->endOfDay()
+                    ]);
+                    break;
+                case 'next_6_months':
+                    $query->whereBetween('expiration_date', [
+                        $now->startOfDay(),
+                        $now->copy()->addMonths(6)->endOfDay()
+                    ]);
+                    break;
+                case 'this_year':
+                    $query->whereYear('expiration_date', $now->year);
+                    break;
+            }
+        }
+
+        $medicaments = $query->latest()->paginate(9);
 
         return view('medicaments.index', compact('medicaments'));
     }
@@ -52,6 +101,8 @@ class MedicamentController extends Controller
             'medicament' => $medicament
         ]);
     }
+
+
 
     public function update(MedicamentRequest $request, Medicament $medicament): JsonResponse
     {

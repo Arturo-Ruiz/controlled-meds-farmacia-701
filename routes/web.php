@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::resource('medicaments', MedicamentController::class);  
+    
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

@@ -43,7 +43,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Buscar medicamento</label>
                 <div class="relative">
                     <input type="text" id="searchInput" placeholder="Nombre del medicamento..."
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
                         <i class="fas fa-search text-gray-400"></i>
                     </div>
@@ -60,11 +60,15 @@
                 </select>
             </div>
 
-            <div class="flex items-end">
-                <button id="applyFilters" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center">
-                    <i class="fas fa-filter mr-2"></i>
-                    Aplicar Filtros
-                </button>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de vencimiento</label>
+                <select id="expirationFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="all">Todas las fechas</option>
+                    <option value="this_month">Este mes</option>
+                    <option value="next_3_months">Próximos 3 meses</option>
+                    <option value="next_6_months">Próximos 6 meses</option>
+                    <option value="this_year">Este año</option>
+                </select>
             </div>
         </div>
     </div>
@@ -95,12 +99,12 @@
                         </div>
 
                         <!-- Badge de estado -->
-                        @if($medicament->stock <= $medicament->min_stock)
+                        @if($medicament->stock < $medicament->min_stock)
                             <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full border border-red-200">
                                 <i class="fas fa-exclamation-triangle mr-1"></i>
                                 Stock Crítico
                             </span>
-                            @elseif($medicament->stock <= ($medicament->min_stock * 1.5))
+                            @elseif($medicament->stock <= ($medicament->min_stock + 5))
                                 <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     Stock Bajo
@@ -669,6 +673,51 @@
         function clearErrors() {
             $('.text-red-500').addClass('hidden');
             $('input').removeClass('border-red-500');
+        }
+
+
+        // Filtrado automático sin botón  
+        $('#searchInput').on('input', function() {
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(function() {
+                applyFilters();
+            }, 500); // Delay de 500ms para evitar muchas peticiones  
+        });
+
+        // Filtrado automático al cambiar selects  
+        $('#statusFilter, #expirationFilter').on('change', function() {
+            applyFilters();
+        });
+
+        // Función para aplicar filtros automáticamente  
+        function applyFilters() {
+            const search = $('#searchInput').val();
+            const status = $('#statusFilter').val();
+            const expiration = $('#expirationFilter').val();
+
+            // Construir URL con parámetros  
+            const params = new URLSearchParams();
+
+            if (search) params.append('search', search);
+            if (status && status !== 'all') params.append('status', status);
+            if (expiration && expiration !== 'all') params.append('expiration', expiration);
+
+            // Redirigir con los filtros  
+            const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+            window.location.href = url;
+        }
+
+        // Mantener valores de filtros después de la recarga  
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.get('search')) {
+            $('#searchInput').val(urlParams.get('search'));
+        }
+        if (urlParams.get('status')) {
+            $('#statusFilter').val(urlParams.get('status'));
+        }
+        if (urlParams.get('expiration')) {
+            $('#expirationFilter').val(urlParams.get('expiration'));
         }
     });
 </script>
