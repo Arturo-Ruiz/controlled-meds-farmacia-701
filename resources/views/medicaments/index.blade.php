@@ -76,7 +76,7 @@
         </div>
 
         <!-- Grid de Medicamentos Mejorado -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="medicamentsGrid">
             @forelse($medicaments as $medicament)
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group">
                 <!-- Header de la tarjeta con gradiente sutil -->
@@ -522,7 +522,7 @@
         });
 
         // Editar medicamento  
-        $(document).on('click', '.edit-btn', function() {
+        $(document).on('click', '.edit-medicament', function() {
             const medicamentId = $(this).data('id');
 
             $.ajax({
@@ -555,7 +555,7 @@
         });
 
         // Eliminar medicamento  
-        $(document).on('click', '.delete-btn', function() {
+        $(document).on('click', '.delete-medicament', function() {
             const medicamentId = $(this).data('id');
             const medicamentName = $(this).closest('.bg-white').find('h3').text();
 
@@ -579,7 +579,7 @@
                         success: function(response) {
                             if (response.success) {
                                 // Remover tarjeta del DOM con animación  
-                                const card = $(`.delete-btn[data-id="${medicamentId}"]`).closest('.bg-white').parent();
+                                const card = $(`.delete-medicament[data-id="${medicamentId}"]`).closest('.bg-white').parent();
                                 card.fadeOut(300, function() {
                                     $(this).remove();
                                 });
@@ -610,10 +610,16 @@
 
         // Función para agregar medicamento al grid  
         function addMedicamentToGrid(medicament) {
+            // Busca y elimina el mensaje de "grid vacío" si existe
+            const emptyState = $('#medicamentsGrid').find('.col-span-full');
+            if (emptyState.length) {
+                emptyState.remove();
+            }
+
             const newCard = createMedicamentCard(medicament);
             $('#medicamentsGrid').prepend(newCard);
 
-            // Animación de entrada  
+            // Animación de entrada
             setTimeout(() => {
                 newCard.removeClass('opacity-0 scale-95').addClass('opacity-100 scale-100');
             }, 100);
@@ -621,7 +627,7 @@
 
         // Función para actualizar tarjeta existente  
         function updateMedicamentCard(medicament) {
-            const existingCard = $(`.edit-btn[data-id="${medicament.id}"]`).closest('.bg-white').parent();
+            const existingCard = $(`.edit-medicament[data-id="${medicament.id}"]`).closest('.bg-white').parent();
             const newCard = createMedicamentCard(medicament);
 
             existingCard.fadeOut(200, function() {
@@ -711,10 +717,10 @@
   
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">  
                     <div class="flex space-x-2">  
-                        <button class="edit-btn bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
+                        <button class="edit-medicament bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
                             <i class="fas fa-edit text-sm"></i>  
                         </button>  
-                        <button class="delete-btn bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
+                        <button class="delete-medicament bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-lg transition-colors duration-200" data-id="${medicament.id}">  
                             <i class="fas fa-trash text-sm"></i>  
                         </button>  
                     </div>  
