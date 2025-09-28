@@ -4,32 +4,33 @@
 
 @section('content')
 <div class="animate-fadeInUp">
-    <div class="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-2xl p-4 sm:p-6 lg:p-8 text-white shadow-2xl relative overflow-hidden mb-8">
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
             <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
             <div class="absolute top-1/2 right-1/4 w-20 h-20 bg-white/5 rounded-full blur-xl animate-pulse" style="animation-delay: 4s;"></div>
         </div>
 
-        <div class="relative z-10 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-2">Gestión de Medicamentos</h1>
-                <p class="text-blue-100 text-lg">Administra el inventario de medicamentos de la farmacia</p>
-                <div class="flex items-center space-x-6 mt-4">
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+            <div class="flex-1">
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Gestión de Medicamentos</h1>
+                <p class="text-blue-100 text-sm sm:text-base lg:text-lg mb-4 lg:mb-0">Administra el inventario de medicamentos de la farmacia</p>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 lg:space-x-6 space-y-2 sm:space-y-0 mt-4">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-pills text-blue-200"></i>
-                        <span class="text-blue-100">{{ $medicaments->total() ?? 0 }} medicamentos registrados</span>
+                        <span class="text-blue-100 text-xs sm:text-sm">{{ $medicaments->total() ?? 0 }} medicamentos registrados</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-clock text-blue-200"></i>
-                        <span class="text-blue-100">Actualizado {{ now()->format('d/m/Y H:i') }}</span>
+                        <span class="text-blue-100 text-xs sm:text-sm">Actualizado {{ now()->format('d/m/Y H:i') }}</span>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <button id="createMedicamentBtn" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-white/20 shadow-lg">
+            <div class="flex items-center justify-center lg:justify-end">
+                <button id="createMedicamentBtn" class="bg-white/20 hover:bg-white/30 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-white/20 shadow-lg text-sm sm:text-base w-full sm:w-auto">
                     <i class="fas fa-plus mr-2"></i>
-                    Nuevo Medicamento
+                    <span class="hidden sm:inline">Nuevo Medicamento</span>
+                    <span class="sm:hidden">Nuevo</span>
                 </button>
             </div>
         </div>
@@ -37,38 +38,50 @@
 
 
     <!-- Filtros y Búsqueda -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Buscar medicamento</label>
-                <div class="relative">
-                    <input type="text" id="searchInput" placeholder="Nombre del medicamento..."
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <i class="fas fa-search text-gray-400"></i>
+    <!-- Filtros y Búsqueda -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 mb-8">
+        <!-- Header del filtro con botón toggle para móviles -->
+        <div class="flex items-center justify-between p-4 lg:p-6 border-b border-gray-100 lg:border-b-0">
+            <h3 class="text-lg font-semibold text-gray-900">Filtros de búsqueda</h3>
+            <button id="toggleFilters" class="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                <i class="fas fa-chevron-down text-sm transition-transform duration-200" id="filterIcon"></i>
+            </button>
+        </div>
+
+        <!-- Contenido de filtros colapsable -->
+        <div id="filtersContent" class="hidden lg:block p-4 lg:p-6 lg:pt-0">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Buscar medicamento</label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Nombre del medicamento..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Estado del stock</label>
-                <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">Todos los estados</option>
-                    <option value="normal">Stock normal</option>
-                    <option value="low">Stock bajo</option>
-                    <option value="critical">Stock crítico</option>
-                </select>
-            </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Estado del stock</label>
+                    <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="all">Todos los estados</option>
+                        <option value="normal">Stock normal</option>
+                        <option value="low">Stock bajo</option>
+                        <option value="critical">Stock crítico</option>
+                    </select>
+                </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de vencimiento</label>
-                <select id="expirationFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">Todas las fechas</option>
-                    <option value="this_month">Este mes</option>
-                    <option value="next_3_months">Próximos 3 meses</option>
-                    <option value="next_6_months">Próximos 6 meses</option>
-                    <option value="this_year">Este año</option>
-                </select>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de vencimiento</label>
+                    <select id="expirationFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="all">Todas las fechas</option>
+                        <option value="this_month">Este mes</option>
+                        <option value="next_3_months">Próximos 3 meses</option>
+                        <option value="next_6_months">Próximos 6 meses</option>
+                        <option value="this_year">Este año</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +149,7 @@
 
                     <!-- Información adicional -->
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                        <div class="flex items-center justify-between py-2 border-b border-gray-300">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-dollar-sign text-green-500 mr-2"></i>
                                 Precio
@@ -144,7 +157,7 @@
                             <span class="font-semibold text-green-600">${{ number_format($medicament->price, 2) }}</span>
                         </div>
 
-                        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                        <div class="flex items-center justify-between py-2 border-b border-gray-300">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
                                 Vencimiento
@@ -441,6 +454,7 @@
     }
 </style>
 @endsection
+
 @push('scripts')
 <script>
     $(document).ready(function() {
@@ -706,6 +720,79 @@
             const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
             window.location.href = url;
         }
+
+        function hasActiveFilters() {
+            const search = $('#searchInput').val();
+            const status = $('#statusFilter').val();
+            const expiration = $('#expirationFilter').val();
+
+            return (search && search.trim() !== '') ||
+                (status && status !== 'all') ||
+                (expiration && expiration !== 'all');
+        }
+
+        // Función para mostrar filtros automáticamente si están activos  
+        function autoExpandFiltersIfActive() {
+            if ($(window).width() < 1024 && hasActiveFilters()) { // Solo en móviles  
+                const filtersContent = $('#filtersContent');
+                const filterIcon = $('#filterIcon');
+
+                if (filtersContent.hasClass('hidden')) {
+                    filtersContent.removeClass('hidden').show();
+                    filterIcon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                }
+            }
+        }
+
+        // Toggle de filtros en móviles (código existente modificado)  
+        $('#toggleFilters').click(function() {
+            const filtersContent = $('#filtersContent');
+            const filterIcon = $('#filterIcon');
+
+            if (filtersContent.hasClass('hidden')) {
+                // Mostrar filtros  
+                filtersContent.removeClass('hidden').hide().slideDown(300);
+                filterIcon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            } else {
+                // Ocultar filtros  
+                filtersContent.slideUp(300, function() {
+                    $(this).addClass('hidden');
+                });
+                filterIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+
+        // Mantener filtros abiertos en desktop y expandir automáticamente si hay filtros activos  
+        $(window).resize(function() {
+            if ($(window).width() >= 1024) { // lg breakpoint  
+                $('#filtersContent').removeClass('hidden').show();
+                $('#filterIcon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            } else {
+                // En móviles, expandir automáticamente si hay filtros activos  
+                autoExpandFiltersIfActive();
+            }
+        });
+
+        // Expandir automáticamente al cargar la página si hay filtros activos  
+        $(document).ready(function() {
+            // ... código existente ...  
+
+            // Mantener valores de filtros después de la recarga (código existente)  
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.get('search')) {
+                $('#searchInput').val(urlParams.get('search'));
+            }
+            if (urlParams.get('status')) {
+                $('#statusFilter').val(urlParams.get('status'));
+            }
+            if (urlParams.get('expiration')) {
+                $('#expirationFilter').val(urlParams.get('expiration'));
+            }
+
+            // NUEVO: Expandir automáticamente si hay filtros activos  
+            autoExpandFiltersIfActive();
+        });
 
         // Mantener valores de filtros después de la recarga  
         const urlParams = new URLSearchParams(window.location.search);

@@ -42,8 +42,8 @@
     <x-layout.overlay />
 
     <!-- Component Scripts -->
-    @vite(['resources/js/app.js']);
-    @vite(['resources/js/components/sidebar.js', 'resources/js/components/header.js']);
+    @vite(['resources/js/app.js'])
+    @vite(['resources/js/components/sidebar.js', 'resources/js/components/header.js'])
 
     @stack('scripts')
 </body>
