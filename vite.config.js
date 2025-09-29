@@ -15,6 +15,7 @@ export default defineConfig({
                 
                 'resources/js/components/sidebar.js',
                 'resources/js/components/header.js',
+                'resources/js/components/auth/login.js.',
             ],
             refresh: true,
         }),
