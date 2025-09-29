@@ -11,7 +11,7 @@ export default defineConfig({
 
                 'resources/css/components/sidebar.css',
                 'resources/css/components/animations.css',
-
+                'resources/css/components/auth/login.css',
                 
                 'resources/js/components/sidebar.js',
                 'resources/js/components/header.js',
