@@ -106,13 +106,13 @@
 
         <!-- Footer -->
         <div class="mt-8 text-center animate-fadeInUp">
-            <div class=" copyright">
-            © <script>
-                document.write(new Date().getFullYear())
-            </script>
-            made with <i class="fa fa-heart"></i> by
-            <a href="https://github.com/Arturo-Ruiz" class="font-weight-bold" target="_blank">Arturo Ruiz</a>
-            for Farmacia 701.
+            <p class="text-sm text-gray-500 flex items-center justify-center space-x-1">
+                <span>© 2025 made with</span>
+                <i class="fa fa-heart text-red-500"></i>
+                <span>by</span>
+                <a href="https://github.com/Arturo-Ruiz" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" target="_blank">Arturo Ruiz</a>
+                <span>for Farmacia 701.</span>
+            </p>
         </div>
     </div>
 </div>
