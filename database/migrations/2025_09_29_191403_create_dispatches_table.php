@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entries', function (Blueprint $table) {
+        Schema::create('dispatches', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_number');
-            $table->foreignId('laboratory_id')->constrained('laboratories')->onDelete('restrict');
+
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->foreignId('medicament_id')->constrained('medicaments')->onDelete('restrict');
-            $table->integer('stock');
-            $table->decimal('price', 10, 2);
+            $table->integer('amount');
+            $table->enum('reason', ['Venta', 'Medicamento Vencido', 'Error de Inventario']);
+            $table->integer('current_stock');
+            $table->integer('final_stock');
+
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entries');
+        Schema::dropIfExists('dispatches');
     }
 };

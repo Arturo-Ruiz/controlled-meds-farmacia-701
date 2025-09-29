@@ -23,8 +23,8 @@ class EntryRequest extends FormRequest
     {
         return [
             'invoice_number' => 'required|string|max:255',
-            'id_laboratory' => 'required|exists:laboratories,id',
-            'id_medicament' => 'required|exists:medicaments,id',
+            'laboratory_id' => 'required|exists:laboratories,id',
+            'medicament_id' => 'required|exists:medicaments,id',
             'stock' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0'
         ];
@@ -36,10 +36,10 @@ class EntryRequest extends FormRequest
             'invoice_number.required' => 'El número de factura es obligatorio.',
             'invoice_number.string' => 'El número de factura debe ser texto.',
             'invoice_number.max' => 'El número de factura no debe exceder 255 caracteres.',
-            'id_laboratory.required' => 'El laboratorio es obligatorio.',
-            'id_laboratory.exists' => 'El laboratorio seleccionado no existe.',
-            'id_medicament.required' => 'El medicamento es obligatorio.',
-            'id_medicament.exists' => 'El medicamento seleccionado no existe.',
+            'laboratory_id.required' => 'El laboratorio es obligatorio.',
+            'laboratory_id.exists' => 'El laboratorio seleccionado no existe.',
+            'medicament_id.required' => 'El medicamento es obligatorio.',
+            'medicament_id.exists' => 'El medicamento seleccionado no existe.',
             'stock.required' => 'El stock es obligatorio.',
             'stock.integer' => 'El stock debe ser un número entero.',
             'stock.min' => 'El stock debe ser mayor a 0.',

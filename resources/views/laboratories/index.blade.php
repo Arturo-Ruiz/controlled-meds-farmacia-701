@@ -219,10 +219,11 @@
         }
     }
 
-    /* Modal backdrop blur effect */
-    #laboratoryModal:not(.hidden) {
+
+     #laboratoryModal:not(.hidden) {
         backdrop-filter: blur(4px);
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(0, 0, 0, 0.3);
+        /* Cambiar de negro sólido a semi-transparente */
     }
 
     /* Animación de entrada del modal */
@@ -237,26 +238,12 @@
         opacity: 1;
     }
 
-    #laboratoryModal .bg-white {
-        animation-duration: 0.4s;
-        animation-timing-function: ease-out;
-    }
-
     #laboratoryModal {
         transition: opacity 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out;
     }
 
     #laboratoryModal .bg-white {
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
-    }
-
-    /* Animación de salida más suave */
-    #laboratoryModal.opacity-0 {
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    #laboratoryModal .bg-white.scale-95 {
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 </style>
 @endsection

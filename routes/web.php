@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\LaboratoryController;
-use App\Http\Controllers\EntryController;   
+use App\Http\Controllers\EntryController;
+use App\Http\Controllers\DispatchController;
 
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('entries', EntryController::class);
     Route::get('medicaments/{medicament}/data', [EntryController::class, 'getMedicamentData'])->name('medicaments.data');
+
+    Route::resource('dispatches', DispatchController::class);
+    Route::get('medicaments/{medicament}/stock-data', [DispatchController::class, 'getMedicamentData'])->name('medicaments.stock-data');
 
 
 

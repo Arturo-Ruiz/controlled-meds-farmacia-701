@@ -228,28 +228,28 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <!-- Select de Laboratorio -->
                 <div>
-                    <label for="id_laboratory" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
-                    <select id="id_laboratory" name="id_laboratory" required
+                    <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
+                    <select id="laboratory_id" name="laboratory_id" required
                         class="select2-laboratory w-full">
                         <option value="">Seleccionar laboratorio</option>
                         @foreach($laboratories as $laboratory)
                         <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
                         @endforeach
                     </select>
-                    <span class="text-red-500 text-xs hidden" id="id_laboratoryError"></span>
+                    <span class="text-red-500 text-xs hidden" id="laboratory_idError"></span>
                 </div>
 
                 <!-- Select de Medicamento -->
                 <div>
-                    <label for="id_medicament" class="block text-sm font-medium text-gray-700 mb-1">Medicamento</label>
-                    <select id="id_medicament" name="id_medicament" required
+                    <label for="medicament_id" class="block text-sm font-medium text-gray-700 mb-1">Medicamento</label>
+                    <select id="medicament_id" name="medicament_id" required
                         class="select2-medicament w-full">
                         <option value="">Seleccionar medicamento</option>
                         @foreach($medicaments as $medicament)
                         <option value="{{ $medicament->id }}">{{ $medicament->name }}</option>
                         @endforeach
                     </select>
-                    <span class="text-red-500 text-xs hidden" id="id_medicamentError"></span>
+                    <span class="text-red-500 text-xs hidden" id="medicament_idError"></span>
                 </div>
             </div>
 
@@ -334,12 +334,14 @@
             transform: translateY(0);
         }
     }
-
-    #entryModal:not(.hidden) {
+    
+     #entryModal:not(.hidden) {
         backdrop-filter: blur(4px);
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(0, 0, 0, 0.3);
+        /* Cambiar de negro sólido a semi-transparente */
     }
 
+    /* Animación de entrada del modal */
     #entryModal .bg-white {
         transform: scale(0.95);
         opacity: 0;
@@ -351,25 +353,12 @@
         opacity: 1;
     }
 
-    #entryModal .bg-white {
-        animation-duration: 0.4s;
-        animation-timing-function: ease-out;
-    }
-
     #entryModal {
         transition: opacity 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out;
     }
 
     #entryModal .bg-white {
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
-    }
-
-    #entryModal.opacity-0 {
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    #entryModal .bg-white.scale-95 {
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .select2-container--default .select2-selection--single {
@@ -627,8 +616,8 @@
                         $('#invoice_number').val(entry.invoice_number);
 
                         // MODIFICACIÓN NECESARIA: Para Select2 necesitas usar .trigger('change')  
-                        $('#id_laboratory').val(entry.id_laboratory).trigger('change');
-                        $('#id_medicament').val(entry.id_medicament).trigger('change');
+                        $('#laboratory_id').val(entry.laboratory_id).trigger('change');
+                        $('#medicament_id').val(entry.medicament_id).trigger('change');
 
                         $('#stock').val(entry.stock);
                         $('#price').val(entry.price);

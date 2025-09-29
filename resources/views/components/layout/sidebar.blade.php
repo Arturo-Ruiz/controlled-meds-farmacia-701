@@ -84,50 +84,20 @@
                 </div>
             </a>
 
-            <!-- Inventario -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-purple-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-purple-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-boxes text-lg text-gray-600 group-hover:text-purple-600"></i>
-                </div>
-                <span class="font-medium">Inventario</span>
-                <div class="ml-auto w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-
-            <!-- Entradas -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-emerald-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-arrow-down text-lg text-gray-600 group-hover:text-emerald-600"></i>
-                </div>
-                <span class="font-medium">Entradas</span>
-                <div class="ml-auto w-2 h-2 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-
-            <!-- Salidas -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-orange-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-orange-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-arrow-up text-lg text-gray-600 group-hover:text-orange-600"></i>
+            <a href="{{ route('dispatches.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+{{ request()->routeIs('dispatches.*') ? 'bg-orange-100 text-orange-700 border-r-4 border-orange-500' : 'text-gray-600 hover:text-gray-800 hover:bg-orange-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+{{ request()->routeIs('dispatches.*') ? 'bg-orange-200' : 'bg-gray-100 group-hover:bg-orange-100' }}">
+                    <i class="fas fa-arrow-up text-lg transition-all duration-300      
+{{ request()->routeIs('dispatches.*') ? 'text-orange-700' : 'text-gray-600 group-hover:text-orange-600' }}"></i>
                 </div>
                 <span class="font-medium">Salidas</span>
-                <div class="ml-auto w-2 h-2 bg-orange-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+{{ request()->routeIs('dispatches.*') ? 'bg-orange-500 opacity-100' : 'bg-orange-400 opacity-0 group-hover:opacity-100' }}">
+                </div>
             </a>
 
-            <!-- Reportes -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-indigo-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-indigo-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-chart-bar text-lg text-gray-600 group-hover:text-indigo-600"></i>
-                </div>
-                <span class="font-medium">Reportes</span>
-                <div class="ml-auto w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-
-            <!-- Configuración -->
-            <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-xl transition-all duration-300 hover:translate-x-1">
-                <div class="w-10 h-10 bg-gray-100 group-hover:bg-gray-200 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
-                    <i class="fas fa-cog text-lg text-gray-600 group-hover:text-gray-700"></i>
-                </div>
-                <span class="font-medium">Configuración</span>
-                <div class="ml-auto w-2 h-2 bg-gray-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
+          
         </nav>
 
         <!-- User Profile Section -->

@@ -11,19 +11,19 @@ class Entry extends Model
 
     protected $fillable = [
         'invoice_number',
-        'id_laboratory',
-        'id_medicament',
+        'laboratory_id',
+        'medicament_id',
         'stock',
         'price'
     ];
 
     public function laboratory()
     {
-        return $this->belongsTo(Laboratory::class, 'id_laboratory');
+        return $this->belongsTo(Laboratory::class, 'laboratory_id');
     }
 
     public function medicament()
     {
-        return $this->belongsTo(Medicament::class, 'id_medicament');
+        return $this->belongsTo(Medicament::class, 'medicament_id');
     }   
 }

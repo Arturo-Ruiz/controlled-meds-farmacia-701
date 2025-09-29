@@ -42,7 +42,7 @@ class EntryController extends Controller
             $entry = Entry::create($request->validated());
 
             // Actualizar el medicamento: sumar stock y actualizar precio  
-            $medicament = Medicament::find($request->id_medicament);
+            $medicament = Medicament::find($request->medicament_id);
             $medicament->update([
                 'stock' => $medicament->stock + $request->stock, // Sumar al stock actual  
                 'price' => $request->price // Actualizar precio  
@@ -80,7 +80,7 @@ class EntryController extends Controller
             DB::beginTransaction();
 
             // Revertir la entrada anterior del medicamento original  
-            $oldMedicament = Medicament::find($entry->id_medicament);
+            $oldMedicament = Medicament::find($entry->medicament_id);
             $oldMedicament->update([
                 'stock' => $oldMedicament->stock - $entry->stock // Restar stock anterior  
             ]);
@@ -89,7 +89,7 @@ class EntryController extends Controller
             $entry->update($request->validated());
 
             // Aplicar la nueva entrada al medicamento (puede ser el mismo o diferente)  
-            $newMedicament = Medicament::find($request->id_medicament);
+            $newMedicament = Medicament::find($request->medicament_id);
             $newMedicament->update([
                 'stock' => $newMedicament->stock + $request->stock, // Sumar nuevo stock  
                 'price' => $request->price // Actualizar precio  
@@ -118,7 +118,7 @@ class EntryController extends Controller
             DB::beginTransaction();
 
             // Revertir el stock del medicamento  
-            $medicament = Medicament::find($entry->id_medicament);
+            $medicament = Medicament::find($entry->medicament_id);
             $medicament->update([
                 'stock' => $medicament->stock - $entry->stock // Restar el stock de la entrada eliminada  
             ]);
