@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\LaboratoryController;
+use App\Http\Controllers\EntryController;   
 
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
@@ -20,10 +21,13 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.index');
     })->name('dashboard');
 
-    Route::resource('medicaments', MedicamentController::class);  
-    Route::resource('laboratories', LaboratoryController::class);  
+    Route::resource('medicaments', MedicamentController::class);
+    Route::resource('laboratories', LaboratoryController::class);
 
-    
+    Route::resource('entries', EntryController::class);
+    Route::get('medicaments/{medicament}/data', [EntryController::class, 'getMedicamentData'])->name('medicaments.data');
+
+
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

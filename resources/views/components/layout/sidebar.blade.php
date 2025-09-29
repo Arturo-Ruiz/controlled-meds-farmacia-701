@@ -71,6 +71,19 @@
                 </div>
             </a>
 
+            <a href="{{ route('entries.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+{{ request()->routeIs('entries.*') ? 'bg-emerald-100 text-emerald-700 border-r-4 border-emerald-500' : 'text-gray-600 hover:text-gray-800 hover:bg-emerald-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+{{ request()->routeIs('entries.*') ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100' }}">
+                    <i class="fas fa-arrow-down text-lg transition-all duration-300      
+{{ request()->routeIs('entries.*') ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600' }}"></i>
+                </div>
+                <span class="font-medium">Entradas</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+{{ request()->routeIs('entries.*') ? 'bg-emerald-500 opacity-100' : 'bg-emerald-400 opacity-0 group-hover:opacity-100' }}">
+                </div>
+            </a>
+
             <!-- Inventario -->
             <a href="#" class="nav-item group flex items-center px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-purple-50 rounded-xl transition-all duration-300 hover:translate-x-1">
                 <div class="w-10 h-10 bg-gray-100 group-hover:bg-purple-100 rounded-lg flex items-center justify-center mr-3 transition-all duration-300">
