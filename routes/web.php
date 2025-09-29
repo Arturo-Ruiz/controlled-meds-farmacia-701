@@ -7,6 +7,7 @@ use App\Http\Controllers\MedicamentController;
 use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\DispatchController;
+use App\Http\Controllers\UserController;
 
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('dispatches', DispatchController::class);
     Route::get('medicaments/{medicament}/stock-data', [DispatchController::class, 'getMedicamentData'])->name('medicaments.stock-data');
+
+    Route::resource('users', UserController::class);
 
 
 
