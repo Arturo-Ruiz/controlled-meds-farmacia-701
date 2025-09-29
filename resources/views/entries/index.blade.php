@@ -226,38 +226,30 @@
 
             <!-- Segunda fila: Laboratorio y Medicamento -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Select de Laboratorio -->
                 <div>
                     <label for="id_laboratory" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-industry text-gray-400"></i>
-                        </div>
-                        <select id="id_laboratory" name="id_laboratory" required
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <option value="">Seleccionar laboratorio</option>
-                            @foreach($laboratories as $laboratory)
-                            <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-red-500 text-xs hidden" id="id_laboratoryError"></span>
-                    </div>
+                    <select id="id_laboratory" name="id_laboratory" required
+                        class="select2-laboratory w-full">
+                        <option value="">Seleccionar laboratorio</option>
+                        @foreach($laboratories as $laboratory)
+                        <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                        @endforeach
+                    </select>
+                    <span class="text-red-500 text-xs hidden" id="id_laboratoryError"></span>
                 </div>
 
+                <!-- Select de Medicamento -->
                 <div>
                     <label for="id_medicament" class="block text-sm font-medium text-gray-700 mb-1">Medicamento</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-pills text-gray-400"></i>
-                        </div>
-                        <select id="id_medicament" name="id_medicament" required
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <option value="">Seleccionar medicamento</option>
-                            @foreach($medicaments as $medicament)
-                            <option value="{{ $medicament->id }}">{{ $medicament->name }}</option>
-                            @endforeach
-                        </select>
-                        <span class="text-red-500 text-xs hidden" id="id_medicamentError"></span>
-                    </div>
+                    <select id="id_medicament" name="id_medicament" required
+                        class="select2-medicament w-full">
+                        <option value="">Seleccionar medicamento</option>
+                        @foreach($medicaments as $medicament)
+                        <option value="{{ $medicament->id }}">{{ $medicament->name }}</option>
+                        @endforeach
+                    </select>
+                    <span class="text-red-500 text-xs hidden" id="id_medicamentError"></span>
                 </div>
             </div>
 
@@ -379,6 +371,31 @@
     #entryModal .bg-white.scale-95 {
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    .select2-container--default .select2-selection--single {
+        height: 42px !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 0.5rem !important;
+        padding: 0.5rem !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 26px !important;
+        padding-left: 0 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px !important;
+    }
+
+    .select2-dropdown {
+        border-radius: 0.5rem !important;
+        border: 1px solid #d1d5db !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #10b981 !important;
+    }
 </style>
 @endsection
 
@@ -387,6 +404,7 @@
     $(document).ready(function() {
         // Mantener valores de filtros después de la recarga  
         const urlParams = new URLSearchParams(window.location.search);
+
         if (urlParams.get('search')) {
             const searchValue = urlParams.get('search');
             $('#searchInput').val(searchValue);
@@ -412,8 +430,7 @@
             }, 500);
         });
 
-        // Obtener datos del medicamento al seleccionarlo  
-        $('#id_medicament').on('change', function() {
+        $('.select2-medicament').on('change', function() {
             const medicamentId = $(this).val();
 
             if (medicamentId) {
@@ -436,6 +453,37 @@
                 $('#currentMedicamentInfo').hide();
             }
         });
+
+        $('.select2-laboratory').select2({
+            placeholder: 'Buscar laboratorio...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#entryModal'),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
+            }
+        });
+
+        $('.select2-medicament').select2({
+            placeholder: 'Buscar medicamento...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#entryModal'),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
+            }
+        });
+
 
         // Abrir modal para crear  
         $(document).on('click', '#createEntryBtn', function() {
@@ -517,7 +565,9 @@
                 success: function(response) {
                     if (response.success) {
                         closeModal();
-
+                        $('.select2-laboratory').val(null).trigger('change');
+                        $('.select2-medicament').val(null).trigger('change');
+                        $('#currentMedicamentInfo').hide();
                         if (action === 'create') {
                             Swal.fire({
                                 toast: true,
@@ -574,8 +624,11 @@
 
                         $('#entryModalTitle').text('Editar Entrada');
                         $('#invoice_number').val(entry.invoice_number);
-                        $('#id_laboratory').val(entry.id_laboratory);
+
+                        // MODIFICACIÓN NECESARIA: Para Select2 necesitas usar .trigger('change')  
+                        $('#id_laboratory').val(entry.id_laboratory).trigger('change');
                         $('#id_medicament').val(entry.id_medicament).trigger('change');
+
                         $('#stock').val(entry.stock);
                         $('#price').val(entry.price);
                         $('#entryId').val(entry.id);
