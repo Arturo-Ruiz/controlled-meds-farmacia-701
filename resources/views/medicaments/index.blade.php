@@ -38,7 +38,6 @@
 
 
     <!-- Filtros y Búsqueda -->
-    <!-- Filtros y Búsqueda -->
     <div class="bg-white rounded-xl shadow-lg border border-gray-100 mb-8">
         <!-- Header del filtro con botón toggle para móviles -->
         <div class="flex items-center justify-between p-4 lg:p-6 border-b border-gray-100 lg:border-b-0">
