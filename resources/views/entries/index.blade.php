@@ -545,6 +545,7 @@
             }
         });
 
+
         // Guardar entrada  
         $('#saveBtn').click(function() {
             const form = $('#entryForm');
