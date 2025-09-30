@@ -16,6 +16,7 @@ class EntryController extends Controller
     {
         $query = Entry::with(['laboratory', 'medicament']);
 
+        // Filtro existente por búsqueda  
         if ($request->filled('search')) {
             $query->where('invoice_number', 'LIKE', '%' . $request->search . '%')
                 ->orWhereHas('laboratory', function ($q) use ($request) {
@@ -24,6 +25,33 @@ class EntryController extends Controller
                 ->orWhereHas('medicament', function ($q) use ($request) {
                     $q->where('name', 'LIKE', '%' . $request->search . '%');
                 });
+        }
+
+        // AGREGAR FILTRO POR FECHA  
+        if ($request->filled('date_filter') && $request->date_filter !== 'all') {
+            $now = now();
+
+            switch ($request->date_filter) {
+                case 'this_month':
+                    $query->whereMonth('created_at', $now->month)
+                        ->whereYear('created_at', $now->year);
+                    break;
+                case 'last_3_months':
+                    $query->whereBetween('created_at', [
+                        $now->copy()->subMonths(3)->startOfDay(),
+                        $now->endOfDay()
+                    ]);
+                    break;
+                case 'last_6_months':
+                    $query->whereBetween('created_at', [
+                        $now->copy()->subMonths(6)->startOfDay(),
+                        $now->endOfDay()
+                    ]);
+                    break;
+                case 'this_year':
+                    $query->whereYear('created_at', $now->year);
+                    break;
+            }
         }
 
         $entries = $query->latest()->paginate(10);
@@ -38,29 +66,37 @@ class EntryController extends Controller
         try {
             DB::beginTransaction();
 
-            // Crear la entrada  
-            $entry = Entry::create($request->validated());
-
-            // Actualizar el medicamento: sumar stock y actualizar precio  
             $medicament = Medicament::find($request->medicament_id);
+
+            $entry = Entry::create([
+                'invoice_number' => $request->invoice_number,
+                'laboratory_id' => $request->laboratory_id,
+                'medicament_id' => $request->medicament_id,
+                'stock' => $request->stock,
+                'price' => $request->price,
+                'current_stock' => $medicament->stock,
+                'final_stock' => $medicament->stock + $request->stock // Stock después  
+            ]);
+
             $medicament->update([
-                'stock' => $medicament->stock + $request->stock, // Sumar al stock actual  
-                'price' => $request->price // Actualizar precio  
+                'stock' => $medicament->stock + $request->stock,
+                'price' => $request->price
             ]);
 
             DB::commit();
-            $entry->load(['laboratory', 'medicament']);
+
+            $entry->load(['medicament', 'laboratory']);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Entrada creada exitosamente',
+                'message' => 'Entrada registrada exitosamente',
                 'entry' => $entry,
             ]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => 'Error al crear la entrada: ' . $e->getMessage(),
+                'message' => 'Error al registrar la entrada: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -82,21 +118,31 @@ class EntryController extends Controller
             // Revertir la entrada anterior del medicamento original  
             $oldMedicament = Medicament::find($entry->medicament_id);
             $oldMedicament->update([
-                'stock' => $oldMedicament->stock - $entry->stock // Restar stock anterior  
+                'stock' => $entry->current_stock // Restaurar al stock que había antes de esta entrada  
             ]);
 
-            // Actualizar la entrada  
-            $entry->update($request->validated());
-
-            // Aplicar la nueva entrada al medicamento (puede ser el mismo o diferente)  
+            // Obtener el medicamento nuevo (puede ser el mismo o diferente)  
             $newMedicament = Medicament::find($request->medicament_id);
+
+            // Actualizar la entrada con nuevos valores de seguimiento  
+            $entry->update([
+                'invoice_number' => $request->invoice_number,
+                'laboratory_id' => $request->laboratory_id,
+                'medicament_id' => $request->medicament_id,
+                'stock' => $request->stock,
+                'price' => $request->price,
+                'current_stock' => $newMedicament->stock, // Stock actual del medicamento  
+                'final_stock' => $newMedicament->stock + $request->stock // Stock después de la nueva entrada  
+            ]);
+
+            // Aplicar la nueva entrada al medicamento  
             $newMedicament->update([
-                'stock' => $newMedicament->stock + $request->stock, // Sumar nuevo stock  
-                'price' => $request->price // Actualizar precio  
+                'stock' => $newMedicament->stock + $request->stock,
+                'price' => $request->price
             ]);
 
             DB::commit();
-            $entry->load(['laboratory', 'medicament']);
+            $entry->load(['medicament', 'laboratory']);
 
             return response()->json([
                 'success' => true,
@@ -117,10 +163,10 @@ class EntryController extends Controller
         try {
             DB::beginTransaction();
 
-            // Revertir el stock del medicamento  
+            // Revertir el stock del medicamento usando current_stock  
             $medicament = Medicament::find($entry->medicament_id);
             $medicament->update([
-                'stock' => $medicament->stock - $entry->stock // Restar el stock de la entrada eliminada  
+                'stock' => $entry->current_stock
             ]);
 
             $entry->delete();

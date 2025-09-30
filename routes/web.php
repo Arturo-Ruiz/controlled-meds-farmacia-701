@@ -8,6 +8,7 @@ use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\DispatchController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
@@ -19,9 +20,8 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
     Route::resource('medicaments', MedicamentController::class);
     Route::resource('laboratories', LaboratoryController::class);

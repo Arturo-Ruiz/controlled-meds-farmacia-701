@@ -57,19 +57,45 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- AGREGAR ESTE FILTRO DE FECHA -->
+                    <div class="w-48">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Filtrar por fecha</label>
+                        <select id="dateFilter" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="all">Todas las fechas</option>
+                            <option value="this_month">Este mes</option>
+                            <option value="last_3_months">Últimos 3 meses</option>
+                            <option value="last_6_months">Últimos 6 meses</option>
+                            <option value="this_year">Este año</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <!-- Filtros en móvil -->
             <div class="lg:hidden mt-4">
-                <div class="w-full">
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Buscar entrada</label>
-                    <div class="relative">
-                        <input type="text" id="searchInputMobile" placeholder="Factura, laboratorio o medicamento..."
-                            class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
-                            <i class="fas fa-search text-gray-400 text-xs"></i>
+                <div class="space-y-4">
+                    <div class="w-full">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Buscar entrada</label>
+                        <div class="relative">
+                            <input type="text" id="searchInputMobile" placeholder="Factura, laboratorio o medicamento..."
+                                class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
+                                <i class="fas fa-search text-gray-400 text-xs"></i>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- AGREGAR ESTE FILTRO DE FECHA MÓVIL -->
+                    <div class="w-full">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Filtrar por fecha</label>
+                        <select id="dateFilterMobile" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="all">Todas las fechas</option>
+                            <option value="this_month">Este mes</option>
+                            <option value="last_3_months">Últimos 3 meses</option>
+                            <option value="last_6_months">Últimos 6 meses</option>
+                            <option value="this_year">Este año</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -101,7 +127,19 @@
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-boxes text-gray-400"></i>
-                                <span>Stock</span>
+                                <span>Stock Ingresado</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-chart-line text-gray-400"></i>
+                                <span>Stock Anterior</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-arrow-up text-gray-400"></i>
+                                <span>Stock Final</span>
                             </div>
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -142,11 +180,37 @@
                             <div class="text-sm text-gray-900">{{ $entry->laboratory->name }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ $entry->medicament->name }}</div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-pills text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">{{ $entry->medicament->name }}</div>
+                                    <div class="text-sm text-gray-600">{{ $entry->medicament->presentation }}</div>
+                                    <div class="text-xs text-gray-500 flex items-center mt-1">
+                                        <i class="fas fa-capsules text-purple-500 mr-1"></i>
+                                        {{ $entry->medicament->posological_units }} unidades posológicas
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ number_format($entry->stock) }}</div>
-                            <div class="text-sm text-gray-500">unidades</div>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    {{ number_format($entry->stock) }}
+                                    unidades
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-600">{{ number_format($entry->current_stock) }}</div>
+                            <div class="text-sm text-gray-500">antes</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-green-600">{{ number_format($entry->final_stock) }}</div>
+                            <div class="text-sm text-gray-500">después</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-green-600">${{ number_format($entry->price, 2) }}</div>
@@ -246,7 +310,9 @@
                         class="select2-medicament w-full">
                         <option value="">Seleccionar medicamento</option>
                         @foreach($medicaments as $medicament)
-                        <option value="{{ $medicament->id }}">{{ $medicament->name }}</option>
+                        <option value="{{ $medicament->id }}">
+                            {{ $medicament->name }} - {{ $medicament->presentation }} ({{ $medicament->posological_units }} unidades posológicas)
+                        </option>
                         @endforeach
                     </select>
                     <span class="text-red-500 text-xs hidden" id="medicament_idError"></span>
@@ -334,8 +400,8 @@
             transform: translateY(0);
         }
     }
-    
-     #entryModal:not(.hidden) {
+
+    #entryModal:not(.hidden) {
         backdrop-filter: blur(4px);
         background-color: rgba(0, 0, 0, 0.3);
         /* Cambiar de negro sólido a semi-transparente */
@@ -399,6 +465,24 @@
             $('#searchInput').val(searchValue);
             $('#searchInputMobile').val(searchValue);
         }
+
+        if (urlParams.get('date_filter')) {
+            const dateValue = urlParams.get('date_filter');
+            $('#dateFilter').val(dateValue);
+            $('#dateFilterMobile').val(dateValue);
+        }
+
+        $('#dateFilter').on('change', function() {
+            const value = $(this).val();
+            $('#dateFilterMobile').val(value);
+            applyFilters();
+        });
+
+        $('#dateFilterMobile').on('change', function() {
+            const value = $(this).val();
+            $('#dateFilter').val(value);
+            applyFilters();
+        });
 
         // Sincronización bidireccional de inputs  
         $('#searchInput').on('input', function() {
@@ -703,10 +787,15 @@
         // Función para aplicar filtros  
         function applyFilters() {
             const search = $('#searchInput').val();
+            const dateFilter = $('#dateFilter').val();
             const params = new URLSearchParams();
 
             if (search && search.trim() !== '') {
                 params.append('search', search);
+            }
+
+            if (dateFilter && dateFilter !== 'all') {
+                params.append('date_filter', dateFilter);
             }
 
             const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');

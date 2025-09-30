@@ -14,7 +14,9 @@ class Entry extends Model
         'laboratory_id',
         'medicament_id',
         'stock',
-        'price'
+        'price',
+        'current_stock',
+        'final_stock',
     ];
 
     public function laboratory()
@@ -25,5 +27,5 @@ class Entry extends Model
     public function medicament()
     {
         return $this->belongsTo(Medicament::class, 'medicament_id');
-    }   
+    }
 }

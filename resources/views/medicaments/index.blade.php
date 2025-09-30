@@ -116,7 +116,7 @@
                                 <i class="fas fa-exclamation-triangle mr-1"></i>
                                 Stock Crítico
                             </span>
-                            @elseif($medicament->stock <= ($medicament->min_stock + 5))
+                            @elseif($medicament->stock <= ($medicament->min_stock + 1))
                                 <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     Stock Bajo

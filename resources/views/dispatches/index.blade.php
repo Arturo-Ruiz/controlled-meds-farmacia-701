@@ -100,6 +100,18 @@
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-2">
+                                <i class="fas fa-chart-line text-gray-400"></i>
+                                <span>Stock Anterior</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-chart-bar text-gray-400"></i>
+                                <span>Stock Final</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center space-x-2">
                                 <i class="fas fa-clipboard-list text-gray-400"></i>
                                 <span>Razón</span>
                             </div>
@@ -129,14 +141,33 @@
                                 <div>
                                     <div class="text-sm font-medium text-gray-900">{{ $dispatch->medicament->name }}</div>
                                     <div class="text-sm text-gray-500">{{ $dispatch->medicament->presentation }}</div>
+                                    <div class="text-xs text-gray-500 flex items-center mt-1">
+                                        <i class="fas fa-capsules text-purple-500 mr-1"></i>
+                                        {{ $dispatch->medicament->posological_units }} unidades posológicas
+                                    </div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $dispatch->user->name }}</div>
                         </td>
+                       
+
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ number_format($dispatch->amount) }}</div>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-minus mr-1"></i>
+                                    {{ number_format($dispatch->amount) }}
+                                    unidades
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ number_format($dispatch->current_stock) }}</div>
+                            <div class="text-sm text-gray-500">unidades</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ number_format($dispatch->final_stock) }}</div>
                             <div class="text-sm text-gray-500">unidades</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

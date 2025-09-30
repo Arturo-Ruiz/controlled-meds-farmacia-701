@@ -26,10 +26,10 @@ class MedicamentController extends Controller
                     $query->whereRaw('stock < min_stock');
                     break;
                 case 'low':
-                    $query->whereRaw('stock >= min_stock AND stock <= (min_stock + 5)');
+                    $query->whereRaw('stock >= min_stock AND stock <= (min_stock + 1)');
                     break;
                 case 'normal':
-                    $query->whereRaw('stock > (min_stock + 5)');
+                    $query->whereRaw('stock > (min_stock + 1)');
                     break;
             }
         }
