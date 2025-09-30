@@ -30,16 +30,16 @@
         <nav class="relative z-10 p-4 space-y-2">
 
             <!-- Dashboard -->
-            <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1    
-                {{ request()->routeIs('dashboard') ? 'bg-blue-100 text-blue-700 border-r-4 border-blue-500' : 'text-gray-600 hover:text-gray-800 hover:bg-blue-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300  
-                    {{ request()->routeIs('dashboard') ? 'bg-blue-200' : 'bg-gray-100 group-hover:bg-blue-100' }}">
-                    <i class="fas fa-tachometer-alt text-lg transition-all duration-300  
-                    {{ request()->routeIs('dashboard') ? 'text-blue-700' : 'text-gray-600 group-hover:text-blue-600' }}"></i>
+            <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+    {{ request()->routeIs('dashboard') ? 'bg-cyan-100 text-cyan-800 border-r-4 border-cyan-600' : 'text-gray-600 hover:text-gray-800 hover:bg-cyan-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300    
+        {{ request()->routeIs('dashboard') ? 'bg-cyan-200' : 'bg-gray-100 group-hover:bg-cyan-100' }}">
+                    <i class="fas fa-tachometer-alt text-lg transition-all duration-300    
+        {{ request()->routeIs('dashboard') ? 'text-cyan-800' : 'text-gray-600 group-hover:text-cyan-700' }}"></i>
                 </div>
                 <span class="font-medium">Panel de control</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300  
-                    {{ request()->routeIs('dashboard') ? 'bg-blue-500 opacity-100' : 'bg-blue-400 opacity-0 group-hover:opacity-100' }}">
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300    
+        {{ request()->routeIs('dashboard') ? 'bg-cyan-600 opacity-100' : 'bg-cyan-500 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 

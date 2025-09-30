@@ -212,7 +212,7 @@
                             <p class="font-semibold text-green-600">+{{ $entry->stock }} unidades</p>
                             <p class="text-sm text-gray-500">{{ $entry->created_at->diffForHumans() }}</p>
                             <!-- Información adicional de stock en el lado derecho -->
-                           
+
                             <p class="text-sm font-medium text-gray-700"> Stock: <span class="text-xs text-gray-500">{{ $entry->current_stock }}</span>
                                 → <span class="text-green-600">{{ $entry->final_stock }}</span> </p>
                         </div>
