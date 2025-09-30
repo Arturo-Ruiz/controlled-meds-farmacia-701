@@ -164,12 +164,20 @@
                             <span class="font-medium text-gray-900">{{ $medicament->expiration_date->format('d/m/Y') }}</span>
                         </div>
 
-                        <div class="flex items-center justify-between py-2">
+                        <div class="flex items-center justify-between py-2 border-b border-gray-300">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-capsules text-purple-500 mr-2"></i>
-                                Unidades Posológicas
+                                Unidades posológicas por caja
                             </span>
                             <span class="font-medium text-gray-900">{{ $medicament->posological_units }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-gray-600 flex items-center">
+                                <i class="fas fa-calculator text-blue-500 mr-2"></i>
+                                Total unidades posológicas en stock
+                            </span>
+                            <span class="font-medium text-gray-900">{{ $medicament->posological_units * $medicament->stock }}</span>
                         </div>
                     </div>
                 </div>
@@ -412,10 +420,10 @@
         }
     }
 
-    
 
 
-     #medicamentModal:not(.hidden) {
+
+    #medicamentModal:not(.hidden) {
         backdrop-filter: blur(4px);
         background-color: rgba(0, 0, 0, 0.3);
         /* Cambiar de negro sólido a semi-transparente */

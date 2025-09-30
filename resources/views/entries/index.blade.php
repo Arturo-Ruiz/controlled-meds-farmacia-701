@@ -194,23 +194,55 @@
                                 </div>
                             </div>
                         </td>
+
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex flex-col space-y-2">
+                                <!-- Stock en unidades (actual) -->
                                 <div class="flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
                                     <i class="fas fa-plus mr-1"></i>
-                                    {{ number_format($entry->stock) }}
-                                    unidades
+                                    {{ number_format($entry->stock) }} unidades
+                                </div>
+
+                                <!-- Unidades posológicas ingresadas -->
+                                <div class="flex items-center px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                                    <i class="fas fa-capsules mr-1"></i>
+                                    {{ number_format($entry->stock * $entry->medicament->posological_units) }} u. posológicas
                                 </div>
                             </div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-600">{{ number_format($entry->current_stock) }}</div>
-                            <div class="text-sm text-gray-500">antes</div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full flex items-center">
+                                        <i class="fas fa-history mr-1"></i>
+                                        {{ $entry->current_stock }} unidades
+                                    </span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full flex items-center">
+                                        <i class="fas fa-pills mr-1"></i>
+                                        {{ $entry->current_stock * $entry->medicament->posological_units }} u. posológicas
+                                    </span>
+                                </div>
+                            </div>
                         </td>
+
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-green-600">{{ number_format($entry->final_stock) }}</div>
-                            <div class="text-sm text-gray-500">después</div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i>
+                                        {{ $entry->final_stock }} unidades
+                                    </span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full flex items-center">
+                                        <i class="fas fa-pills mr-1"></i>
+                                        {{ $entry->final_stock * $entry->medicament->posological_units }} u. posológicas
+                                    </span>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-green-600">${{ number_format($entry->price, 2) }}</div>

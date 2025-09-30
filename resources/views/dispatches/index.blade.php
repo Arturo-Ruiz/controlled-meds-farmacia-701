@@ -180,21 +180,52 @@
 
 
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center space-x-2">
-                                <div class="flex items-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-                                    <i class="fas fa-minus mr-1"></i>
-                                    {{ number_format($dispatch->amount) }}
-                                    unidades
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full border border-red-300 flex items-center">
+                                        <i class="fas fa-minus mr-1"></i>
+                                        {{ $dispatch->amount }} unidades
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full border border-purple-200">
+                                        <i class="fas fa-capsules mr-1"></i>
+                                        {{ $dispatch->amount * $dispatch->medicament->posological_units }} u. posológicas
+                                    </span>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ number_format($dispatch->current_stock) }}</div>
-                            <div class="text-sm text-gray-500">unidades</div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full border border-gray-300 flex items-center">
+                                        <i class="fas fa-history mr-1"></i>
+                                        {{ $dispatch->current_stock }} unidades
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full border border-purple-200">
+                                        <i class="fas fa-capsules mr-1"></i>
+                                        {{ $dispatch->current_stock * $dispatch->medicament->posological_units }} u. posológicas
+                                    </span>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ number_format($dispatch->final_stock) }}</div>
-                            <div class="text-sm text-gray-500">unidades</div>
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center justify-center">
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full border border-blue-300 flex items-center">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        {{ $dispatch->final_stock }} unidades
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full border border-purple-200">
+                                        <i class="fas fa-capsules mr-1"></i>
+                                        {{ $dispatch->final_stock * $dispatch->medicament->posological_units }} u. posológicas
+                                    </span>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             @if($dispatch->reason === 'Venta')
