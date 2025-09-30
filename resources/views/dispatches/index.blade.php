@@ -50,26 +50,52 @@
                     <div class="w-64">
                         <label class="block text-xs font-medium text-gray-700 mb-1">Buscar salida</label>
                         <div class="relative">
-                            <input type="text" id="searchInput" placeholder="Medicamento, usuario o razón..."
+                            <input type="text" id="searchInput" placeholder="Medicamento, usuario o motivo..."
                                 class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                             <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
                                 <i class="fas fa-search text-gray-400 text-xs"></i>
                             </div>
                         </div>
                     </div>
+
+                    <div class="w-48">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Filtrar por fecha</label>
+                        <select id="dateFilter" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <option value="all">Todas las fechas</option>
+                            <option value="this_month">Este mes</option>
+                            <option value="last_3_months">Últimos 3 meses</option>
+                            <option value="last_6_months">Últimos 6 meses</option>
+                            <option value="this_year">Este año</option>
+                        </select>
+                    </div>
                 </div>
+
             </div>
 
             <!-- Filtros en móvil -->
             <div class="lg:hidden mt-4">
-                <div class="w-full">
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Buscar salida</label>
-                    <div class="relative">
-                        <input type="text" id="searchInputMobile" placeholder="Medicamento, usuario o razón..."
-                            class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
-                            <i class="fas fa-search text-gray-400 text-xs"></i>
+                <div class="space-y-4">
+                    <div class="w-full">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Buscar salida</label>
+                        <div class="relative">
+                            <input type="text" id="searchInputMobile" placeholder="Medicamento, usuario o motivo..."
+                                class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <div class="absolute inset-y-0 left-0 pl-2 flex items-center">
+                                <i class="fas fa-search text-gray-400 text-xs"></i>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- AGREGAR ESTE FILTRO DE FECHA MÓVIL -->
+                    <div class="w-full">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Filtrar por fecha</label>
+                        <select id="dateFilterMobile" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <option value="all">Todas las fechas</option>
+                            <option value="this_month">Este mes</option>
+                            <option value="last_3_months">Últimos 3 meses</option>
+                            <option value="last_6_months">Últimos 6 meses</option>
+                            <option value="this_year">Este año</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -151,7 +177,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $dispatch->user->name }}</div>
                         </td>
-                       
+
 
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center space-x-2">
@@ -419,11 +445,30 @@
 
         // Mantener valores de filtros después de la recarga  
         const urlParams = new URLSearchParams(window.location.search);
+
         if (urlParams.get('search')) {
             const searchValue = urlParams.get('search');
             $('#searchInput').val(searchValue);
             $('#searchInputMobile').val(searchValue);
         }
+
+        if (urlParams.get('date_filter')) {
+            const dateValue = urlParams.get('date_filter');
+            $('#dateFilter').val(dateValue);
+            $('#dateFilterMobile').val(dateValue);
+        }
+
+        $('#dateFilter').on('change', function() {
+            const value = $(this).val();
+            $('#dateFilterMobile').val(value);
+            applyFilters();
+        });
+
+        $('#dateFilterMobile').on('change', function() {
+            const value = $(this).val();
+            $('#dateFilter').val(value);
+            applyFilters();
+        });
 
         // Sincronización bidireccional de inputs  
         $('#searchInput').on('input', function() {
@@ -674,10 +719,15 @@
         // Función para aplicar filtros  
         function applyFilters() {
             const search = $('#searchInput').val();
+            const dateFilter = $('#dateFilter').val();
             const params = new URLSearchParams();
 
             if (search && search.trim() !== '') {
                 params.append('search', search);
+            }
+
+            if (dateFilter && dateFilter !== 'all') {
+                params.append('date_filter', dateFilter);
             }
 
             const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
