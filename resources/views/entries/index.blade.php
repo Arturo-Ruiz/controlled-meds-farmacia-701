@@ -334,7 +334,7 @@
             <div class="mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <label class="block text-sm font-medium text-gray-700">Medicamentos</label>
-                    <button type="button" id="addMedicamentBtn" class="text-green-600 hover:text-green-700 text-sm font-medium">
+                    <button type="button" id="addMedicamentBtn" class="text-green-600 hover:text-green-700 text-sm font-medium cursor-pointer">
                         <i class="fas fa-plus mr-1"></i>Agregar medicamento
                     </button>
                 </div>
