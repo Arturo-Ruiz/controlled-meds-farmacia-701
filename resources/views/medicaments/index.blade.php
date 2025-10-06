@@ -167,7 +167,7 @@
                         <div class="flex items-center justify-between py-2 border-b border-gray-300">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-capsules text-purple-500 mr-2"></i>
-                                Unidades posológicas por caja
+                                Unidades posológicas
                             </span>
                             <span class="font-medium text-gray-900">{{ $medicament->posological_units }}</span>
                         </div>
@@ -175,7 +175,7 @@
                         <div class="flex items-center justify-between py-2">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-calculator text-blue-500 mr-2"></i>
-                                Total unidades posológicas en stock
+                                Total unidades posológicas 
                             </span>
                             <span class="font-medium text-gray-900">{{ $medicament->posological_units * $medicament->stock }}</span>
                         </div>
