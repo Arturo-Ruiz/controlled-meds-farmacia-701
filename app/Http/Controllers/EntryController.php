@@ -66,37 +66,41 @@ class EntryController extends Controller
         try {
             DB::beginTransaction();
 
-            $medicament = Medicament::find($request->medicament_id);
+            $entries = [];
 
-            $entry = Entry::create([
-                'invoice_number' => $request->invoice_number,
-                'laboratory_id' => $request->laboratory_id,
-                'medicament_id' => $request->medicament_id,
-                'stock' => $request->stock,
-                'price' => $request->price,
-                'current_stock' => $medicament->stock,
-                'final_stock' => $medicament->stock + $request->stock // Stock después  
-            ]);
+            foreach ($request->medicaments as $medicamentData) {
+                $medicament = Medicament::find($medicamentData['medicament_id']);
 
-            $medicament->update([
-                'stock' => $medicament->stock + $request->stock,
-                'price' => $request->price
-            ]);
+                $entry = Entry::create([
+                    'invoice_number' => $request->invoice_number,
+                    'laboratory_id' => $request->laboratory_id,
+                    'medicament_id' => $medicamentData['medicament_id'],
+                    'stock' => $medicamentData['stock'],
+                    'price' => $medicamentData['price'],
+                    'current_stock' => $medicament->stock,
+                    'final_stock' => $medicament->stock + $medicamentData['stock']
+                ]);
+
+                $medicament->update([
+                    'stock' => $medicament->stock + $medicamentData['stock'],
+                    'price' => $medicamentData['price']
+                ]);
+
+                $entries[] = $entry;
+            }
 
             DB::commit();
 
-            $entry->load(['medicament', 'laboratory']);
-
             return response()->json([
                 'success' => true,
-                'message' => 'Entrada registrada exitosamente',
-                'entry' => $entry,
+                'message' => 'Entradas registradas exitosamente',
+                'entries' => $entries,
             ]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => 'Error al registrar la entrada: ' . $e->getMessage(),
+                'message' => 'Error al registrar las entradas: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -194,7 +198,8 @@ class EntryController extends Controller
                 'id' => $medicament->id,
                 'name' => $medicament->name,
                 'current_stock' => $medicament->stock,
-                'current_price' => $medicament->price
+                'current_price' => $medicament->price,
+                'posological_units' => $medicament->posological_units  
             ]
         ]);
     }

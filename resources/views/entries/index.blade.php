@@ -253,11 +253,6 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex items-center justify-center space-x-2">
-                                <button class="edit-entry p-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200"
-                                    data-id="{{ $entry->id }}"
-                                    title="Editar entrada">
-                                    <i class="fas fa-edit"></i>
-                                </button>
                                 <button class="delete-entry p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
                                     data-id="{{ $entry->id }}"
                                     title="Eliminar entrada">
@@ -307,99 +302,45 @@
             @csrf
             <input type="hidden" id="entryId" name="id">
 
-            <!-- Primera fila: Número de factura -->
-            <div class="mb-4">
-                <label for="invoice_number" class="block text-sm font-medium text-gray-700 mb-1">Número de factura</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <i class="fas fa-receipt text-gray-400"></i>
-                    </div>
-                    <input type="text" id="invoice_number" name="invoice_number" required
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    <span class="text-red-500 text-xs hidden" id="invoice_numberError"></span>
-                </div>
-            </div>
-
-            <!-- Segunda fila: Laboratorio y Medicamento -->
+            <!-- Número de factura y Laboratorio -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <!-- Select de Laboratorio -->
+                <div class="mb-4">
+                    <label for="invoice_number" class="block text-sm font-medium text-gray-700 mb-1">Número de factura</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-receipt text-gray-400"></i>
+                        </div>
+                        <input type="text" id="invoice_number" name="invoice_number" required
+                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <span class="text-red-500 text-xs hidden" id="invoice_numberError"></span>
+                    </div>
+                </div>
                 <div>
                     <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
-                    <select id="laboratory_id" name="laboratory_id" required
-                        class="select2-laboratory w-full">
-                        <option value="">Seleccionar laboratorio</option>
-                        @foreach($laboratories as $laboratory)
-                        <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <select id="laboratory_id" name="laboratory_id" required
+                            class="select2-laboratory w-full pl-10">
+                            <option value="">Seleccionar laboratorio</option>
+                            @foreach($laboratories as $laboratory)
+                            <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <span class="text-red-500 text-xs hidden" id="laboratory_idError"></span>
                 </div>
-
-                <!-- Select de Medicamento -->
-                <div>
-                    <label for="medicament_id" class="block text-sm font-medium text-gray-700 mb-1">Medicamento</label>
-                    <select id="medicament_id" name="medicament_id" required
-                        class="select2-medicament w-full">
-                        <option value="">Seleccionar medicamento</option>
-                        @foreach($medicaments as $medicament)
-                        <option value="{{ $medicament->id }}">
-                            {{ $medicament->name }} - {{ $medicament->presentation }} ({{ $medicament->posological_units }} unidades posológicas)
-                        </option>
-                        @endforeach
-                    </select>
-                    <span class="text-red-500 text-xs hidden" id="medicament_idError"></span>
-                </div>
             </div>
 
-            <!-- Tercera fila: Información actual del medicamento (solo lectura) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4" id="currentMedicamentInfo" style="display: none;">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Stock actual</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-boxes text-gray-400"></i>
-                        </div>
-                        <input type="text" id="current_stock" readonly
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
-                    </div>
+            <!-- Contenedor de medicamentos -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Medicamentos</label>
+                    <button type="button" id="addMedicamentBtn" class="text-green-600 hover:text-green-700 text-sm font-medium">
+                        <i class="fas fa-plus mr-1"></i>Agregar medicamento
+                    </button>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Precio actual</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-dollar-sign text-gray-400"></i>
-                        </div>
-                        <input type="text" id="current_price" readonly
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cuarta fila: Stock y Precio nuevos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock a ingresar</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-boxes text-gray-400"></i>
-                        </div>
-                        <input type="number" id="stock" name="stock" required min="1"
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        <span class="text-red-500 text-xs hidden" id="stockError"></span>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Precio unitario</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-dollar-sign text-gray-400"></i>
-                        </div>
-                        <input type="number" id="price" name="price" required min="0" step="0.01"
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        <span class="text-red-500 text-xs hidden" id="priceError"></span>
-                    </div>
+                <div id="medicamentsContainer" class="space-y-3">
+                    <!-- Las filas de medicamentos se agregarán aquí dinámicamente -->
                 </div>
             </div>
         </form>
@@ -489,8 +430,8 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Mantener valores de filtros después de la recarga  
         const urlParams = new URLSearchParams(window.location.search);
+        let medicamentRowIndex = 0;
 
         if (urlParams.get('search')) {
             const searchValue = urlParams.get('search');
@@ -589,20 +530,31 @@
             }
         });
 
+        $(document).on('click', '.remove-medicament-btn', function() {
+            if ($('.medicament-row').length > 1) {
+                $(this).closest('.medicament-row').remove();
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Debe haber al menos un medicamento'
+                });
+            }
+        });
+
+        $('#addMedicamentBtn').click(function() {
+            addMedicamentRow();
+        });
 
         // Abrir modal para crear  
         $(document).on('click', '#createEntryBtn', function() {
             $('#entryModalTitle').text('Nueva Entrada');
             $('#entryForm')[0].reset();
-            $('#entryForm').attr('data-action', 'create');
-            $('#entryId').val('');
-            $('#currentMedicamentInfo').hide();
-            clearErrors();
+            $('#medicamentsContainer').empty();
+            medicamentRowIndex = 0;
+            addMedicamentRow(); // Agregar primera fila  
 
             $('#entryModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
-            setTimeout(() => {
-                $('#entryModal .bg-white').removeClass('scale-95').addClass('scale-100');
-            }, 10);
         });
 
         // Cerrar modal  
@@ -636,6 +588,133 @@
             clearErrors();
         }
 
+        function addMedicamentRow() {
+            const row = `    
+<div class="medicament-row border border-gray-200 rounded-lg p-4 bg-white shadow-sm" data-index="${medicamentRowIndex}">    
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">    
+        <!-- Medicamento - ocupa 6 columnas (50%) -->  
+
+        <div class="md:col-span-6">    
+            <label class="block text-sm font-medium text-gray-700 mb-1">Medicamento #${medicamentRowIndex + 1}</label>    
+            <select name="medicaments[${medicamentRowIndex}][medicament_id]" required     
+                    class="select2-medicament-row w-full"  
+                    data-row-index="${medicamentRowIndex}">    
+                <option value="">Seleccionar medicamento</option>    
+                @foreach($medicaments as $medicament)    
+                <option value="{{ $medicament->id }}">    
+                    {{ $medicament->name }} - {{ $medicament->presentation }}    
+                </option>    
+                @endforeach    
+            </select>  
+              
+            <!-- Current stock, price and posological units info - MEJORADO -->  
+            <div class="current-medicament-info mt-2 hidden" id="currentInfo_${medicamentRowIndex}">  
+                <div class="flex gap-1.5 text-xs items-center flex-nowrap">  
+                    <div class="bg-blue-50 px-2 py-1 rounded flex items-center gap-1 border border-blue-200 whitespace-nowrap">  
+                        <i class="fas fa-boxes text-blue-600 text-xs"></i>  
+                        <span class="font-semibold text-blue-700 current-stock-display"></span>  
+                    </div>  
+                    <div class="bg-green-50 px-2 py-1 rounded flex items-center gap-1 border border-green-200 whitespace-nowrap">  
+                        <span class="font-semibold text-green-700 current-price-display"></span>  
+                    </div>  
+                    <div class="bg-purple-50 px-2 py-1 rounded flex items-center gap-1 border border-purple-200 whitespace-nowrap">  
+                        <i class="fas fa-capsules text-purple-600 text-xs"></i>  
+                        <span class="font-semibold text-purple-700 posological-units-display"></span>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>    
+            
+        <!-- Stock - ocupa 2 columnas (~17%) -->  
+        <div class="md:col-span-2">    
+            <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>    
+            <div class="relative">  
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">  
+                    <i class="fas fa-boxes text-gray-400 text-sm"></i>  
+                </div>  
+                <input type="number" name="medicaments[${medicamentRowIndex}][stock]"     
+                       required min="1"   
+                       class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">    
+            </div>  
+        </div>    
+            
+        <!-- Precio - ocupa 3 columnas (25%) -->  
+        <div class="md:col-span-3">    
+            <label class="block text-sm font-medium text-gray-700 mb-1">Precio</label>    
+            <div class="relative">  
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">  
+                    <i class="fas fa-dollar-sign text-gray-400 text-sm"></i>  
+                </div>  
+                <input type="number" name="medicaments[${medicamentRowIndex}][price]"     
+                       required min="0" step="0.01"   
+                       class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">    
+            </div>  
+        </div>  
+          
+        <!-- Botón eliminar - ocupa 1 columna (~8%) -->  
+        <div class="md:col-span-1 flex items-start pt-6">  
+            <button type="button" class="remove-medicament-btn w-full h-[42px] text-red-600 hover:text-white hover:bg-red-600 border border-red-300 hover:border-red-600 rounded-lg transition-all duration-200 flex items-center justify-center">    
+                <i class="fas fa-trash text-sm"></i>    
+            </button>    
+        </div>  
+    </div>    
+</div>    
+`;
+
+            $('#medicamentsContainer').append(row);
+
+            // Initialize Select2 for the newly added row  
+            const $select = $(`.medicament-row[data-index="${medicamentRowIndex}"] .select2-medicament-row`);
+            $select.select2({
+                placeholder: 'Buscar medicamento...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#entryModal')
+            });
+
+            medicamentRowIndex++;
+        }
+
+        $(document).on('change', '.select2-medicament-row', function() {
+            const medicamentId = $(this).val();
+            const rowIndex = $(this).data('row-index');
+            const $infoContainer = $(`#currentInfo_${rowIndex}`);
+
+            if (medicamentId) {
+                $.ajax({
+                    url: '{{ route("medicaments.data", ":id") }}'.replace(':id', medicamentId),
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            const medicament = response.medicament;
+
+                            // Mostrar stock actual  
+                            $infoContainer.find('.current-stock-display').text(medicament.current_stock + ' unidades');
+
+                            // Mostrar precio actual  
+                            $infoContainer.find('.current-price-display').text('$' + parseFloat(medicament.current_price).toFixed(2));
+
+                            // Mostrar unidades posológicas por unidad  
+                            $infoContainer.find('.posological-units-display').text(medicament.posological_units + ' Unidades Posológicas ');
+
+                            $infoContainer.removeClass('hidden');
+                        }
+                    },
+                    error: function() {
+                        $infoContainer.addClass('hidden');
+                    }
+                });
+            } else {
+                $infoContainer.addClass('hidden');
+            }
+        });
+
+        // Helper function para formatear números  
+        function number_format(number) {
+            return new Intl.NumberFormat('es-ES').format(number);
+        }
+
+
         // Manejar Enter para enviar el formulario  
         $('#entryForm').on('keypress', function(e) {
             if (e.which === 13) {
@@ -653,101 +732,40 @@
 
         // Guardar entrada  
         $('#saveBtn').click(function() {
-            const form = $('#entryForm');
-            const action = form.attr('data-action');
-            const entryId = $('#entryId').val();
-
-            let url = action === 'create' ? '{{ route("entries.store") }}' :
-                '{{ route("entries.update", ":id") }}'.replace(':id', entryId);
-            let method = action === 'create' ? 'POST' : 'PUT';
+            const formData = $('#entryForm').serialize();
 
             $.ajax({
-                url: url,
-                method: method,
-                data: form.serialize(),
+                url: '{{ route("entries.store") }}',
+                method: 'POST',
+                data: formData,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
                     if (response.success) {
                         closeModal();
-                        $('.select2-laboratory').val(null).trigger('change');
-                        $('.select2-medicament').val(null).trigger('change');
-                        $('#currentMedicamentInfo').hide();
-                        if (action === 'create') {
-                            Swal.fire({
-                                toast: true,
-                                position: 'top-end',
-                                icon: 'success',
-                                title: '¡Entrada creada!',
-                                text: `Entrada ${response.entry.invoice_number} registrada exitosamente`,
-                                showConfirmButton: false,
-                                timer: 1000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                toast: true,
-                                position: 'top-end',
-                                icon: 'success',
-                                title: '¡Entrada actualizada!',
-                                text: `Entrada ${response.entry.invoice_number} actualizada exitosamente`,
-                                showConfirmButton: false,
-                                timer: 1000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        }
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: '¡Entradas creadas!',
+                            text: `${response.entries.length} medicamento(s) registrados`,
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true
+                        }).then(() => {
+                            window.location.reload();
+                        });
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         showValidationErrors(xhr.responseJSON.errors);
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error al procesar la solicitud'
-                        });
                     }
                 }
             });
         });
 
-        // Editar entrada  
-        $(document).on('click', '.edit-entry', function() {
-            const entryId = $(this).data('id');
-
-            $.ajax({
-                url: '{{ route("entries.show", ":id") }}'.replace(':id', entryId),
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        const entry = response.entry;
-
-                        $('#entryModalTitle').text('Editar Entrada');
-                        $('#invoice_number').val(entry.invoice_number);
-
-                        // MODIFICACIÓN NECESARIA: Para Select2 necesitas usar .trigger('change')  
-                        $('#laboratory_id').val(entry.laboratory_id).trigger('change');
-                        $('#medicament_id').val(entry.medicament_id).trigger('change');
-
-                        $('#stock').val(entry.stock);
-                        $('#price').val(entry.price);
-                        $('#entryId').val(entry.id);
-                        $('#entryForm').attr('data-action', 'edit');
-
-                        $('#entryModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
-                        setTimeout(() => {
-                            $('#entryModal .bg-white').removeClass('scale-95').addClass('scale-100');
-                        }, 10);
-                    }
-                }
-            });
-        });
 
         // Eliminar entrada  
         $(document).on('click', '.delete-entry', function() {

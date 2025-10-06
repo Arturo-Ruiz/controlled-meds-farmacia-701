@@ -24,9 +24,10 @@ class EntryRequest extends FormRequest
         return [
             'invoice_number' => 'required|string|max:255',
             'laboratory_id' => 'required|exists:laboratories,id',
-            'medicament_id' => 'required|exists:medicaments,id',
-            'stock' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0'
+            'medicaments' => 'required|array|min:1',
+            'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
+            'medicaments.*.stock' => 'required|integer|min:1',
+            'medicaments.*.price' => 'required|numeric|min:0'
         ];
     }
 
