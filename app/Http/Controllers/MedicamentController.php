@@ -61,7 +61,7 @@ class MedicamentController extends Controller
             }
         }
 
-        $medicaments = $query->latest()->paginate(9);
+        $medicaments = $query->orderBy('name', 'asc')->paginate(9);
 
         return view('medicaments.index', compact('medicaments'));
     }
