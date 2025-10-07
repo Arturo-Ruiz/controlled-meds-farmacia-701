@@ -175,7 +175,7 @@
                         <div class="flex items-center justify-between py-2">
                             <span class="text-sm text-gray-600 flex items-center">
                                 <i class="fas fa-calculator text-blue-500 mr-2"></i>
-                                Total unidades posológicas 
+                                Total unidades posológicas
                             </span>
                             <span class="font-medium text-gray-900">{{ $medicament->posological_units * $medicament->stock }}</span>
                         </div>
@@ -242,7 +242,7 @@
         <!-- Paginación -->
         @if($medicaments->hasPages())
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $medicaments->links() }}
+            {{ $medicaments->onEachSide(3)->links() }}
         </div>
         @endif
 
