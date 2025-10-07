@@ -45,6 +45,7 @@ class DashboardController extends Controller
                             ELSE 3   
                         END')
             ->orderBy('stock', 'asc')
+            ->take(3)
             ->get();
 
         $expirationAlerts = Medicament::where(function ($query) {
@@ -56,7 +57,7 @@ class DashboardController extends Controller
         })
             ->orderByRaw('CASE WHEN expiration_date < NOW() THEN 1 ELSE 2 END')
             ->orderBy('expiration_date', 'asc')
-            ->take(6)
+            ->take(3)
             ->get();
 
         $movementsData = $this->getMovementsData();
