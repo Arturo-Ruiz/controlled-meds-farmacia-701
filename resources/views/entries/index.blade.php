@@ -303,7 +303,7 @@
             <input type="hidden" id="entryId" name="id">
 
             <!-- Número de factura y Laboratorio -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
                 <div class="mb-4">
                     <label for="invoice_number" class="block text-sm font-medium text-gray-700 mb-1">Número de factura</label>
                     <div class="relative">
@@ -332,15 +332,13 @@
 
             <!-- Contenedor de medicamentos -->
             <div class="mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="block text-sm font-medium text-gray-700">Medicamentos</label>
+                <div id="medicamentsContainer" class="space-y-3">
+                </div>
+
+                <div class="flex justify-end items-center mt-5 mb-2">
                     <button type="button" id="addMedicamentBtn" class="text-green-600 hover:text-green-700 text-sm font-medium cursor-pointer">
                         <i class="fas fa-plus mr-1"></i>Agregar medicamento
                     </button>
-                </div>
-
-                <div id="medicamentsContainer" class="space-y-3">
-                    <!-- Las filas de medicamentos se agregarán aquí dinámicamente -->
                 </div>
             </div>
         </form>
@@ -653,7 +651,7 @@
           
         <!-- Botón eliminar - ocupa 1 columna (~8%) -->  
         <div class="md:col-span-1 flex items-start pt-6">  
-            <button type="button" class="remove-medicament-btn w-full h-[42px] text-red-600 hover:text-white hover:bg-red-600 border border-red-300 hover:border-red-600 rounded-lg transition-all duration-200 flex items-center justify-center">    
+            <button type="button" class="remove-medicament-btn cursor-pointer w-full h-[42px] text-red-600 hover:text-white hover:bg-red-600 border border-red-300 hover:border-red-600 rounded-lg transition-all duration-200 flex items-center justify-center">    
                 <i class="fas fa-trash text-sm"></i>    
             </button>    
         </div>  
