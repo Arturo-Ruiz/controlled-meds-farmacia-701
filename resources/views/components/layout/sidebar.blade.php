@@ -56,6 +56,19 @@
                     {{ request()->routeIs('medicaments.*') ? 'bg-blue-500 opacity-100' : 'bg-blue-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
+            <a href="{{ route('laboratories.index') }}"
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+{{ request()->routeIs('laboratories.*') ? 'bg-purple-100 text-purple-700 border-r-4 border-purple-500' : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+{{ request()->routeIs('laboratories.*') ? 'bg-purple-200' : 'bg-gray-100 group-hover:bg-purple-100' }}">
+                    <i class="fas fa-industry text-lg transition-all duration-300      
+{{ request()->routeIs('laboratories.*') ? 'text-purple-700' : 'text-gray-600 group-hover:text-purple-600' }}"></i>
+                </div>
+                <span class="font-medium">Laboratorios</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+{{ request()->routeIs('laboratories.*') ? 'bg-purple-500 opacity-100' : 'bg-purple-400 opacity-0 group-hover:opacity-100' }}">
+                </div>
+            </a>
 
             <a href="{{ route('drugstores.index') }}"
                 class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
@@ -70,20 +83,22 @@
 {{ request()->routeIs('drugstores.*') ? 'bg-teal-500 opacity-100' : 'bg-teal-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
-            
-            <a href="{{ route('laboratories.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
-{{ request()->routeIs('laboratories.*') ? 'bg-purple-100 text-purple-700 border-r-4 border-purple-500' : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
-{{ request()->routeIs('laboratories.*') ? 'bg-purple-200' : 'bg-gray-100 group-hover:bg-purple-100' }}">
-                    <i class="fas fa-industry text-lg transition-all duration-300      
-{{ request()->routeIs('laboratories.*') ? 'text-purple-700' : 'text-gray-600 group-hover:text-purple-600' }}"></i>
+
+            <a href="{{ route('medicament-types.index') }}"
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+{{ request()->routeIs('medicament-types.*') ? 'bg-purple-100 text-purple-700 border-r-4 border-purple-500' : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+{{ request()->routeIs('medicament-types.*') ? 'bg-purple-200' : 'bg-gray-100 group-hover:bg-purple-100' }}">
+                    <i class="fas fa-tags text-lg transition-all duration-300        
+{{ request()->routeIs('medicament-types.*') ? 'text-purple-700' : 'text-gray-600 group-hover:text-purple-600' }}"></i>
                 </div>
-                <span class="font-medium">Laboratorios</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
-{{ request()->routeIs('laboratories.*') ? 'bg-purple-500 opacity-100' : 'bg-purple-400 opacity-0 group-hover:opacity-100' }}">
+                <span class="font-medium">Tipos de Medicamentos</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+{{ request()->routeIs('medicament-types.*') ? 'bg-purple-500 opacity-100' : 'bg-purple-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
+
+
 
             <a href="{{ route('entries.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
 {{ request()->routeIs('entries.*') ? 'bg-emerald-100 text-emerald-700 border-r-4 border-emerald-500' : 'text-gray-600 hover:text-gray-800 hover:bg-emerald-50' }}">

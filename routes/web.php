@@ -10,6 +10,8 @@ use App\Http\Controllers\DispatchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrugstoreController;
+use App\Http\Controllers\MedicamentTypeController;
+
 
 Route::middleware('guest')->group(function () {
     Route::redirect('/', 'login', 301);
@@ -36,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::resource('drugstores', DrugstoreController::class);
+    
+    Route::resource('medicament-types', MedicamentTypeController::class);
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
