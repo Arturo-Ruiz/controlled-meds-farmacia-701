@@ -114,8 +114,8 @@
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-2">
-                                <i class="fas fa-industry text-gray-400"></i>
-                                <span>Laboratorio</span>
+                                <i class="fas fa-store text-gray-400"></i>
+                                <span>Droguería</span>
                             </div>
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -177,7 +177,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ $entry->laboratory->name }}</div>
+                            <div class="text-sm text-gray-900">{{ $entry->drugstore->name }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
@@ -316,17 +316,17 @@
                     </div>
                 </div>
                 <div>
-                    <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
+                    <label for="drugstore_id" class="block text-sm font-medium text-gray-700 mb-1">Droguería</label>
                     <div class="relative">
-                        <select id="laboratory_id" name="laboratory_id" required
-                            class="select2-laboratory w-full pl-10">
-                            <option value="">Seleccionar laboratorio</option>
-                            @foreach($laboratories as $laboratory)
-                            <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                        <select id="drugstore_id" name="drugstore_id" required
+                            class="select2-drugstore w-full pl-10">
+                            <option value="">Seleccionar droguería</option>
+                            @foreach($drugstores as $drugstore)
+                            <option value="{{ $drugstore->id }}">{{ $drugstore->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <span class="text-red-500 text-xs hidden" id="laboratory_idError"></span>
+                    <span class="text-red-500 text-xs hidden" id="drugstore_idError"></span>
                 </div>
             </div>
 
@@ -498,8 +498,8 @@
             }
         });
 
-        $('.select2-laboratory').select2({
-            placeholder: 'Buscar laboratorio...',
+        $('.select2-drugstore').select2({
+            placeholder: 'Buscar droguería...',
             allowClear: true,
             width: '100%',
             dropdownParent: $('#entryModal'),

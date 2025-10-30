@@ -22,12 +22,12 @@ class EntryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'invoice_number' => 'required|string|max:255',
-            'laboratory_id' => 'required|exists:laboratories,id',
-            'medicaments' => 'required|array|min:1',
-            'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
-            'medicaments.*.stock' => 'required|integer|min:1',
-            'medicaments.*.price' => 'required|numeric|min:0'
+          'invoice_number' => 'required|string|max:255',  
+            'drugstore_id' => 'required|exists:drugstores,id', 
+            'medicaments' => 'required|array|min:1',  
+            'medicaments.*.medicament_id' => 'required|exists:medicaments,id',  
+            'medicaments.*.stock' => 'required|integer|min:1',  
+            'medicaments.*.price' => 'required|numeric|min:0'  
         ];
     }
 
@@ -37,8 +37,8 @@ class EntryRequest extends FormRequest
             'invoice_number.required' => 'El número de factura es obligatorio.',
             'invoice_number.string' => 'El número de factura debe ser texto.',
             'invoice_number.max' => 'El número de factura no debe exceder 255 caracteres.',
-            'laboratory_id.required' => 'El laboratorio es obligatorio.',
-            'laboratory_id.exists' => 'El laboratorio seleccionado no existe.',
+            'drugstore_id.required' => 'La droguería es obligatoria.',
+            'drugstore_id.exists' => 'La droguería seleccionada no existe.',
             'medicament_id.required' => 'El medicamento es obligatorio.',
             'medicament_id.exists' => 'El medicamento seleccionado no existe.',
             'stock.required' => 'El stock es obligatorio.',

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('entries', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number');
-            $table->foreignId('laboratory_id')->constrained('laboratories')->onDelete('restrict');
-            $table->foreignId('medicament_id')->constrained('medicaments')->onDelete('restrict');
+            $table->foreignId(column: 'laboratory_id')->constrained('laboratories')->onDelete('restrict');
+            $table->foreignId(column: 'medicament_id')->constrained('medicaments')->onDelete('restrict');
             $table->integer('stock');
             $table->decimal('price', 10, 2);
             $table->timestamps();
