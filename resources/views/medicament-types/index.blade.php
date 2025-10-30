@@ -148,7 +148,7 @@
             </div>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No hay tipos de medicamentos registrados</h3>
             <p class="text-gray-500 mb-6">Comienza agregando tu primer tipo de medicamento</p>
-            <button id="createMedicamentTypeBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200">
+            <button id="createMedicamentTypeBtn" class="bg-lime-600 hover:bg-lime-700 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200">
                 <i class="fas fa-plus mr-2"></i>
                 Agregar Tipo
             </button>
