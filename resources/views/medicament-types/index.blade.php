@@ -5,7 +5,7 @@
 @section('content')
 <div class="animate-fadeInUp">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 rounded-2xl p-4 sm:p-6 lg:p-8 text-white shadow-2xl relative overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-lime-500 via-lime-600 to-green-600 rounded-2xl p-4 sm:p-6 lg:p-8 text-white shadow-2xl relative overflow-hidden mb-8">
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
             <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
@@ -15,15 +15,15 @@
         <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div class="flex-1">
                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Gestión de Tipos de Medicamentos</h1>
-                <p class="text-purple-100 text-sm sm:text-base lg:text-lg mb-4 lg:mb-0">Administra los tipos de medicamentos</p>
+                <p class="text-lime-100 text-sm sm:text-base lg:text-lg mb-4 lg:mb-0">Administra los tipos de medicamentos</p>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 lg:space-x-6 space-y-2 sm:space-y-0 mt-4">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-tags text-purple-200"></i>
-                        <span class="text-purple-100 text-xs sm:text-sm">{{ $medicamentTypes->total() ?? 0 }} tipos registrados</span>
+                        <i class="fas fa-tags text-lime-200"></i>
+                        <span class="text-lime-100 text-xs sm:text-sm">{{ $medicamentTypes->total() ?? 0 }} tipos registrados</span>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-clock text-purple-200"></i>
-                        <span class="text-purple-100 text-xs sm:text-sm">Actualizado {{ now()->translatedFormat('d/m/Y H:i') }}</span>
+                        <i class="fas fa-clock text-lime-200"></i>
+                        <span class="text-lime-100 text-xs sm:text-sm">Actualizado {{ now()->translatedFormat('d/m/Y H:i') }}</span>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                     <tr>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-2">
-                                <i class="fas fa-tags text-purple-500"></i>
+                                <i class="fas fa-tags text-lime-500"></i>
                                 <span>Tipo de Medicamento</span>
                             </div>
                         </th>
@@ -108,7 +108,7 @@
                     <tr class="hover:bg-gray-50 transition-colors duration-200">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-lime-500 to-lime-600 rounded-lg flex items-center justify-center mr-3">
                                     <i class="fas fa-tags text-white text-sm"></i>
                                 </div>
                                 <div>
@@ -123,11 +123,12 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <div class="flex items-center justify-center space-x-2">
-                                <button class="edit-medicament-type p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all duration-200"
+                                <button class="edit-medicament-type p-2 text-lime-600 hover:text-lime-700 hover:bg-lime-50 rounded-lg transition-all duration-200"
                                     data-id="{{ $medicamentType->id }}"
                                     title="Editar tipo">
                                     <i class="fas fa-edit"></i>
                                 </button>
+
                                 <button class="delete-medicament-type p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
                                     data-id="{{ $medicamentType->id }}"
                                     title="Eliminar tipo">
@@ -184,7 +185,7 @@
                         <i class="fas fa-tags text-gray-400"></i>
                     </div>
                     <input type="text" id="name" name="name" required
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
                     <span class="text-red-500 text-xs hidden" id="nameError"></span>
                 </div>
             </div>
@@ -194,7 +195,7 @@
             <button id="cancelBtn" class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
                 Cancelar
             </button>
-            <button id="saveBtn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200">
+            <button id="saveBtn" class="px-4 py-2 bg-lime-600 hover:bg-lime-700 text-white rounded-lg transition-colors duration-200">
                 Guardar
             </button>
         </div>
