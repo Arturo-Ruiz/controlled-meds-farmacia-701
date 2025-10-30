@@ -70,6 +70,21 @@
 {{ request()->routeIs('medicament-types.*') ? 'bg-lime-500 opacity-100' : 'bg-lime-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
+            
+            <a href="{{ route('active-ingredients.index') }}"
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+{{ request()->routeIs('active-ingredients.*') ? 'bg-sky-100 text-sky-700 border-r-4 border-sky-500' : 'text-gray-600 hover:text-gray-800 hover:bg-sky-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+{{ request()->routeIs('active-ingredients.*') ? 'bg-sky-200' : 'bg-gray-100 group-hover:bg-sky-100' }}">
+                    <i class="fas fa-flask text-lg transition-all duration-300        
+{{ request()->routeIs('active-ingredients.*') ? 'text-sky-700' : 'text-gray-600 group-hover:text-sky-600' }}"></i>
+                </div>
+                <span class="font-medium">Principios Activos</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+{{ request()->routeIs('active-ingredients.*') ? 'bg-sky-500 opacity-100' : 'bg-sky-400 opacity-0 group-hover:opacity-100' }}">
+                </div>
+            </a>
+
             <a href="{{ route('laboratories.index') }}"
                 class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
 {{ request()->routeIs('laboratories.*') ? 'bg-purple-100 text-purple-700 border-r-4 border-purple-500' : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50' }}">

@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrugstoreController;
 use App\Http\Controllers\MedicamentTypeController;
+use App\Http\Controllers\ActiveIngredientController;
 
 
 Route::middleware('guest')->group(function () {
@@ -38,8 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::resource('drugstores', DrugstoreController::class);
-    
+
     Route::resource('medicament-types', MedicamentTypeController::class);
+
+    Route::resource('active-ingredients', ActiveIngredientController::class);
+
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
