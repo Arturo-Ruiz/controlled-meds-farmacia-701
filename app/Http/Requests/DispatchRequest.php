@@ -22,22 +22,25 @@ class DispatchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'medicament_id' => 'required|exists:medicaments,id',
-            'amount' => 'required|integer|min:1',
-            'reason' => 'required|in:Venta,Medicamento Vencido,Error de Inventario'
+            'reason' => 'required|string|in:Venta,Medicamento Vencido,Error de Inventario',
+            'medicaments' => 'required|array|min:1',
+            'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
+            'medicaments.*.amount' => 'required|integer|min:1',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'medicament_id.required' => 'El medicamento es obligatorio.',
-            'medicament_id.exists' => 'El medicamento seleccionado no existe.',
-            'amount.required' => 'La cantidad es obligatoria.',
-            'amount.integer' => 'La cantidad debe ser un número entero.',
-            'amount.min' => 'La cantidad debe ser mayor a 0.',
-            'reason.required' => 'La razón es obligatoria.',
-            'reason.in' => 'La razón debe ser una de las opciones válidas.'
+            'reason.required' => 'La razón de la salida es obligatoria.',
+            'reason.in' => 'La razón seleccionada no es válida.',
+            'medicaments.required' => 'Debe agregar al menos un medicamento.',
+            'medicaments.min' => 'Debe agregar al menos un medicamento.',
+            'medicaments.*.medicament_id.required' => 'El medicamento es obligatorio.',
+            'medicaments.*.medicament_id.exists' => 'El medicamento seleccionado no existe.',
+            'medicaments.*.amount.required' => 'La cantidad es obligatoria.',
+            'medicaments.*.amount.integer' => 'La cantidad debe ser un número entero.',
+            'medicaments.*.amount.min' => 'La cantidad debe ser mayor a 0.',
         ];
     }
 }

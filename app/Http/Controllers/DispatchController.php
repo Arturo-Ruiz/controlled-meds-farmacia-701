@@ -27,7 +27,6 @@ class DispatchController extends Controller
                 });
         }
 
-        // AGREGAR FILTRO POR FECHA  
         if ($request->filled('date_filter') && $request->date_filter !== 'all') {
             $now = now();
 
@@ -65,44 +64,48 @@ class DispatchController extends Controller
         try {
             DB::beginTransaction();
 
-            // Obtener el medicamento y verificar stock  
-            $medicament = Medicament::find($request->medicament_id);
+            $dispatches = [];
 
-            if ($medicament->stock < $request->amount) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Stock insuficiente. Stock actual: ' . $medicament->stock
-                ], 400);
+            foreach ($request->medicaments as $medicamentData) {
+                $medicament = Medicament::find($medicamentData['medicament_id']);
+
+                if ($medicament->stock < $medicamentData['amount']) {
+                    DB::rollback();
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Stock insuficiente para {$medicament->name}. Stock actual: {$medicament->stock}"
+                    ], 400);
+                }
+
+                $dispatch = Dispatch::create([
+                    'user_id' => Auth::id(),
+                    'medicament_id' => $medicamentData['medicament_id'],
+                    'amount' => $medicamentData['amount'],
+                    'reason' => $request->reason,
+                    'current_stock' => $medicament->stock,
+                    'final_stock' => $medicament->stock - $medicamentData['amount']
+                ]);
+
+                // Actualizar el stock del medicamento  
+                $medicament->update([
+                    'stock' => $medicament->stock - $medicamentData['amount']
+                ]);
+
+                $dispatches[] = $dispatch;
             }
 
-            // Crear la salida  
-            $dispatch = Dispatch::create([
-                'user_id' => Auth::id(),
-                'medicament_id' => $request->medicament_id,
-                'amount' => $request->amount,
-                'reason' => $request->reason,
-                'current_stock' => $medicament->stock,
-                'final_stock' => $medicament->stock - $request->amount
-            ]);
-
-            // Actualizar el stock del medicamento  
-            $medicament->update([
-                'stock' => $medicament->stock - $request->amount
-            ]);
-
             DB::commit();
-            $dispatch->load(['user', 'medicament']);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Salida registrada exitosamente',
-                'dispatch' => $dispatch,
+                'message' => 'Salidas registradas exitosamente',
+                'dispatches' => $dispatches,
             ]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => 'Error al registrar la salida: ' . $e->getMessage(),
+                'message' => 'Error al registrar las salidas: ' . $e->getMessage(),
             ], 500);
         }
     }

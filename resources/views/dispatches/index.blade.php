@@ -299,74 +299,36 @@
             @csrf
             <input type="hidden" id="dispatchId" name="id">
 
-            <!-- Primera fila: Medicamento -->
+            <!-- Razón de la salida (ahora primero) -->
             <div class="mb-4">
-                <label for="medicament_id" class="block text-sm font-medium text-gray-700 mb-1">Medicamento</label>
-                <select id="medicament_id" name="medicament_id" required
-                    class="select2-medicament w-full">
-                    <option value="">Seleccionar medicamento</option>
-                    @foreach($medicaments as $medicament)
-                    <option value="{{ $medicament->id }}"
-                        data-presentation="{{ $medicament->presentation }}"
-                        data-posological="{{ $medicament->posological_units }}"
-                        data-stock="{{ $medicament->stock }}">
-                        {{ $medicament->name }} - {{ $medicament->presentation }} ({{ $medicament->posological_units }} unidades)
-                    </option>
-                    @endforeach
-                </select>
-                <span class="text-red-500 text-xs hidden" id="medicament_idError"></span>
-            </div>
-
-            <!-- Información del medicamento seleccionado -->
-            <div class="mb-4" id="medicamentInfo" style="display: none;">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 class="text-sm font-medium text-blue-800 mb-2">Información del medicamento</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                        <div>
-                            <span class="text-blue-600 font-medium">Stock actual:</span>
-                            <span id="currentStock" class="text-blue-800 font-semibold"></span>
-                        </div>
-                        <div>
-                            <span class="text-blue-600 font-medium">Presentación:</span>
-                            <span id="presentation" class="text-blue-800"></span>
-                        </div>
-                        <div>
-                            <span class="text-blue-600 font-medium">Unidades posológicas:</span>
-                            <span id="posologicalUnits" class="text-blue-800"></span>
-                        </div>
+                <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Razón de la salida</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <i class="fas fa-clipboard-list text-gray-400"></i>
                     </div>
+                    <select id="reason" name="reason" required
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        <option value="">Seleccionar razón</option>
+                        <option value="Venta">Venta</option>
+                        <option value="Medicamento Vencido">Medicamento Vencido</option>
+                        <option value="Error de Inventario">Error de Inventario</option>
+                    </select>
+                    <span class="text-red-500 text-xs hidden" id="reasonError"></span>
                 </div>
             </div>
 
-            <!-- Segunda fila: Cantidad y Razón -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Cantidad a retirar</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fa-solid fa-arrow-up text-gray-400"></i>
-                        </div>
-                        <input type="number" id="amount" name="amount" required min="1"
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                        <span class="text-red-500 text-xs hidden" id="amountError"></span>
-                    </div>
+            <!-- Sección de medicamentos -->
+            <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Medicamentos</label>
+                    <button type="button" id="addMedicamentBtn" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                        <i class="fas fa-plus mr-1.5"></i>
+                        Agregar medicamento
+                    </button>
                 </div>
 
-                <div>
-                    <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Razón de la salida</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <i class="fas fa-clipboard-list text-gray-400"></i>
-                        </div>
-                        <select id="reason" name="reason" required
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <option value="">Seleccionar razón</option>
-                            <option value="Venta">Venta</option>
-                            <option value="Medicamento Vencido">Medicamento Vencido</option>
-                            <option value="Error de Inventario">Error de Inventario</option>
-                        </select>
-                        <span class="text-red-500 text-xs hidden" id="reasonError"></span>
-                    </div>
+                <div id="medicamentsContainer" class="space-y-3">
+                    <!-- Los medicamentos se agregarán aquí dinámicamente -->
                 </div>
             </div>
 
@@ -377,7 +339,7 @@
                 </button>
                 <button type="button" id="saveBtn" class="px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
                     <i class="fas fa-save mr-2"></i>
-                    Registrar Salida
+                    Registrar Salidas
                 </button>
             </div>
         </form>
@@ -454,25 +416,10 @@
     }
 </style>
 @endsection
-
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Inicializar Select2 para medicamentos  
-        $('.select2-medicament').select2({
-            placeholder: 'Buscar medicamento...',
-            allowClear: true,
-            width: '100%',
-            dropdownParent: $('#dispatchModal'),
-            language: {
-                noResults: function() {
-                    return "No se encontraron resultados";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
-        });
+        let medicamentCounter = 0;
 
         // Mantener valores de filtros después de la recarga  
         const urlParams = new URLSearchParams(window.location.search);
@@ -489,6 +436,7 @@
             $('#dateFilterMobile').val(dateValue);
         }
 
+        // Sincronización de filtros  
         $('#dateFilter').on('change', function() {
             const value = $(this).val();
             $('#dateFilterMobile').val(value);
@@ -501,7 +449,6 @@
             applyFilters();
         });
 
-        // Sincronización bidireccional de inputs  
         $('#searchInput').on('input', function() {
             const value = $(this).val();
             $('#searchInputMobile').val(value);
@@ -520,65 +467,155 @@
             }, 500);
         });
 
-        // Obtener datos del medicamento al seleccionarlo  
-        $('#medicament_id').on('change', function() {
-            const medicamentId = $(this).val();
+        // Función para agregar un nuevo medicamento  
+        function addMedicamentRow() {
+            medicamentCounter++;
+            const html = `  
+                <div class="medicament-row border border-gray-200 rounded-lg p-4 relative bg-white shadow-sm" data-index="${medicamentCounter}">  
+                  <button type="button" class="remove-medicament absolute top-2 right-3 text-red-600 hover:text-white hover:bg-red-600 w-8 h-8 rounded-lg transition-all duration-200 flex items-center justify-center border border-red-300 hover:border-red-600">  
+                    <i class="fas fa-times"></i>  
+                </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">  
+                        <div>  
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Medicamento #${medicamentCounter}</label>  
+                            <select name="medicaments[${medicamentCounter}][medicament_id]" required  
+                                class="select2-medicament-${medicamentCounter} w-full">  
+                                <option value="">Seleccionar medicamento</option>  
+                                @foreach($medicaments as $medicament)  
+                                <option value="{{ $medicament->id }}"  
+                                    data-stock="{{ $medicament->stock }}"  
+                                    data-presentation="{{ $medicament->presentation }}"  
+                                    data-posological="{{ $medicament->posological_units }}">  
+                                    {{ $medicament->name }} - {{ $medicament->presentation }} (Stock: {{ $medicament->stock }})  
+                                </option>  
+                                @endforeach  
+                            </select>  
+                        </div>  
+                          
+                        <div>  
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>  
+                            <div class="relative">  
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">  
+                                    <i class="fas fa-arrow-up text-gray-400"></i>  
+                                </div>  
+                                <input type="number" name="medicaments[${medicamentCounter}][amount]" required min="1"  
+                                    class="amount-input w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"  
+                                    data-index="${medicamentCounter}">  
+                            </div>  
+                            <span class="text-red-500 text-xs hidden amount-error-${medicamentCounter}"></span>  
+                        </div>  
+                    </div>  
+                      
+                    <div class="mt-3 medicament-info-${medicamentCounter}" style="display: none;">  
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">  
+                            <div class="grid grid-cols-3 gap-2 text-sm">  
+                                <div>  
+                                    <span class="text-blue-600 font-medium">Stock:</span>  
+                                    <span class="stock-display-${medicamentCounter} text-blue-800 font-semibold"></span>  
+                                </div>  
+                                <div>  
+                                    <span class="text-blue-600 font-medium">Presentación:</span>  
+                                    <span class="presentation-display-${medicamentCounter} text-blue-800"></span>  
+                                </div>  
+                                <div>  
+                                    <span class="text-blue-600 font-medium">U. Posológicas:</span>  
+                                    <span class="posological-display-${medicamentCounter} text-blue-800"></span>  
+                                </div>  
+                            </div>  
+                        </div>  
+                    </div>  
+                </div>  
+            `;
 
-            if (medicamentId) {
-                $.ajax({
-                    url: '{{ route("medicaments.stock-data", ":id") }}'.replace(':id', medicamentId),
-                    method: 'GET',
-                    success: function(response) {
-                        if (response.success) {
-                            const medicament = response.medicament;
-                            $('#currentStock').text(medicament.current_stock + ' unidades');
-                            $('#presentation').text(medicament.presentation);
-                            $('#posologicalUnits').text(medicament.posological_units);
-                            $('#medicamentInfo').show();
+            $('#medicamentsContainer').append(html);
 
-                            // Establecer máximo en el input de cantidad  
-                            $('#amount').attr('max', medicament.current_stock);
-                        }
+            // Inicializar Select2 para el nuevo medicamento  
+            $(`.select2-medicament-${medicamentCounter}`).select2({
+                placeholder: 'Buscar medicamento...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#dispatchModal'),
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
                     },
-                    error: function() {
-                        $('#medicamentInfo').hide();
-                        $('#amount').removeAttr('max');
+                    searching: function() {
+                        return "Buscando...";
                     }
-                });
-            } else {
-                $('#medicamentInfo').hide();
-                $('#amount').removeAttr('max');
-            }
-        });
+                }
+            });
 
-        // Validar cantidad en tiempo real  
-        $('#amount').on('input', function() {
-            const maxStock = parseInt($(this).attr('max'));
-            const currentAmount = parseInt($(this).val());
+            // Event listener para cuando se selecciona un medicamento  
+            $(`.select2-medicament-${medicamentCounter}`).on('change', function() {
+                const index = medicamentCounter;
+                const selectedOption = $(this).find('option:selected');
+                const stock = selectedOption.data('stock');
+                const presentation = selectedOption.data('presentation');
+                const posological = selectedOption.data('posological');
 
-            if (maxStock && currentAmount > maxStock) {
-                $(this).addClass('border-red-500');
-                $('#amountError').text(`Solo hay: ${maxStock} unidades disponibles`).removeClass('hidden');
-            } else {
-                $(this).removeClass('border-red-500');
-                $('#amountError').addClass('hidden');
-            }
-        });
+                if ($(this).val()) {
+                    $(`.stock-display-${index}`).text(stock + ' unidades');
+                    $(`.presentation-display-${index}`).text(presentation);
+                    $(`.posological-display-${index}`).text(posological);
+                    $(`.medicament-info-${index}`).show();
+
+                    // Establecer máximo en el input de cantidad  
+                    $(`input[data-index="${index}"]`).attr('max', stock);
+                } else {
+                    $(`.medicament-info-${index}`).hide();
+                    $(`input[data-index="${index}"]`).removeAttr('max');
+                }
+            });
+
+            // Validar cantidad en tiempo real  
+            $(`input[data-index="${medicamentCounter}"]`).on('input', function() {
+                const index = $(this).data('index');
+                const maxStock = parseInt($(this).attr('max'));
+                const currentAmount = parseInt($(this).val());
+
+                if (maxStock && currentAmount > maxStock) {
+                    $(this).addClass('border-red-500');
+                    $(`.amount-error-${index}`).text(`Solo hay ${maxStock} unidades disponibles`).removeClass('hidden');
+                } else {
+                    $(this).removeClass('border-red-500');
+                    $(`.amount-error-${index}`).addClass('hidden');
+                }
+            });
+        }
 
         // Abrir modal para crear  
         $(document).on('click', '#createDispatchBtn', function() {
-            $('#dispatchModalTitle').text('Registrar Salida');
+            $('#dispatchModalTitle').text('Registrar Salidas');
             $('#dispatchForm')[0].reset();
-            $('#dispatchForm').attr('data-action', 'create');
-            $('#dispatchId').val('');
-            $('#medicamentInfo').hide();
-            $('.select2-medicament').val(null).trigger('change');
+            $('#medicamentsContainer').empty();
+            medicamentCounter = 0;
             clearErrors();
+
+            // Agregar primera fila de medicamento  
+            addMedicamentRow();
 
             $('#dispatchModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
             setTimeout(() => {
                 $('#dispatchModal .bg-white').removeClass('scale-95').addClass('scale-100');
             }, 10);
+        });
+
+        // Botón para agregar más medicamentos  
+        $(document).on('click', '#addMedicamentBtn', function() {
+            addMedicamentRow();
+        });
+
+        // Eliminar fila de medicamento  
+        $(document).on('click', '.remove-medicament', function() {
+            if ($('.medicament-row').length > 1) {
+                $(this).closest('.medicament-row').remove();
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atención',
+                    text: 'Debe haber al menos un medicamento'
+                });
+            }
         });
 
         // Cerrar modal  
@@ -626,18 +663,27 @@
             }
         });
 
-        // Guardar salida  
+        // Guardar salidas  
         $('#saveBtn').click(function() {
             const form = $('#dispatchForm');
-            const maxStock = parseInt($('#amount').attr('max'));
-            const currentAmount = parseInt($('#amount').val());
 
-            // Validar stock antes de enviar  
-            if (maxStock && currentAmount > maxStock) {
+            // Validar que todos los medicamentos tengan stock suficiente  
+            let hasError = false;
+            $('.amount-input').each(function() {
+                const maxStock = parseInt($(this).attr('max'));
+                const currentAmount = parseInt($(this).val());
+
+                if (maxStock && currentAmount > maxStock) {
+                    hasError = true;
+                    return false;
+                }
+            });
+
+            if (hasError) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Stock insuficiente',
-                    text: `No puedes retirar más de ${maxStock} unidades disponibles`
+                    text: 'Uno o más medicamentos no tienen stock suficiente'
                 });
                 return;
             }
@@ -657,8 +703,8 @@
                             toast: true,
                             position: 'top-end',
                             icon: 'success',
-                            title: '¡Salida registrada!',
-                            text: `Salida de ${response.dispatch.amount} unidades registrada exitosamente`,
+                            title: '¡Salidas registradas!',
+                            text: `${response.dispatches.length} salida(s) registrada(s) exitosamente`,
                             showConfirmButton: false,
                             timer: 1000,
                             timerProgressBar: true
@@ -670,6 +716,12 @@
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         showValidationErrors(xhr.responseJSON.errors);
+                    } else if (xhr.status === 400) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Stock insuficiente'
+                        });
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -731,7 +783,6 @@
             });
         });
 
-        // Funciones auxiliares  
         function showValidationErrors(errors) {
             clearErrors();
 
