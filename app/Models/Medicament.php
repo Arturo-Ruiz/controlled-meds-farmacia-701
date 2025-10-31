@@ -18,6 +18,9 @@ class Medicament extends Model
         'min_stock',
         'price',
         'expiration_date',
+        'laboratory_id',
+        'medicament_type_id',
+        'active_ingredient_id',
     ];
 
     protected $casts = [
@@ -55,5 +58,20 @@ class Medicament extends Model
         return Attribute::make(
             get: fn() => $this->expiration_date < now()
         );
+    }
+
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class, 'laboratory_id');
+    }
+
+    public function medicamentType()
+    {
+        return $this->belongsTo(MedicamentType::class, 'medicament_type_id');
+    }
+
+    public function activeIngredient()
+    {
+        return $this->belongsTo(ActiveIngredient::class, 'active_ingredient_id');
     }
 }

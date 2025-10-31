@@ -179,6 +179,33 @@
                             </span>
                             <span class="font-medium text-gray-900">{{ $medicament->posological_units * $medicament->stock }}</span>
                         </div>
+
+                        @if($medicament->laboratory || $medicament->medicamentType || $medicament->activeIngredient)
+                        <div class="px-6 py-3 bg-gray-50 border-t border-gray-100">
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                @if($medicament->laboratory)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-purple-100 text-purple-700">
+                                    <i class="fas fa-industry mr-1"></i>
+                                    {{ $medicament->laboratory->name }}
+                                </span>
+                                @endif
+
+                                @if($medicament->medicamentType)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-lime-100 text-lime-700">
+                                    <i class="fas fa-tags mr-1"></i>
+                                    {{ $medicament->medicamentType->name }}
+                                </span>
+                                @endif
+
+                                @if($medicament->activeIngredient)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-sky-100 text-sky-700">
+                                    <i class="fas fa-flask mr-1"></i>
+                                    {{ $medicament->activeIngredient->name }}
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -362,6 +389,67 @@
                     <span class="text-red-500 text-xs hidden" id="expiration_dateError"></span>
                 </div>
             </div>
+
+            <div class="mb-4">
+                <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-industry text-gray-400"></i>
+                    </div>
+                    <select id="laboratory_id" name="laboratory_id"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
+                        <option value="">Buscar laboratorio...</option>
+                        @foreach($laboratories as $laboratory)
+                        <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                </div>
+                <span class="text-red-500 text-xs hidden" id="laboratory_idError"></span>
+            </div>
+
+            <div class="mb-4">
+                <label for="medicament_type_id" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Medicamento</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-tags text-gray-400"></i>
+                    </div>
+                    <select id="medicament_type_id" name="medicament_type_id"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
+                        <option value="">Buscar tipo...</option>
+                        @foreach($medicamentTypes as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                </div>
+                <span class="text-red-500 text-xs hidden" id="medicament_type_idError"></span>
+            </div>
+
+            <div class="mb-4">
+                <label for="active_ingredient_id" class="block text-sm font-medium text-gray-700 mb-1">Principio Activo</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-flask text-gray-400"></i>
+                    </div>
+                    <select id="active_ingredient_id" name="active_ingredient_id"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
+                        <option value="">Buscar principio activo...</option>
+                        @foreach($activeIngredients as $ingredient)
+                        <option value="{{ $ingredient->id }}">{{ $ingredient->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
+                    </div>
+                </div>
+                <span class="text-red-500 text-xs hidden" id="active_ingredient_idError"></span>
+            </div>
+            
         </form>
 
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
@@ -454,6 +542,42 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+
+        $('.select2-laboratory').select2({
+            placeholder: 'Buscar laboratorio...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#medicamentModal'),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
+
+        $('.select2-medicament-type').select2({
+            placeholder: 'Buscar tipo...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#medicamentModal'),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
+
+        $('.select2-active-ingredient').select2({
+            placeholder: 'Buscar principio activo...',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#medicamentModal'),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
         // Abrir modal para crear  
         $(document).on('click', '#createMedicamentBtn', function() {
             $('#medicamentModalTitle').text('Nuevo Medicamento');
@@ -608,6 +732,10 @@
 
                         $('#medicamentId').val(medicament.id);
                         $('#medicamentForm').attr('data-action', 'edit');
+
+                        $('#laboratory_id').val(medicament.laboratory_id).trigger('change');
+                        $('#medicament_type_id').val(medicament.medicament_type_id).trigger('change');
+                        $('#active_ingredient_id').val(medicament.active_ingredient_id).trigger('change');
 
                         $('#medicamentModal').removeClass('hidden opacity-0').addClass('flex opacity-100');
                         setTimeout(() => {

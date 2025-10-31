@@ -28,7 +28,10 @@ class MedicamentRequest extends FormRequest
             'stock' => 'required|integer|min:0',
             'min_stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
-            'expiration_date' => 'required|date|after:today'
+            'expiration_date' => 'required|date|after:today',
+            'laboratory_id' => 'nullable|exists:laboratories,id',
+            'medicament_type_id' => 'nullable|exists:medicament_types,id',
+            'active_ingredient_id' => 'nullable|exists:active_ingredients,id',
         ];
     }
 
@@ -61,7 +64,11 @@ class MedicamentRequest extends FormRequest
 
             'expiration_date.required' => 'La fecha de expiración es obligatoria.',
             'expiration_date.date' => 'La fecha de expiración debe ser una fecha válida.',
-            'expiration_date.after' => 'La fecha de expiración debe ser una fecha futura.'
+            'expiration_date.after' => 'La fecha de expiración debe ser una fecha futura.',
+
+            'laboratory_id.exists' => 'El laboratorio seleccionado no existe.',
+            'medicament_type_id.exists' => 'El tipo de medicamento seleccionado no existe.',
+            'active_ingredient_id.exists' => 'El principio activo seleccionado no existe.',
         ];
     }
 }

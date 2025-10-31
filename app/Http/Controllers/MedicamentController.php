@@ -7,12 +7,15 @@ use Illuminate\Http\JsonResponse;
 
 use App\Http\Requests\MedicamentRequest;
 use App\Models\Medicament;
+use App\Models\Laboratory;
+use App\Models\MedicamentType;
+use App\Models\ActiveIngredient;
 
 class MedicamentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Medicament::query();
+        $query = Medicament::with(['laboratory', 'medicamentType', 'activeIngredient']);
 
         // Filtro por nombre  
         if ($request->filled('search')) {
@@ -63,7 +66,11 @@ class MedicamentController extends Controller
 
         $medicaments = $query->orderBy('name', 'asc')->simplePaginate(9);
 
-        return view('medicaments.index', compact('medicaments'));
+        $laboratories = Laboratory::all();
+        $medicamentTypes = MedicamentType::all();
+        $activeIngredients = ActiveIngredient::all();
+
+        return view('medicaments.index', compact('medicaments', 'laboratories', 'medicamentTypes', 'activeIngredients'));
     }
 
     public function store(MedicamentRequest $request): JsonResponse
