@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
 
         @if($medicamentTypes->count() > 0)
         <div class="overflow-x-auto">
@@ -103,6 +103,7 @@
                         </th>
                     </tr>
                 </thead>
+                
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($medicamentTypes as $medicamentType)
                     <tr class="hover:bg-gray-50 transition-colors duration-200">
