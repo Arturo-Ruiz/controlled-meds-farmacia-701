@@ -18,7 +18,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 lg:space-x-6 space-y-2 sm:space-y-0 mt-4">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-pills text-blue-200"></i>
-                        <span class="text-blue-100 text-xs sm:text-sm">{{ $medicaments->count() ?? 0 }} medicamentos registrados</span>
+                        <span class="text-blue-100 text-xs sm:text-sm">{{ $medicaments->total() ?? 0 }} medicamentos registrados</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-clock text-blue-200"></i>
@@ -269,7 +269,7 @@
         <!-- Paginación -->
         @if($medicaments->hasPages())
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $medicaments->links() }}
+            {{ $medicaments->onEachSide(3)->links() }}
         </div>
         @endif
 

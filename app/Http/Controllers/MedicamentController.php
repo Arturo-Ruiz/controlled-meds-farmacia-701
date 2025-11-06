@@ -64,7 +64,7 @@ class MedicamentController extends Controller
             }
         }
 
-        $medicaments = $query->orderBy('name', 'asc')->simplePaginate(9);
+        $medicaments = $query->orderBy('name', 'asc')->paginate(9);
 
         $laboratories = Laboratory::all();
         $medicamentTypes = MedicamentType::all();
