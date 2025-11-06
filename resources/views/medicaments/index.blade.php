@@ -181,8 +181,8 @@
                         </div>
 
                         @if($medicament->laboratory || $medicament->medicamentType || $medicament->activeIngredient)
-                        <div class="px-6 py-3 bg-gray-50 border-t border-gray-100">
-                            <div class="flex flex-wrap gap-2 text-xs">
+                        <div class="px-6 py-3 bg-gray-50 border-gray-100  rounded-b-lg">
+                            <div class="flex flex-wrap justify-center gap-2 text-xs">
                                 @if($medicament->laboratory)
                                 <span class="inline-flex items-center px-2 py-1 rounded-full bg-purple-100 text-purple-700">
                                     <i class="fas fa-industry mr-1"></i>
