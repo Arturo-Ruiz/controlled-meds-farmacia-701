@@ -391,65 +391,50 @@
             </div>
 
             <div class="mb-4">
-                <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">Laboratorio</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-industry text-gray-400"></i>
-                    </div>
-                    <select id="laboratory_id" name="laboratory_id"
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
-                        <option value="">Buscar laboratorio...</option>
-                        @foreach($laboratories as $laboratory)
-                        <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
-                    </div>
-                </div>
+                <label for="laboratory_id" class="block text-sm font-medium text-gray-700 mb-1">
+                    <i class="fas fa-industry text-gray-500 mr-1"></i>
+                    Laboratorio
+                </label>
+                <select id="laboratory_id" name="laboratory_id"
+                    class="select2-laboratory w-full">
+                    <option value="">Seleccionar laboratorio...</option>
+                    @foreach($laboratories as $laboratory)
+                    <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                    @endforeach
+                </select>
                 <span class="text-red-500 text-xs hidden" id="laboratory_idError"></span>
             </div>
 
             <div class="mb-4">
-                <label for="medicament_type_id" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Medicamento</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-tags text-gray-400"></i>
-                    </div>
-                    <select id="medicament_type_id" name="medicament_type_id"
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
-                        <option value="">Buscar tipo...</option>
-                        @foreach($medicamentTypes as $type)
-                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
-                    </div>
-                </div>
+                <label for="medicament_type_id" class="block text-sm font-medium text-gray-700 mb-1">
+                    <i class="fas fa-tags text-gray-500 mr-1"></i>
+                    Tipo de Medicamento
+                </label>
+                <select id="medicament_type_id" name="medicament_type_id"
+                    class="select2-medicament-type w-full">
+                    <option value="">Seleccionar tipo...</option>
+                    @foreach($medicamentTypes as $medicamentType)
+                    <option value="{{ $medicamentType->id }}">{{ $medicamentType->name }}</option>
+                    @endforeach
+                </select>
                 <span class="text-red-500 text-xs hidden" id="medicament_type_idError"></span>
             </div>
 
             <div class="mb-4">
-                <label for="active_ingredient_id" class="block text-sm font-medium text-gray-700 mb-1">Principio Activo</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-flask text-gray-400"></i>
-                    </div>
-                    <select id="active_ingredient_id" name="active_ingredient_id"
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
-                        <option value="">Buscar principio activo...</option>
-                        @foreach($activeIngredients as $ingredient)
-                        <option value="{{ $ingredient->id }}">{{ $ingredient->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <i class="fas fa-chevron-down text-gray-400 text-sm"></i>
-                    </div>
-                </div>
+                <label for="active_ingredient_id" class="block text-sm font-medium text-gray-700 mb-1">
+                    <i class="fas fa-flask text-gray-500 mr-1"></i>
+                    Principio Activo
+                </label>
+                <select id="active_ingredient_id" name="active_ingredient_id"
+                    class="select2-active-ingredient w-full">
+                    <option value="">Seleccionar principio activo...</option>
+                    @foreach($activeIngredients as $activeIngredient)
+                    <option value="{{ $activeIngredient->id }}">{{ $activeIngredient->name }}</option>
+                    @endforeach
+                </select>
                 <span class="text-red-500 text-xs hidden" id="active_ingredient_idError"></span>
             </div>
-            
+
         </form>
 
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
@@ -467,6 +452,31 @@
 
 <!-- CSS para animaciones -->
 <style>
+    .select2-container--default .select2-selection--single {
+        height: 42px !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 0.5rem !important;
+        padding: 0.5rem !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 26px !important;
+        padding-left: 0 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px !important;
+    }
+
+    .select2-dropdown {
+        border-radius: 0.5rem !important;
+        border: 1px solid #d1d5db !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #3b82f6 !important;
+    }
+
     .animate-fadeInUp {
         animation: fadeInUp 0.6s ease-out;
     }
@@ -507,8 +517,6 @@
             opacity: 0.8;
         }
     }
-
-
 
 
     #medicamentModal:not(.hidden) {
