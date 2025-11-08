@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrugstoreController;
 use App\Http\Controllers\MedicamentTypeController;
 use App\Http\Controllers\ActiveIngredientController;
+use App\Http\Controllers\ReportController;
 
 
 Route::middleware('guest')->group(function () {
@@ -44,6 +45,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('active-ingredients', ActiveIngredientController::class);
 
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports/monthly', [ReportController::class, 'generateMonthlyReport'])->name('reports.monthly');
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

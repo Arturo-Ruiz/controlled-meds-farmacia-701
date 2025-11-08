@@ -27,7 +27,7 @@
         </div>
 
         <!-- Navigation Menu -->
-        <nav class="relative z-10 p-4 space-y-2">
+<nav class="relative z-10 p-4 space-y-2 overflow-y-auto" style="max-height: calc(100vh - 180px);">
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
@@ -70,7 +70,7 @@
 {{ request()->routeIs('medicament-types.*') ? 'bg-lime-500 opacity-100' : 'bg-lime-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
-            
+
             <a href="{{ route('active-ingredients.index') }}"
                 class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('active-ingredients.*') ? 'bg-sky-100 text-sky-700 border-r-4 border-sky-500' : 'text-gray-600 hover:text-gray-800 hover:bg-sky-50' }}">
@@ -142,6 +142,19 @@
                 </div>
             </a>
 
+        <!-- Reportes -->  
+<a href="{{ route('reports.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+{{ request()->routeIs('reports.*') ? 'bg-cyan-100 text-cyan-700 border-r-4 border-cyan-500' : 'text-gray-600 hover:text-gray-800 hover:bg-cyan-50' }}">  
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+{{ request()->routeIs('reports.*') ? 'bg-cyan-200' : 'bg-gray-100 group-hover:bg-cyan-100' }}">  
+        <i class="fas fa-file-pdf text-lg transition-all duration-300        
+{{ request()->routeIs('reports.*') ? 'text-cyan-700' : 'text-gray-600 group-hover:text-cyan-600' }}"></i>  
+    </div>  
+    <span class="font-medium">Reportes</span>  
+    <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+{{ request()->routeIs('reports.*') ? 'bg-cyan-500 opacity-100' : 'bg-cyan-400 opacity-0 group-hover:opacity-100' }}">  
+    </div>  
+</a>    
             <a href="{{ route('users.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
 {{ request()->routeIs('users.*') ? 'bg-indigo-100 text-indigo-700 border-r-4 border-indigo-500' : 'text-gray-600 hover:text-gray-800 hover:bg-indigo-50' }}">
                 <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
@@ -159,7 +172,7 @@
         </nav>
 
         <!-- User Profile Section -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50">
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 z-20">
             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                     <i class="fas fa-user text-white text-sm"></i>
