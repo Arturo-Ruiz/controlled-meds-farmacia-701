@@ -74,4 +74,9 @@ class Medicament extends Model
     {
         return $this->belongsTo(ActiveIngredient::class, 'active_ingredient_id');
     }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'medicament_id');
+    }
 }

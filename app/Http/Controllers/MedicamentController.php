@@ -64,7 +64,32 @@ class MedicamentController extends Controller
             }
         }
 
-        $medicaments = $query->orderBy('name', 'asc')->paginate(9);
+        // Filtro por laboratorio
+        if ($request->filled('laboratory_id') && $request->laboratory_id !== '') {
+            $query->where('laboratory_id', $request->laboratory_id);
+        }
+
+        // active ingredient filter
+        if ($request->filled('active_ingredient_id') && $request->active_ingredient_id !== '') {
+            $query->where('active_ingredient_id', $request->active_ingredient_id);
+        }
+
+        // medicament type filter
+        if ($request->filled('medicament_type_id') && $request->medicament_type_id !== '') {
+            $query->where('medicament_type_id', $request->medicament_type_id);
+        }
+
+        // Pagination size: allow overriding via ?per_page= (number) or ?per_page=all
+        $perPageParam = $request->get('per_page', '9');
+        if ($perPageParam === 'all') {
+            // count total matching rows and use that as per-page to return all
+            $total = (int) $query->count();
+            $perPage = $total > 0 ? $total : 1;
+        } else {
+            $perPage = (int) $perPageParam > 0 ? (int) $perPageParam : 9;
+        }
+
+        $medicaments = $query->orderBy('name', 'asc')->paginate($perPage);
 
         $laboratories = Laboratory::all();
         $medicamentTypes = MedicamentType::all();

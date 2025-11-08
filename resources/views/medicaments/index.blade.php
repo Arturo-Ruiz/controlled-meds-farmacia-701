@@ -49,12 +49,12 @@
 
         <!-- Contenido de filtros colapsable -->
         <div id="filtersContent" class="hidden lg:block p-4 lg:p-6 lg:pt-0">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Buscar medicamento</label>
                     <div class="relative">
                         <input type="text" id="searchInput" placeholder="Nombre del medicamento..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full pl-12 pr-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
@@ -63,7 +63,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Estado del stock</label>
-                    <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="statusFilter" class="w-full px-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                         <option value="all">Todos los estados</option>
                         <option value="normal">Stock normal</option>
                         <option value="low">Stock bajo</option>
@@ -73,12 +73,46 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de vencimiento</label>
-                    <select id="expirationFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="expirationFilter" class="w-full px-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                         <option value="all">Todas las fechas</option>
                         <option value="this_month">Este mes</option>
                         <option value="next_3_months">Próximos 3 meses</option>
                         <option value="next_6_months">Próximos 6 meses</option>
                         <option value="this_year">Este año</option>
+                    </select>
+                </div>
+
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Laboratorio</label>
+                    <select id="laboratoryFilter" class="w-full px-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option value="">Todos los laboratorios</option>
+                        @foreach($laboratories as $laboratory)
+                        <option value="{{ $laboratory->id }}">{{ $laboratory->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Principio activo</label>
+                    <select id="activeIngredientFilter" class="w-full px-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option value="">Todos los principios activos</option>
+                        @foreach($activeIngredients as $ai)
+                        <option value="{{ $ai->id }}">{{ $ai->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de medicamento</label>
+                    <select id="medicamentTypeFilter" class="w-full px-4 h-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option value="">Todos los tipos</option>
+                        @foreach($medicamentTypes as $mt)
+                        <option value="{{ $mt->id }}">{{ $mt->name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -87,8 +121,18 @@
 
     <!-- Lista de Medicamentos -->
     <div class="bg-white rounded-xl shadow-lg border border-gray-100">
-        <div class="p-6 border-b border-gray-200">
+        <div class="p-6 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
             <h3 class="text-lg font-semibold text-gray-900">Lista de Medicamentos</h3>
+
+            <div class="flex items-center space-x-3 w-full sm:w-auto">
+                <label for="perPageFilter" class="text-sm text-gray-600 mr-2">Mostrar</label>
+                <select id="perPageFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-36">
+                    <option value="9" {{ request('per_page', '9') == '9' ? 'selected' : '' }}>9 por página</option>
+                    <option value="18" {{ request('per_page') == '18' ? 'selected' : '' }}>18 por página</option>
+                    <option value="36" {{ request('per_page') == '36' ? 'selected' : '' }}>36 por página</option>
+                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>Todos</option>
+                </select>
+            </div>
         </div>
 
         <!-- Grid de Medicamentos Mejorado -->
@@ -269,7 +313,7 @@
         <!-- Paginación -->
         @if($medicaments->hasPages())
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $medicaments->onEachSide(3)->links() }}
+            {{ $medicaments->appends(request()->except('page'))->onEachSide(3)->links() }}
         </div>
         @endif
 
@@ -831,7 +875,7 @@
         });
 
         // Filtrado automático al cambiar selects  
-        $('#statusFilter, #expirationFilter').on('change', function() {
+        $('#statusFilter, #expirationFilter, #laboratoryFilter, #activeIngredientFilter, #medicamentTypeFilter, #perPageFilter').on('change', function() {
             applyFilters();
         });
 
@@ -840,6 +884,10 @@
             const search = $('#searchInput').val();
             const status = $('#statusFilter').val();
             const expiration = $('#expirationFilter').val();
+            const laboratory = $('#laboratoryFilter').val();
+            const activeIngredient = $('#activeIngredientFilter').val();
+            const medicamentType = $('#medicamentTypeFilter').val();
+            const perPage = $('#perPageFilter').val();
 
             // Construir URL con parámetros  
             const params = new URLSearchParams();
@@ -847,6 +895,10 @@
             if (search) params.append('search', search);
             if (status && status !== 'all') params.append('status', status);
             if (expiration && expiration !== 'all') params.append('expiration', expiration);
+            if (laboratory && laboratory !== '') params.append('laboratory_id', laboratory);
+            if (activeIngredient && activeIngredient !== '') params.append('active_ingredient_id', activeIngredient);
+            if (medicamentType && medicamentType !== '') params.append('medicament_type_id', medicamentType);
+            if (perPage && perPage !== '') params.append('per_page', perPage);
 
             // Redirigir con los filtros  
             const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
@@ -858,9 +910,16 @@
             const status = $('#statusFilter').val();
             const expiration = $('#expirationFilter').val();
 
+            const laboratory = $('#laboratoryFilter').val();
+            const activeIngredient = $('#activeIngredientFilter').val();
+            const medicamentType = $('#medicamentTypeFilter').val();
+
             return (search && search.trim() !== '') ||
                 (status && status !== 'all') ||
-                (expiration && expiration !== 'all');
+                (expiration && expiration !== 'all') ||
+                (laboratory && laboratory !== '') ||
+                (activeIngredient && activeIngredient !== '') ||
+                (medicamentType && medicamentType !== '');
         }
 
         // Función para mostrar filtros automáticamente si están activos  
@@ -921,6 +980,18 @@
             if (urlParams.get('expiration')) {
                 $('#expirationFilter').val(urlParams.get('expiration'));
             }
+            if (urlParams.get('laboratory_id')) {
+                $('#laboratoryFilter').val(urlParams.get('laboratory_id'));
+            }
+            if (urlParams.get('active_ingredient_id')) {
+                $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id'));
+            }
+            if (urlParams.get('medicament_type_id')) {
+                $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id'));
+            }
+            if (urlParams.get('per_page')) {
+                $('#perPageFilter').val(urlParams.get('per_page'));
+            }
 
             // NUEVO: Expandir automáticamente si hay filtros activos  
             autoExpandFiltersIfActive();
@@ -937,6 +1008,18 @@
         }
         if (urlParams.get('expiration')) {
             $('#expirationFilter').val(urlParams.get('expiration'));
+        }
+        if (urlParams.get('laboratory_id')) {
+            $('#laboratoryFilter').val(urlParams.get('laboratory_id'));
+        }
+        if (urlParams.get('active_ingredient_id')) {
+            $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id'));
+        }
+        if (urlParams.get('medicament_type_id')) {
+            $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id'));
+        }
+        if (urlParams.get('per_page')) {
+            $('#perPageFilter').val(urlParams.get('per_page'));
         }
     });
 </script>
