@@ -1,16 +1,16 @@
 <!-- Sidebar Component -->
 <div class="fixed inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out" id="sidebar">
     <!-- Sidebar Background with Light Gradient -->
-    <div class="h-full bg-gradient-to-b from-white via-gray-50 to-gray-100 shadow-2xl relative overflow-hidden border-r border-gray-200">
+    <div class="h-full bg-gradient-to-b from-white via-gray-50 to-gray-100 shadow-2xl relative overflow-hidden border-r border-gray-200 flex flex-col">
         <!-- Animated Background Elements -->
-        <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
             <div class="absolute -bottom-20 -left-20 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
             <div class="absolute top-1/2 right-0 w-1 h-32 bg-gradient-to-b from-transparent via-blue-400/10 to-transparent animate-pulse" style="animation-delay: 1s;"></div>
         </div>
 
-        <!-- Logo Section -->
-        <div class="relative z-10 p-6 border-b border-gray-200/50">
+        <!-- Logo Section (Fixed Height) -->
+        <div class="relative z-10 p-6 border-b border-gray-200/50 flex-shrink-0">
             <div class="flex items-center space-x-3 group">
                 <div class="w-16 h-16 flex items-center justify-center transition-all duration-300">
                     <img src="{{ asset('img/logo.png') }}" alt="Farmacia 701" class="w-13 h-13 object-contain">
@@ -26,153 +26,152 @@
             </div>
         </div>
 
-        <!-- Navigation Menu -->
-<nav class="relative z-10 p-4 space-y-2 overflow-y-auto" style="max-height: calc(100vh - 180px);">
-
+        <!-- Navigation Menu (Scrollable, Takes Remaining Space) -->
+        <nav class="relative z-10 p-4 space-y-2 flex-1 overflow-y-auto">
             <!-- Dashboard -->
-            <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+            <a href="{{ route('dashboard') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
     {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-slate-700 border-r-4 border-slate-500' : 'text-gray-600 hover:text-gray-800 hover:bg-slate-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300   
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300     
         {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-slate-700' : 'bg-gray-100 group-hover:bg-slate-100' }}">
-                    <i class="fas fa-tachometer-alt text-lg transition-all duration-300   
+                    <i class="fas fa-tachometer-alt text-lg transition-all duration-300     
             {{ request()->routeIs('dashboard') ? 'text-slate-700' : 'text-gray-600 group-hover:text-slate-600' }}"></i>
                 </div>
                 <span class="font-medium">Panel de control</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300    
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
         {{ request()->routeIs('dashboard') ? 'bg-slate-500 opacity-100' : 'bg-slate-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
+
             <!-- Medicaments -->
             <a href="{{ route('medicaments.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1    
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
    {{ request()->routeIs('medicaments.*') ? 'bg-blue-100 text-blue-700 border-r-4 border-blue-500' : 'text-gray-600 hover:text-gray-800 hover:bg-blue-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300    
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
          {{ request()->routeIs('medicaments.*') ? 'bg-blue-200' : 'bg-gray-100 group-hover:bg-blue-100' }}">
-                    <i class="fas fa-pills text-lg transition-all duration-300    
+                    <i class="fas fa-pills text-lg transition-all duration-300      
            {{ request()->routeIs('medicaments.*') ? 'text-blue-700' : 'text-gray-600 group-hover:text-blue-600' }}"></i>
                 </div>
                 <span class="font-medium">Medicamentos</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300    
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
                     {{ request()->routeIs('medicaments.*') ? 'bg-blue-500 opacity-100' : 'bg-blue-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
             <a href="{{ route('medicament-types.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1          
 {{ request()->routeIs('medicament-types.*') ? 'bg-lime-100 text-lime-700 border-r-4 border-lime-500' : 'text-gray-600 hover:text-gray-800 hover:bg-lime-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300          
 {{ request()->routeIs('medicament-types.*') ? 'bg-lime-200' : 'bg-gray-100 group-hover:bg-lime-100' }}">
-                    <i class="fas fa-tags text-lg transition-all duration-300        
+                    <i class="fas fa-tags text-lg transition-all duration-300          
 {{ request()->routeIs('medicament-types.*') ? 'text-lime-700' : 'text-gray-600 group-hover:text-lime-600' }}"></i>
                 </div>
                 <span class="font-medium">Tipos de Medicamentos</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300          
 {{ request()->routeIs('medicament-types.*') ? 'bg-lime-500 opacity-100' : 'bg-lime-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
             <a href="{{ route('active-ingredients.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1          
 {{ request()->routeIs('active-ingredients.*') ? 'bg-sky-100 text-sky-700 border-r-4 border-sky-500' : 'text-gray-600 hover:text-gray-800 hover:bg-sky-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300          
 {{ request()->routeIs('active-ingredients.*') ? 'bg-sky-200' : 'bg-gray-100 group-hover:bg-sky-100' }}">
-                    <i class="fas fa-flask text-lg transition-all duration-300        
+                    <i class="fas fa-flask text-lg transition-all duration-300          
 {{ request()->routeIs('active-ingredients.*') ? 'text-sky-700' : 'text-gray-600 group-hover:text-sky-600' }}"></i>
                 </div>
                 <span class="font-medium">Principios Activos</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300          
 {{ request()->routeIs('active-ingredients.*') ? 'bg-sky-500 opacity-100' : 'bg-sky-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
             <a href="{{ route('laboratories.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('laboratories.*') ? 'bg-purple-100 text-purple-700 border-r-4 border-purple-500' : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
 {{ request()->routeIs('laboratories.*') ? 'bg-purple-200' : 'bg-gray-100 group-hover:bg-purple-100' }}">
-                    <i class="fas fa-industry text-lg transition-all duration-300      
+                    <i class="fas fa-industry text-lg transition-all duration-300        
 {{ request()->routeIs('laboratories.*') ? 'text-purple-700' : 'text-gray-600 group-hover:text-purple-600' }}"></i>
                 </div>
                 <span class="font-medium">Laboratorios</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
 {{ request()->routeIs('laboratories.*') ? 'bg-purple-500 opacity-100' : 'bg-purple-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
             <a href="{{ route('drugstores.index') }}"
-                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+                class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1          
 {{ request()->routeIs('drugstores.*') ? 'bg-teal-100 text-teal-700 border-r-4 border-teal-500' : 'text-gray-600 hover:text-gray-800 hover:bg-teal-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300          
 {{ request()->routeIs('drugstores.*') ? 'bg-teal-200' : 'bg-gray-100 group-hover:bg-teal-100' }}">
-                    <i class="fas fa-store text-lg transition-all duration-300        
+                    <i class="fas fa-store text-lg transition-all duration-300          
 {{ request()->routeIs('drugstores.*') ? 'text-teal-700' : 'text-gray-600 group-hover:text-teal-600' }}"></i>
                 </div>
                 <span class="font-medium">Droguerías</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300          
 {{ request()->routeIs('drugstores.*') ? 'bg-teal-500 opacity-100' : 'bg-teal-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
-
-
-
-            <a href="{{ route('entries.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+            <!-- Entries -->
+            <a href="{{ route('entries.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('entries.*') ? 'bg-emerald-100 text-emerald-700 border-r-4 border-emerald-500' : 'text-gray-600 hover:text-gray-800 hover:bg-emerald-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
 {{ request()->routeIs('entries.*') ? 'bg-emerald-200' : 'bg-gray-100 group-hover:bg-emerald-100' }}">
-                    <i class="fas fa-arrow-down text-lg transition-all duration-300      
+                    <i class="fas fa-arrow-down text-lg transition-all duration-300        
 {{ request()->routeIs('entries.*') ? 'text-emerald-700' : 'text-gray-600 group-hover:text-emerald-600' }}"></i>
                 </div>
                 <span class="font-medium">Entradas</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
 {{ request()->routeIs('entries.*') ? 'bg-emerald-500 opacity-100' : 'bg-emerald-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
-            <a href="{{ route('dispatches.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
+            <!-- Dispatches -->
+            <a href="{{ route('dispatches.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('dispatches.*') ? 'bg-orange-100 text-orange-700 border-r-4 border-orange-500' : 'text-gray-600 hover:text-gray-800 hover:bg-orange-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
 {{ request()->routeIs('dispatches.*') ? 'bg-orange-200' : 'bg-gray-100 group-hover:bg-orange-100' }}">
-                    <i class="fas fa-arrow-up text-lg transition-all duration-300      
+                    <i class="fas fa-arrow-up text-lg transition-all duration-300        
 {{ request()->routeIs('dispatches.*') ? 'text-orange-700' : 'text-gray-600 group-hover:text-orange-600' }}"></i>
                 </div>
                 <span class="font-medium">Salidas</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
 {{ request()->routeIs('dispatches.*') ? 'bg-orange-500 opacity-100' : 'bg-orange-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
-        <!-- Reportes -->  
-<a href="{{ route('reports.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
-{{ request()->routeIs('reports.*') ? 'bg-cyan-100 text-cyan-700 border-r-4 border-cyan-500' : 'text-gray-600 hover:text-gray-800 hover:bg-cyan-50' }}">  
-    <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
-{{ request()->routeIs('reports.*') ? 'bg-cyan-200' : 'bg-gray-100 group-hover:bg-cyan-100' }}">  
-        <i class="fas fa-file-pdf text-lg transition-all duration-300        
-{{ request()->routeIs('reports.*') ? 'text-cyan-700' : 'text-gray-600 group-hover:text-cyan-600' }}"></i>  
-    </div>  
-    <span class="font-medium">Reportes</span>  
-    <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
-{{ request()->routeIs('reports.*') ? 'bg-cyan-500 opacity-100' : 'bg-cyan-400 opacity-0 group-hover:opacity-100' }}">  
-    </div>  
-</a>    
-            <a href="{{ route('users.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
-{{ request()->routeIs('users.*') ? 'bg-indigo-100 text-indigo-700 border-r-4 border-indigo-500' : 'text-gray-600 hover:text-gray-800 hover:bg-indigo-50' }}">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300      
-{{ request()->routeIs('users.*') ? 'bg-indigo-200' : 'bg-gray-100 group-hover:bg-indigo-100' }}">
-                    <i class="fas fa-users text-lg transition-all duration-300      
-{{ request()->routeIs('users.*') ? 'text-indigo-700' : 'text-gray-600 group-hover:text-indigo-600' }}"></i>
+            <!-- Reportes -->
+            <a href="{{ route('reports.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1          
+{{ request()->routeIs('reports.*') ? 'bg-cyan-100 text-cyan-700 border-r-4 border-cyan-500' : 'text-gray-600 hover:text-gray-800 hover:bg-cyan-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300          
+{{ request()->routeIs('reports.*') ? 'bg-cyan-200' : 'bg-gray-100 group-hover:bg-cyan-100' }}">
+                    <i class="fas fa-file-pdf text-lg transition-all duration-300          
+{{ request()->routeIs('reports.*') ? 'text-cyan-700' : 'text-gray-600 group-hover:text-cyan-600' }}"></i>
                 </div>
-                <span class="font-medium">Usuarios</span>
-                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300      
-{{ request()->routeIs('users.*') ? 'bg-indigo-500 opacity-100' : 'bg-indigo-400 opacity-0 group-hover:opacity-100' }}">
+                <span class="font-medium">Reportes</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300          
+{{ request()->routeIs('reports.*') ? 'bg-cyan-500 opacity-100' : 'bg-cyan-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
 
-
+            <!-- Users -->
+            <a href="{{ route('users.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
+{{ request()->routeIs('users.*') ? 'bg-indigo-100 text-indigo-700 border-r-4 border-indigo-500' : 'text-gray-600 hover:text-gray-800 hover:bg-indigo-50' }}">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-all duration-300        
+{{ request()->routeIs('users.*') ? 'bg-indigo-200' : 'bg-gray-100 group-hover:bg-indigo-100' }}">
+                    <i class="fas fa-users text-lg transition-all duration-300        
+{{ request()->routeIs('users.*') ? 'text-indigo-700' : 'text-gray-600 group-hover:text-indigo-600' }}"></i>
+                </div>
+                <span class="font-medium">Usuarios</span>
+                <div class="ml-auto w-2 h-2 rounded-full transition-opacity duration-300        
+{{ request()->routeIs('users.*') ? 'bg-indigo-500 opacity-100' : 'bg-indigo-400 opacity-0 group-hover:opacity-100' }}">
+                </div>
+            </a>
         </nav>
 
-        <!-- User Profile Section -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 z-20">
+        <!-- User Profile Section (Fixed at Bottom) -->
+        <div class="relative z-10 p-4 border-t border-gray-200/50 flex-shrink-0">
             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                     <i class="fas fa-user text-white text-sm"></i>
