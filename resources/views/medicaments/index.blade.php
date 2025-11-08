@@ -116,7 +116,9 @@
                     </select>
                 </div>
             </div>
+            
         </div>
+        
     </div>
 
     <!-- Lista de Medicamentos -->
@@ -630,6 +632,21 @@
                 }
             }
         });
+
+        // Init Select2 for filters (searchable selects in the filters panel)
+        $('#laboratoryFilter, #activeIngredientFilter, #medicamentTypeFilter').select2({
+            placeholder: function() {
+                return $(this).data('placeholder') || 'Seleccionar...';
+            },
+            allowClear: true,
+            width: 'resolve',
+            dropdownParent: $(document.body),
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
         // Abrir modal para crear  
         $(document).on('click', '#createMedicamentBtn', function() {
             $('#medicamentModalTitle').text('Nuevo Medicamento');
@@ -1021,6 +1038,28 @@
         if (urlParams.get('per_page')) {
             $('#perPageFilter').val(urlParams.get('per_page'));
         }
+        if (urlParams.get('per_page')) {
+            $('#perPageFilter').val(urlParams.get('per_page'));
+        }
+
+        // Apply / Clear quick actions
+        $('#clearFiltersBtn').on('click', function() {
+            // reset UI controls
+            $('#searchInput').val('');
+            $('#statusFilter').val('all');
+            $('#expirationFilter').val('all');
+            $('#laboratoryFilter').val('');
+            $('#activeIngredientFilter').val('');
+            $('#medicamentTypeFilter').val('');
+            $('#perPageFilter').val('9');
+
+            // redirect to base path (clears querystring)
+            window.location.href = window.location.pathname;
+        });
+
+        $('#applyFiltersBtn').on('click', function() {
+            applyFilters();
+        });
     });
 </script>
 @endpush
