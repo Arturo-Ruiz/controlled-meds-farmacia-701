@@ -116,9 +116,9 @@
                     </select>
                 </div>
             </div>
-            
+
         </div>
-        
+
     </div>
 
     <!-- Lista de Medicamentos -->
@@ -639,8 +639,7 @@
                 return $(this).data('placeholder') || 'Seleccionar...';
             },
             allowClear: true,
-            width: 'resolve',
-            dropdownParent: $(document.body),
+            width: '100%',
             language: {
                 noResults: function() {
                     return "No se encontraron resultados";
