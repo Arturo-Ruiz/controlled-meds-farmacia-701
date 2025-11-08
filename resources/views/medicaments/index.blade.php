@@ -597,6 +597,9 @@
 <script>
     $(document).ready(function() {
 
+        // Prevent automatic apply while we restore values from the URL
+        window.filtersRestoring = true;
+
         $('.select2-laboratory').select2({
             placeholder: 'Buscar laboratorio...',
             allowClear: true,
@@ -884,6 +887,7 @@
 
         // Filtrado automático sin botón  
         $('#searchInput').on('input', function() {
+            if (window.filtersRestoring) return;
             clearTimeout(window.searchTimeout);
             window.searchTimeout = setTimeout(function() {
                 applyFilters();
@@ -892,6 +896,7 @@
 
         // Filtrado automático al cambiar selects  
         $('#statusFilter, #expirationFilter, #laboratoryFilter, #activeIngredientFilter, #medicamentTypeFilter, #perPageFilter').on('change', function() {
+            if (window.filtersRestoring) return;
             applyFilters();
         });
 
@@ -997,13 +1002,13 @@
                 $('#expirationFilter').val(urlParams.get('expiration'));
             }
             if (urlParams.get('laboratory_id')) {
-                $('#laboratoryFilter').val(urlParams.get('laboratory_id'));
+                $('#laboratoryFilter').val(urlParams.get('laboratory_id')).trigger('change');
             }
             if (urlParams.get('active_ingredient_id')) {
-                $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id'));
+                $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id')).trigger('change');
             }
             if (urlParams.get('medicament_type_id')) {
-                $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id'));
+                $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id')).trigger('change');
             }
             if (urlParams.get('per_page')) {
                 $('#perPageFilter').val(urlParams.get('per_page'));
@@ -1026,13 +1031,13 @@
             $('#expirationFilter').val(urlParams.get('expiration'));
         }
         if (urlParams.get('laboratory_id')) {
-            $('#laboratoryFilter').val(urlParams.get('laboratory_id'));
+            $('#laboratoryFilter').val(urlParams.get('laboratory_id')).trigger('change');
         }
         if (urlParams.get('active_ingredient_id')) {
-            $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id'));
+            $('#activeIngredientFilter').val(urlParams.get('active_ingredient_id')).trigger('change');
         }
         if (urlParams.get('medicament_type_id')) {
-            $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id'));
+            $('#medicamentTypeFilter').val(urlParams.get('medicament_type_id')).trigger('change');
         }
         if (urlParams.get('per_page')) {
             $('#perPageFilter').val(urlParams.get('per_page'));
@@ -1040,6 +1045,11 @@
         if (urlParams.get('per_page')) {
             $('#perPageFilter').val(urlParams.get('per_page'));
         }
+
+        // Finished restoring filters — allow change handlers to apply filters normally
+        setTimeout(function() {
+            window.filtersRestoring = false;
+        }, 50);
 
         // Apply / Clear quick actions
         $('#clearFiltersBtn').on('click', function() {
