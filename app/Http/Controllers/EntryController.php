@@ -14,11 +14,11 @@ class EntryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Entry::with(['drugstore', 'medicament']);  
+        $query = Entry::with(['drugstore', 'medicament']);
 
         if ($request->filled('search')) {
             $query->where('invoice_number', 'LIKE', '%' . $request->search . '%')
-                ->orWhereHas('drugstore', function ($q) use ($request) { 
+                ->orWhereHas('drugstore', function ($q) use ($request) {
                     $q->where('name', 'LIKE', '%' . $request->search . '%');
                 })
                 ->orWhereHas('medicament', function ($q) use ($request) {
@@ -53,63 +53,63 @@ class EntryController extends Controller
         }
 
         $entries = $query->latest()->paginate(10);
-        $drugstores = Drugstore::all();  
-        $medicaments = Medicament::all();
+        $drugstores = Drugstore::all();
+        $medicaments = Medicament::with(['laboratory', 'activeIngredient'])->get();
 
         return view('entries.index', compact('entries', 'drugstores', 'medicaments'));
     }
-     public function store(EntryRequest $request): JsonResponse  
-    {  
-        try {  
-            DB::beginTransaction();  
-  
-            $entries = [];  
-  
-            foreach ($request->medicaments as $medicamentData) {  
-                $medicament = Medicament::find($medicamentData['medicament_id']);  
-  
-                $entry = Entry::create([  
-                    'invoice_number' => $request->invoice_number,  
-                    'drugstore_id' => $request->drugstore_id,  
-                    'medicament_id' => $medicamentData['medicament_id'],  
-                    'stock' => $medicamentData['stock'],  
-                    'price' => $medicamentData['price'],  
-                    'current_stock' => $medicament->stock,  
-                    'final_stock' => $medicament->stock + $medicamentData['stock']  
-                ]);  
-  
-                $medicament->update([  
-                    'stock' => $medicament->stock + $medicamentData['stock'],  
-                    'price' => $medicamentData['price']  
-                ]);  
-  
-                $entries[] = $entry;  
-            }  
-  
-            DB::commit();  
-  
-            return response()->json([  
-                'success' => true,  
-                'message' => 'Entradas registradas exitosamente',  
-                'entries' => $entries,  
-            ]);  
-        } catch (\Exception $e) {  
-            DB::rollback();  
-            return response()->json([  
-                'success' => false,  
-                'message' => 'Error al registrar las entradas: ' . $e->getMessage(),  
-            ], 500);  
-        }  
-    }  
+    public function store(EntryRequest $request): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
 
-  public function show(Entry $entry): JsonResponse  
-    {  
-        $entry->load(['drugstore', 'medicament']); 
-        return response()->json([  
-            'success' => true,  
-            'entry' => $entry  
-        ]);  
-    }  
+            $entries = [];
+
+            foreach ($request->medicaments as $medicamentData) {
+                $medicament = Medicament::find($medicamentData['medicament_id']);
+
+                $entry = Entry::create([
+                    'invoice_number' => $request->invoice_number,
+                    'drugstore_id' => $request->drugstore_id,
+                    'medicament_id' => $medicamentData['medicament_id'],
+                    'stock' => $medicamentData['stock'],
+                    'price' => $medicamentData['price'],
+                    'current_stock' => $medicament->stock,
+                    'final_stock' => $medicament->stock + $medicamentData['stock']
+                ]);
+
+                $medicament->update([
+                    'stock' => $medicament->stock + $medicamentData['stock'],
+                    'price' => $medicamentData['price']
+                ]);
+
+                $entries[] = $entry;
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Entradas registradas exitosamente',
+                'entries' => $entries,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al registrar las entradas: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function show(Entry $entry): JsonResponse
+    {
+        $entry->load(['drugstore', 'medicament']);
+        return response()->json([
+            'success' => true,
+            'entry' => $entry
+        ]);
+    }
 
     public function update(EntryRequest $request, Entry $entry): JsonResponse
     {

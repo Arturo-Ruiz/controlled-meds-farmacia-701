@@ -598,11 +598,24 @@
                     class="select2-medicament-row w-full"  
                     data-row-index="${medicamentRowIndex}">    
                 <option value="">Seleccionar medicamento</option>    
-                @foreach($medicaments as $medicament)    
-                <option value="{{ $medicament->id }}">    
-                    {{ $medicament->name }} - {{ $medicament->presentation }}    
-                </option>    
-                @endforeach    
+                @foreach($medicaments as $medicament)  
+                                <option value="{{ $medicament->id }}"  
+                                    data-stock="{{ $medicament->stock }}"  
+                                    data-presentation="{{ $medicament->presentation }}"  
+                                    data-posological="{{ $medicament->posological_units }}"
+                                    data-laboratory="{{ optional($medicament->laboratory)->name }}"
+                                    data-active="{{ optional($medicament->activeIngredient)->name }}">
+                                    {{-- Visible option text: include laboratory and active ingredient so Select2 dropdown shows them --}}
+                                    {{ $medicament->name }} - {{ $medicament->presentation }}
+                                    @if(optional($medicament->laboratory)->name)
+                                        - {{ optional($medicament->laboratory)->name }}
+                                    @endif
+                                    @if(optional($medicament->activeIngredient)->name)
+                                        - {{ optional($medicament->activeIngredient)->name }}
+                                    @endif
+                                    (Stock: {{ $medicament->stock }})
+                                </option>  
+                                @endforeach   
             </select>  
               
             <!-- Current stock, price and posological units info - MEJORADO -->  
