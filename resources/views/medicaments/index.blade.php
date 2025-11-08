@@ -143,16 +143,16 @@
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden group">
                 <!-- Header de la tarjeta con gradiente sutil -->
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-3 min-w-0">
+                            <div class="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-pills text-white text-lg"></i>
                             </div>
-                            <div>
-                                <h3 class="font-bold text-gray-900 text-lg group-hover:text-blue-700 transition-colors duration-200">
+                            <div class="flex-1 min-w-0">
+                                <h3 title="{{ $medicament->name }}" class="font-bold text-gray-900 text-lg group-hover:text-blue-700 transition-colors duration-200 whitespace-normal">
                                     {{ $medicament->name }}
                                 </h3>
-                                <p class="text-sm text-gray-600">{{ $medicament->presentation }}</p>
+                                <p title="{{ $medicament->presentation }}" class="text-sm text-gray-600 mt-1 whitespace-normal">{{ $medicament->presentation }}</p>
                             </div>
                         </div>
 
