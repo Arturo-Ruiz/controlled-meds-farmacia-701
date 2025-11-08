@@ -485,8 +485,18 @@
                                 <option value="{{ $medicament->id }}"  
                                     data-stock="{{ $medicament->stock }}"  
                                     data-presentation="{{ $medicament->presentation }}"  
-                                    data-posological="{{ $medicament->posological_units }}">  
-                                    {{ $medicament->name }} - {{ $medicament->presentation }} (Stock: {{ $medicament->stock }})  
+                                    data-posological="{{ $medicament->posological_units }}"
+                                    data-laboratory="{{ optional($medicament->laboratory)->name }}"
+                                    data-active="{{ optional($medicament->activeIngredient)->name }}">
+                                    {{-- Visible option text: include laboratory and active ingredient so Select2 dropdown shows them --}}
+                                    {{ $medicament->name }} - {{ $medicament->presentation }}
+                                    @if(optional($medicament->laboratory)->name)
+                                        - {{ optional($medicament->laboratory)->name }}
+                                    @endif
+                                    @if(optional($medicament->activeIngredient)->name)
+                                        - {{ optional($medicament->activeIngredient)->name }}
+                                    @endif
+                                    (Stock: {{ $medicament->stock }})
                                 </option>  
                                 @endforeach  
                             </select>  

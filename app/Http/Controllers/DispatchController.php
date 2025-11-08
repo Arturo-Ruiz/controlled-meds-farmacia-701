@@ -54,7 +54,8 @@ class DispatchController extends Controller
         }
 
         $dispatches = $query->latest()->paginate(10);
-        $medicaments = Medicament::all();
+        // Eager-load laboratory and active ingredient to include their names in the view without additional queries
+        $medicaments = Medicament::with(['laboratory', 'activeIngredient'])->get();
 
         return view('dispatches.index', compact('dispatches', 'medicaments'));
     }
