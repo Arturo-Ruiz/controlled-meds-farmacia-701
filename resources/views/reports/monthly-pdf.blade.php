@@ -221,7 +221,6 @@
         <h1>Dra. Tania Biutti</h1>
         <p><strong>Ci:</strong> 5.554.831 | M.P.PS : 6615</p> 
         <p><strong>Colfar: 466</strong></p> 
-
         <p>Inprefar: 0612450</p>
     </div>
 
