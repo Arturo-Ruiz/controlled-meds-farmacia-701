@@ -42,6 +42,7 @@
                 </div>
             </a>
 
+            @role('Administrator|Manager')  
             <!-- Medicaments -->
             <a href="{{ route('medicaments.index') }}"
                 class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1      
@@ -126,7 +127,9 @@
 {{ request()->routeIs('entries.*') ? 'bg-emerald-500 opacity-100' : 'bg-emerald-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
+   @endrole
 
+   @role('Administrator|Manager|Seller')
             <!-- Dispatches -->
             <a href="{{ route('dispatches.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('dispatches.*') ? 'bg-orange-100 text-orange-700 border-r-4 border-orange-500' : 'text-gray-600 hover:text-gray-800 hover:bg-orange-50' }}">
@@ -140,7 +143,8 @@
 {{ request()->routeIs('dispatches.*') ? 'bg-orange-500 opacity-100' : 'bg-orange-400 opacity-0 group-hover:opacity-100' }}">
                 </div>
             </a>
-
+   @endrole
+    @role('Administrator|Manager')
             <!-- Reportes -->
             <a href="{{ route('reports.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1          
 {{ request()->routeIs('reports.*') ? 'bg-cyan-100 text-cyan-700 border-r-4 border-cyan-500' : 'text-gray-600 hover:text-gray-800 hover:bg-cyan-50' }}">
@@ -155,6 +159,8 @@
                 </div>
             </a>
 
+    @endrole
+    @role('Administrator')
             <!-- Users -->
             <a href="{{ route('users.index') }}" class="nav-item group flex items-center px-4 py-3 rounded-xl transition-all duration-300 hover:translate-x-1        
 {{ request()->routeIs('users.*') ? 'bg-indigo-100 text-indigo-700 border-r-4 border-indigo-500' : 'text-gray-600 hover:text-gray-800 hover:bg-indigo-50' }}">
@@ -169,7 +175,7 @@
                 </div>
             </a>
         </nav>
-
+    @endrole
         <!-- User Profile Section (Fixed at Bottom) -->
         <div class="relative z-10 p-4 border-t border-gray-200/50 flex-shrink-0">
             <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">

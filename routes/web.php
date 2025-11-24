@@ -27,26 +27,22 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
-    Route::resource('medicaments', MedicamentController::class);
-    Route::resource('laboratories', LaboratoryController::class);
-
-    Route::resource('entries', EntryController::class);
-    Route::get('medicaments/{medicament}/data', [EntryController::class, 'getMedicamentData'])->name('medicaments.data');
+    Route::middleware('role:Administrator|Manager')->group(function () {
+        Route::resource('medicaments', MedicamentController::class);
+        Route::resource('laboratories', LaboratoryController::class);
+        Route::resource('entries', EntryController::class);
+        Route::get('medicaments/{medicament}/data', [EntryController::class, 'getMedicamentData'])->name('medicaments.data');
+        Route::resource('drugstores', DrugstoreController::class);
+        Route::resource('medicament-types', MedicamentTypeController::class);
+        Route::resource('active-ingredients', ActiveIngredientController::class);
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::post('/reports/monthly', [ReportController::class, 'generateMonthlyReport'])->name('reports.monthly');
+    });
 
     Route::resource('dispatches', DispatchController::class);
     Route::get('medicaments/{medicament}/stock-data', [DispatchController::class, 'getMedicamentData'])->name('medicaments.stock-data');
 
-    Route::resource('users', UserController::class);
-
-    Route::resource('drugstores', DrugstoreController::class);
-
-    Route::resource('medicament-types', MedicamentTypeController::class);
-
-    Route::resource('active-ingredients', ActiveIngredientController::class);
-
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::post('/reports/monthly', [ReportController::class, 'generateMonthlyReport'])->name('reports.monthly');
+    Route::resource('users', UserController::class)->middleware('role:Administrator');
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });

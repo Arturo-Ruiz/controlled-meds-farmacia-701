@@ -94,6 +94,12 @@
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-2">
+                                <i class="fas fa-user-tag text-gray-400"></i>
+                                <span>Rol</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center space-x-2">
                                 <i class="fas fa-calendar text-gray-400"></i>
                                 <span>Fecha de Registro</span>
                             </div>
@@ -122,6 +128,14 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $user->email }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-medium rounded-full   
+                                {{ $user->roles->first()?->name === 'Administrator' ? 'bg-purple-100 text-purple-800' : '' }}  
+                                {{ $user->roles->first()?->name === 'Manager' ? 'bg-blue-100 text-blue-800' : '' }}  
+                                {{ $user->roles->first()?->name === 'Seller' ? 'bg-green-100 text-green-800' : '' }}">
+                                {{ \App\Helpers\RoleHelper::translateRole($user->roles->first()?->name ?? 'Sin rol') }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $user->created_at->format('d/m/Y') }}</div>
@@ -209,6 +223,23 @@
                 </div>
             </div>
 
+            <div class="mb-4">
+                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <i class="fas fa-user-tag text-gray-400"></i>
+                    </div>
+                    <select id="role" name="role" required
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option disabled selected>Seleccionar rol</option>
+                        @foreach($roles as $role)
+                        <option value="{{ $role['name'] }}">{{ $role['display_name'] }}</option>
+                        @endforeach
+                    </select>
+                    <span class="text-red-500 text-xs hidden" id="roleError"></span>
+                </div>
+            </div>
+
             <!-- Contraseña -->
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
@@ -230,6 +261,7 @@
                 </div>
                 <p class="text-xs text-gray-500 mt-1" id="passwordHelp">Mínimo 8 caracteres</p>
             </div>
+
         </form>
 
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
@@ -480,6 +512,7 @@
                         $('#name').val(user.name);
                         $('#email').val(user.email);
                         $('#password').val('');
+                        $('#role').val(user.roles[0]?.name || '');
                         $('#userId').val(user.id);
                         $('#userForm').attr('data-action', 'edit');
                         $('#passwordLabel').text('Nueva contraseña (opcional)');
