@@ -309,9 +309,13 @@
                     <select id="reason" name="reason" required
                         class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         <option value="">Seleccionar razón</option>
+                        @role('Administrator|Manager|Seller')
                         <option value="Venta">Venta</option>
+                        @endrole
+                        @role('Administrator|Manager')
                         <option value="Medicamento Vencido">Medicamento Vencido</option>
                         <option value="Error de Inventario">Error de Inventario</option>
+                        @endrole
                     </select>
                     <span class="text-red-500 text-xs hidden" id="reasonError"></span>
                 </div>
