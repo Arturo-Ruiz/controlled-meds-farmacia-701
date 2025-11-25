@@ -105,13 +105,13 @@
         </form>
 
         <!-- Footer -->
-        <div class="mt-8 text-center animate-fadeInUp">
-            <p class="text-sm text-gray-500 flex items-center justify-center space-x-1">
-                <span>© 2025 made with</span>
-                <i class="fa fa-heart text-red-500"></i>
-                <span>by</span>
-                <a href="https://github.com/Arturo-Ruiz" class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200" target="_blank">Arturo Ruiz</a>
-                <span>for Farmacia 701.</span>
+        <div class="mt-8 text-center space-y-1 animate-fadeInUp">
+            <p class="text-xs text-gray-400">
+                © {{ date('Y') }} Farmacia 701
+            </p>
+            <p class="text-xs text-gray-500">
+                Made with <span class="text-red-500">❤️</span> by
+                <span class="font-medium text-indigo-600">Arturo Ruiz</span>
             </p>
         </div>
     </div>
